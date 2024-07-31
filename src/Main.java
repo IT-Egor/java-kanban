@@ -170,6 +170,61 @@ public class Main {
         System.out.println("taskManager.updateSubtask(subtask2) = " + taskManager.updateSubtask(subtask2));
 
         printTasks(taskManager);
+        System.out.println("----------------------------------------------установка статусов------------------------------------------------------\n");
+
+        taskManager.clearTasks();
+        taskManager.clearEpics();
+        taskManager.clearSubtasks();
+
+        System.out.print("-------------------------------------------обновление статуса эпика---------------------------------------------------");
+        epic = new Epic("epic1", "epicTesting");
+        epic2 = new Epic("epic2", "epicTesting2");
+        subtask = new Subtask("subtask1", "subtaskTesting");
+        subtask2 = new Subtask("subtask2", "subtaskTesting2");
+        subtask3 = new Subtask("subtask3", "subtaskTesting3");
+        Subtask subtask4 = new Subtask("subtask4", "subtaskTesting4");
+        Subtask subtask5 = new Subtask("subtask5", "subtaskTesting5");
+        taskManager.addEpic(epic);
+        taskManager.addEpic(epic2);
+        taskManager.addSubtask(subtask, epic.getId());
+        taskManager.addSubtask(subtask2, epic.getId());
+        taskManager.addSubtask(subtask3, epic2.getId());
+        taskManager.addSubtask(subtask4, epic2.getId());
+
+        printTasks(taskManager);
+
+        taskManager.setSubtaskStatus(19, Status.NEW);
+        taskManager.setSubtaskStatus(20, Status.DONE);
+        taskManager.setSubtaskStatus(21, Status.IN_PROGRESS);
+        taskManager.setSubtaskStatus(22, Status.IN_PROGRESS);
+
+        System.out.println();
+        System.out.println("taskManager.getEpics() = " + taskManager.getEpics());
+
+        taskManager.setSubtaskStatus(19, Status.DONE);
+        taskManager.setSubtaskStatus(21, Status.NEW);
+        taskManager.setSubtaskStatus(22, Status.NEW);
+
+        System.out.println();
+        System.out.println("taskManager.getEpics() = " + taskManager.getEpics());
+
+        taskManager.setSubtaskStatus(19, Status.NEW);
+        taskManager.removeSubtask(20);
+
+        System.out.println();
+        System.out.println("taskManager.getEpics() = " + taskManager.getEpics());
+
+        taskManager.setSubtaskStatus(19, Status.DONE);
+        taskManager.addSubtask(subtask5, epic.getId());
+
+        System.out.println();
+        System.out.println("taskManager.getEpics() = " + taskManager.getEpics());
+
+        System.out.println();
+        System.out.println("taskManager.addSubtask(subtask5, epic.getId()) = " + taskManager.addSubtask(subtask5, epic.getId()));
+
+        printTasks(taskManager);
+        System.out.print("-------------------------------------------обновление статуса эпика---------------------------------------------------");
     }
 
     public static void printTasks(TaskManager taskManager) {

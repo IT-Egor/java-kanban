@@ -44,12 +44,16 @@ public class TaskManager {
         if (!epics.containsKey(epicId)) {
             return -1;
         }
+        if (subtask.getContainingEpicId() != 0) { //если подзадача уже принадлежит какому-то эпику
+            return -4;
+        }
         int subtaskId = IdManager.generateId();
         subtask.setId(subtaskId);
         subtasks.put(subtaskId, subtask);
         subtask.setContainingEpicId(epicId);
         Epic containingEpic = epics.get(epicId);
         containingEpic.addSubtaskId(subtask.getId());
+        setSubtasksStatusToEpic(containingEpic.getId());
         return subtaskId;
     }
 
@@ -154,7 +158,9 @@ public class TaskManager {
         Subtask subtask = subtasks.get(id);
         Epic containingEpic = epics.get(subtask.getContainingEpicId());
         containingEpic.removeSubtaskId(id); //нужно удалить эту подзадачу из содержащего эпика
-        return subtasks.remove(id);
+        Subtask removedSubtask = subtasks.remove(id);
+        setSubtasksStatusToEpic(containingEpic.getId());
+        return removedSubtask;
     }
 
     public Task setTaskStatus(int id, Status status) {
@@ -172,6 +178,7 @@ public class TaskManager {
         }
         Subtask subtask = subtasks.get(id);
         subtask.setStatus(status);
+        setSubtasksStatusToEpic(subtask.getContainingEpicId());
         return subtask;
     }
 
@@ -180,5 +187,42 @@ public class TaskManager {
             return null;
         }
         return epics.get(epicId).getSubtasksIds();
+    }
+
+    private void setSubtasksStatusToEpic(int epicId) {
+        Epic epic = epics.get(epicId);
+        ArrayList<Integer> subtaskIds = epic.getSubtasksIds();
+        if (subtaskIds.isEmpty()) {
+            epic.setStatus(Status.NEW);
+            return;
+        }
+
+        int numberOfNEWs = 0;
+        int numberOfDONEs = 0;
+
+        for (int subtaskId : subtaskIds) {
+            Subtask subtask = subtasks.get(subtaskId);
+            if (subtask.getStatus() == Status.IN_PROGRESS) {
+                epic.setStatus(Status.IN_PROGRESS);
+                return;
+            } else if (subtask.getStatus() == Status.DONE) {
+                if (numberOfNEWs > 0) {
+                    epic.setStatus(Status.IN_PROGRESS);
+                    return;
+                }
+                numberOfDONEs++;
+            } else if (subtask.getStatus() == Status.NEW) {
+                if (numberOfDONEs > 0) {
+                    epic.setStatus(Status.IN_PROGRESS);
+                    return;
+                }
+                numberOfNEWs++;
+            }
+        }
+        if (numberOfDONEs == subtaskIds.size()) {
+            epic.setStatus(Status.DONE);
+        } else if (numberOfNEWs == subtaskIds.size()) {
+            epic.setStatus(Status.NEW);
+        }
     }
 }
