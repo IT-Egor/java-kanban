@@ -119,4 +119,30 @@ public class TaskManager {
         subtasks.put(updatedSubtask.getId(), updatedSubtask);
         return updatedSubtask.getId();
     }
+
+    public Task removeTask(int id) {
+        return tasks.remove(id);
+    }
+
+    public Epic removeEpic(int id) {
+        if (!epics.containsKey(id)) {
+            return null;
+        }
+        Epic epic = epics.get(id);
+        ArrayList<Integer> subtaskIds = epic.getSubtasksIds();
+        for (int subtaskId : subtaskIds) {  //нужно удалить подзадачи принадлежащие этому эпику
+            subtasks.remove(subtaskId);
+        }
+        return epics.remove(id);
+    }
+
+    public Subtask removeSubtask(int id) {
+        if (!subtasks.containsKey(id)) {
+            return null;
+        }
+        Subtask subtask = subtasks.get(id);
+        Epic containingEpic = epics.get(subtask.getContainingEpicId());
+        containingEpic.removeSubtaskId(id); //нужно удалить эту подзадачу из содержащего эпика
+        return subtasks.remove(id);
+    }
 }

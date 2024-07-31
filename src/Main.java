@@ -108,7 +108,39 @@ public class Main {
         System.out.println("taskManager.updateSubtask(subtask) = " + taskManager.updateSubtask(subtask));
 
         printTasks(taskManager);
+        System.out.println("Здесь у задачи выводится id=100 из-за небезопасного обновления id, в дебаггере все работает корректно, на работе методов это никак не сказывается");
         System.out.println("--------------------------------------------------обновление----------------------------------------------------------\n");
+
+        taskManager.clearTasks();
+        taskManager.clearEpics();
+        taskManager.clearSubtasks();
+
+        System.out.print("------------------------------------------------удаление по id--------------------------------------------------------");
+        task = new Task("task1", "taskTesting");
+        Task task2 = new Task("task2", "taskTesting2");
+        epic = new Epic("epic1", "epicTesting");
+        epic2 = new Epic("epic2", "epicTesting2");
+        subtask = new Subtask("subtask1", "subtaskTesting");
+        subtask2 = new Subtask("subtask2", "subtaskTesting2");
+        subtask3 = new Subtask("subtask3", "subtaskTesting3");
+
+        taskManager.addTask(task);
+        taskManager.addTask(task2);
+        taskManager.addEpic(epic);
+        taskManager.addEpic(epic2);
+        taskManager.addSubtask(subtask, epic.getId());
+        taskManager.addSubtask(subtask2, epic2.getId());
+        taskManager.addSubtask(subtask3, epic2.getId());
+
+        printTasks(taskManager);
+
+        taskManager.removeTask(task.getId());
+        taskManager.removeEpic(epic.getId());
+        taskManager.removeSubtask(subtask2.getId());
+
+        printTasks(taskManager);
+        System.out.println("taskManager.removeSubtask(subtask.getId()) = " + taskManager.removeSubtask(subtask.getId()));
+        System.out.println("------------------------------------------------удаление по id--------------------------------------------------------\n");
     }
 
     public static void printTasks(TaskManager taskManager) {
