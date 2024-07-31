@@ -22,6 +22,12 @@ public class Epic extends Task {
         subtasksIds.remove(subtaskId);
     }
 
+    public ArrayList<Integer> clearSubtasksIds() {
+        ArrayList<Integer> out = new ArrayList<>(subtasksIds);
+        subtasksIds.clear();
+        return out;
+    }
+
     @Override
     public String toString() {
         return "Epic{" +

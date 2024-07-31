@@ -20,6 +20,28 @@ public class Main {
         taskManager.addSubtask(subtask, epic.getId());
 
         printTasks(taskManager);
+
+        System.out.println("taskManager.clearTasks() = " + taskManager.clearTasks());
+        System.out.println("taskManager.clearEpics() = " + taskManager.clearEpics());
+        System.out.println("taskManager.clearSubtasks() = " + taskManager.clearSubtasks());
+
+        printTasks(taskManager);
+
+        Epic epic2 = new Epic("epic2", "epicTesting");
+        Subtask subtask2 = new Subtask("subtask2", "subtaskTesting");
+        Subtask subtask3 = new Subtask("subtask3", "subtaskTesting");
+        taskManager.addEpic(epic2);
+        taskManager.addSubtask(subtask2, epic2.getId());
+        taskManager.addSubtask(subtask3, epic2.getId());
+
+        printTasks(taskManager);
+        System.out.println("epic2.getSubtasksIds() = " + epic2.getSubtasksIds());
+
+        System.out.println();
+        System.out.println("taskManager.clearSubtasks() = " + taskManager.clearSubtasks());
+        System.out.println("epic2.getSubtasksIds() = " + epic2.getSubtasksIds());
+
+        printTasks(taskManager);
     }
 
     public static void printTasks(TaskManager taskManager) {

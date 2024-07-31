@@ -50,4 +50,26 @@ public class TaskManager {
         containingEpic.addSubtaskId(subtask.getId());
         return subtaskId;
     }
+
+    public HashMap<Integer, Task> clearTasks() {
+        HashMap<Integer, Task> out = new HashMap<>(tasks);
+        tasks.clear();
+        return out;
+    }
+
+    public HashMap<Integer, Epic> clearEpics() {
+        HashMap<Integer, Epic> out = new HashMap<>(epics);
+        epics.clear();
+        subtasks.clear();
+        return out;
+    }
+
+    public HashMap<Integer, Subtask> clearSubtasks() {
+        for (Epic epic : epics.values()) {
+            epic.clearSubtasksIds();
+        }
+        HashMap<Integer, Subtask> out = new HashMap<>(subtasks);
+        subtasks.clear();
+        return out;
+    }
 }
