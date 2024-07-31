@@ -6,6 +6,7 @@ import taskmanager.tasktypes.Task;
 import taskmanager.utility.IdManager;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public class TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
@@ -83,5 +84,39 @@ public class TaskManager {
 
     public Subtask findSubtask(int id) {
         return subtasks.get(id);
+    }
+
+    public int updateTask(Task updatedTask) {
+        if (!tasks.containsKey(updatedTask.getId())) {
+            return -1;
+        }
+        tasks.put(updatedTask.getId(), updatedTask);
+        return updatedTask.getId();
+    }
+
+    public int updateEpic(Epic updatedEpic) {
+        if (!epics.containsKey(updatedEpic.getId())) {
+            return -1;
+        }
+        Epic oldEpic = epics.get(updatedEpic.getId());  //их id равны
+        ArrayList<Integer> oldSubtaskIds = oldEpic.getSubtasksIds();
+        ArrayList<Integer> newSubtaskIds = updatedEpic.getSubtasksIds();
+        if (!oldSubtaskIds.equals(newSubtaskIds)) {
+            return -2;
+        }
+        epics.put(updatedEpic.getId(), updatedEpic);
+        return updatedEpic.getId();
+    }
+
+    public int updateSubtask(Subtask updatedSubtask) {
+        if (!subtasks.containsKey(updatedSubtask.getId())) {
+            return -1;
+        }
+        Subtask oldSubtask = subtasks.get(updatedSubtask.getId());  //их id равны
+        if (oldSubtask.getContainingEpicId() != updatedSubtask.getContainingEpicId()) {
+            return -2;
+        }
+        subtasks.put(updatedSubtask.getId(), updatedSubtask);
+        return updatedSubtask.getId();
     }
 }
