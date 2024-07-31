@@ -72,4 +72,16 @@ public class TaskManager {
         subtasks.clear();
         return out;
     }
+
+    public Task findTask(int id) {
+        return tasks.get(id);
+    }
+
+    public Epic findEpic(int id) {
+        return epics.get(id);
+    }
+
+    public Subtask findSubtask(int id) {
+        return subtasks.get(id);
+    }
 }

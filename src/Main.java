@@ -16,11 +16,18 @@ public class Main {
         taskManager.addSubtask(subtask, 10);
 
         printTasks(taskManager);
+        System.out.println("taskManager.findTask(10) = " + taskManager.findTask(10));
+        System.out.println("taskManager.findEpic(10) = " + taskManager.findEpic(10));
+        System.out.println("taskManager.findSubtask(10) = " + taskManager.findSubtask(10));
+        System.out.println("taskManager.findTask(task.getId()) = " + taskManager.findTask(task.getId()));
+        System.out.println("taskManager.findEpic(epic.getId()) = " + taskManager.findEpic(epic.getId()));
+        System.out.println("taskManager.findSubtask(subtask.getId()) = " + taskManager.findSubtask(subtask.getId()));
 
         taskManager.addSubtask(subtask, epic.getId());
 
         printTasks(taskManager);
-
+        System.out.println("taskManager.findSubtask(subtask.getId()) = " + taskManager.findSubtask(subtask.getId()));;
+        System.out.println();
         System.out.println("taskManager.clearTasks() = " + taskManager.clearTasks());
         System.out.println("taskManager.clearEpics() = " + taskManager.clearEpics());
         System.out.println("taskManager.clearSubtasks() = " + taskManager.clearSubtasks());
