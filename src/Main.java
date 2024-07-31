@@ -141,6 +141,35 @@ public class Main {
         printTasks(taskManager);
         System.out.println("taskManager.removeSubtask(subtask.getId()) = " + taskManager.removeSubtask(subtask.getId()));
         System.out.println("------------------------------------------------удаление по id--------------------------------------------------------\n");
+
+        System.out.println("-------------------------------------------получение подзадач эпика---------------------------------------------------");
+        System.out.println("taskManager.getEpicSubtasksIds(13) = " + taskManager.getEpicSubtasksIds(13));
+        System.out.println("taskManager.getEpicSubtasksIds(100) = " + taskManager.getEpicSubtasksIds(100));
+        System.out.println("-------------------------------------------получение подзадач эпика---------------------------------------------------\n");
+
+        System.out.println("----------------------------------------------установка статусов------------------------------------------------------");
+        System.out.println("taskManager.setTaskStatus(100, Status.IN_PROGRESS) = " + taskManager.setTaskStatus(100, Status.IN_PROGRESS));
+        System.out.println("taskManager.setSubtaskStatus(100, Status.IN_PROGRESS) = " + taskManager.setSubtaskStatus(100, Status.IN_PROGRESS));
+        System.out.println("taskManager.setTaskStatus(11, Status.IN_PROGRESS) = " + taskManager.setTaskStatus(11, Status.IN_PROGRESS));
+        System.out.println("taskManager.setSubtaskStatus(16, Status.IN_PROGRESS) = " + taskManager.setSubtaskStatus(16, Status.IN_PROGRESS));
+
+        printTasks(taskManager);
+
+        task2 = new Task("task2", "taskTesting2");
+        task2.setId(11);
+        subtask2 = new Subtask("subtask2", "subtaskTesting2");
+        subtask2.setId(16);
+        subtask2.setContainingEpicId(13);
+        epic2 = new Epic("epic2", "epicTesting2");
+        epic2.setId(13);
+        epic2.setStatus(Status.IN_PROGRESS);
+
+        System.out.println();
+        System.out.println("taskManager.updateTask(task2) = " + taskManager.updateTask(task2));
+        System.out.println("taskManager.updateEpic(epic2) = " + taskManager.updateEpic(epic2));
+        System.out.println("taskManager.updateSubtask(subtask2) = " + taskManager.updateSubtask(subtask2));
+
+        printTasks(taskManager);
     }
 
     public static void printTasks(TaskManager taskManager) {

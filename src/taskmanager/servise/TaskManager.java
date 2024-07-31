@@ -4,6 +4,7 @@ import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
 import taskmanager.utility.IdManager;
+import taskmanager.utility.Status;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -90,6 +91,10 @@ public class TaskManager {
         if (!tasks.containsKey(updatedTask.getId())) {
             return -1;
         }
+        Task oldTask = tasks.get(updatedTask.getId());  //их id равны
+        if (oldTask.getStatus() != updatedTask.getStatus()) {
+            return -3;
+        }
         tasks.put(updatedTask.getId(), updatedTask);
         return updatedTask.getId();
     }
@@ -99,6 +104,9 @@ public class TaskManager {
             return -1;
         }
         Epic oldEpic = epics.get(updatedEpic.getId());  //их id равны
+        if (oldEpic.getStatus() != updatedEpic.getStatus()) {
+            return -3;
+        }
         ArrayList<Integer> oldSubtaskIds = oldEpic.getSubtasksIds();
         ArrayList<Integer> newSubtaskIds = updatedEpic.getSubtasksIds();
         if (!oldSubtaskIds.equals(newSubtaskIds)) {
@@ -115,6 +123,9 @@ public class TaskManager {
         Subtask oldSubtask = subtasks.get(updatedSubtask.getId());  //их id равны
         if (oldSubtask.getContainingEpicId() != updatedSubtask.getContainingEpicId()) {
             return -2;
+        }
+        if (oldSubtask.getStatus() != updatedSubtask.getStatus()) {
+            return -3;
         }
         subtasks.put(updatedSubtask.getId(), updatedSubtask);
         return updatedSubtask.getId();
@@ -144,5 +155,30 @@ public class TaskManager {
         Epic containingEpic = epics.get(subtask.getContainingEpicId());
         containingEpic.removeSubtaskId(id); //нужно удалить эту подзадачу из содержащего эпика
         return subtasks.remove(id);
+    }
+
+    public Task setTaskStatus(int id, Status status) {
+        if (!tasks.containsKey(id)) {
+            return null;
+        }
+        Task task = tasks.get(id);
+        task.setStatus(status);
+        return task;
+    }
+
+    public Subtask setSubtaskStatus(int id, Status status) {
+        if (!subtasks.containsKey(id)) {
+            return null;
+        }
+        Subtask subtask = subtasks.get(id);
+        subtask.setStatus(status);
+        return subtask;
+    }
+
+    public ArrayList<Integer> getEpicSubtasksIds(int epicId) {
+        if (!epics.containsKey(epicId)) {
+            return null;
+        }
+        return epics.get(epicId).getSubtasksIds();
     }
 }
