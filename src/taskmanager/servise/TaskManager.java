@@ -31,6 +31,9 @@ public class TaskManager {
     }
 
     public int addTask(Task task) {
+        if (tasks.containsKey(task.getId())) {  //если такая задача уже есть
+            return -5;
+        }
         int id = IdManager.generateId();
         task.setId(id);
         tasks.put(id, task);
@@ -38,23 +41,27 @@ public class TaskManager {
     }
 
     public int addEpic(Epic epic) {
+        if (epics.containsKey(epic.getId())) {  //если такой эпик уже есть
+
+            return -5;
+        }
         int id = IdManager.generateId();
         epic.setId(id);
         epics.put(id, epic);
         return id;
     }
 
-    public int addSubtask(Subtask subtask, int epicId) {
+    public int addSubtask(Subtask subtask) {
+        if (subtasks.containsKey(subtask.getId())) {  //если такая подзадача уже есть
+            return -5;
+        }
+        int epicId = subtask.getContainingEpicId();
         if (!epics.containsKey(epicId)) {
             return -1;
-        }
-        if (subtask.getContainingEpicId() != 0) { //если подзадача уже принадлежит какому-то эпику
-            return -4;
         }
         int subtaskId = IdManager.generateId();
         subtask.setId(subtaskId);
         subtasks.put(subtaskId, subtask);
-        subtask.setContainingEpicId(epicId);
         Epic containingEpic = epics.get(epicId);
         containingEpic.addSubtaskId(subtask.getId());
         setSubtasksStatusToEpic(containingEpic.getId());

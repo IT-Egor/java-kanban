@@ -12,11 +12,11 @@ public class Main {
         TaskManager taskManager = new TaskManager();
         Task task = new Task("task1", "taskTesting");
         Epic epic = new Epic("epic1", "epicTesting");
-        Subtask subtask = new Subtask("subtask1", "subtaskTesting");
+        Subtask subtask = new Subtask("subtask1", "subtaskTesting", 10);
 
         taskManager.addTask(task);
         taskManager.addEpic(epic);
-        taskManager.addSubtask(subtask, 10);
+        taskManager.addSubtask(subtask);
 
         printTasks(taskManager);
         System.out.println("taskManager.findTask(10) = " + taskManager.findTask(10));
@@ -26,7 +26,8 @@ public class Main {
         System.out.println("taskManager.findEpic(epic.getId()) = " + taskManager.findEpic(epic.getId()));
         System.out.println("taskManager.findSubtask(subtask.getId()) = " + taskManager.findSubtask(subtask.getId()));
 
-        taskManager.addSubtask(subtask, epic.getId());
+        subtask.setContainingEpicId(2);
+        taskManager.addSubtask(subtask);
 
         printTasks(taskManager);
         System.out.println("taskManager.findSubtask(subtask.getId()) = " + taskManager.findSubtask(subtask.getId()));;
@@ -43,11 +44,11 @@ public class Main {
 
         System.out.print("----------------------------------------------очистка подзадач--------------------------------------------------------");
         Epic epic2 = new Epic("epic2", "epicTesting");
-        Subtask subtask2 = new Subtask("subtask2", "subtaskTesting");
-        Subtask subtask3 = new Subtask("subtask3", "subtaskTesting");
         taskManager.addEpic(epic2);
-        taskManager.addSubtask(subtask2, epic2.getId());
-        taskManager.addSubtask(subtask3, epic2.getId());
+        Subtask subtask2 = new Subtask("subtask2", "subtaskTesting", epic2.getId());
+        Subtask subtask3 = new Subtask("subtask3", "subtaskTesting", epic2.getId());
+        taskManager.addSubtask(subtask2);
+        taskManager.addSubtask(subtask3);
 
         printTasks(taskManager);
         System.out.println("epic2.getSubtasksIds() = " + epic2.getSubtasksIds());
@@ -67,7 +68,8 @@ public class Main {
         subtask = new Subtask("subtask1", "subtaskTesting");
         taskManager.addTask(task);
         taskManager.addEpic(epic);
-        taskManager.addSubtask(subtask, epic.getId());
+        subtask.setContainingEpicId(epic.getId());
+        taskManager.addSubtask(subtask);
 
         printTasks(taskManager);
 
@@ -91,7 +93,7 @@ public class Main {
 
         epic.setId(8);
         subtask.setId(9);
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         epic = new Epic("updatedEpic", "epicTesting");
         subtask = new Subtask("updatedSubtask", "subtaskTesting");
         epic.setId(8);
@@ -128,9 +130,12 @@ public class Main {
         taskManager.addTask(task2);
         taskManager.addEpic(epic);
         taskManager.addEpic(epic2);
-        taskManager.addSubtask(subtask, epic.getId());
-        taskManager.addSubtask(subtask2, epic2.getId());
-        taskManager.addSubtask(subtask3, epic2.getId());
+        subtask.setContainingEpicId(epic.getId());
+        subtask2.setContainingEpicId(epic2.getId());
+        subtask3.setContainingEpicId(epic2.getId());
+        taskManager.addSubtask(subtask);
+        taskManager.addSubtask(subtask2);
+        taskManager.addSubtask(subtask3);
 
         printTasks(taskManager);
 
@@ -186,10 +191,15 @@ public class Main {
         Subtask subtask5 = new Subtask("subtask5", "subtaskTesting5");
         taskManager.addEpic(epic);
         taskManager.addEpic(epic2);
-        taskManager.addSubtask(subtask, epic.getId());
-        taskManager.addSubtask(subtask2, epic.getId());
-        taskManager.addSubtask(subtask3, epic2.getId());
-        taskManager.addSubtask(subtask4, epic2.getId());
+        subtask.setContainingEpicId(epic.getId());
+        subtask2.setContainingEpicId(epic.getId());
+        subtask3.setContainingEpicId(epic2.getId());
+        subtask4.setContainingEpicId(epic2.getId());
+        subtask5.setContainingEpicId(epic.getId());
+        taskManager.addSubtask(subtask);
+        taskManager.addSubtask(subtask2);
+        taskManager.addSubtask(subtask3);
+        taskManager.addSubtask(subtask4);
 
         printTasks(taskManager);
 
@@ -215,13 +225,13 @@ public class Main {
         System.out.println("taskManager.getEpics() = " + taskManager.getEpics());
 
         taskManager.setSubtaskStatus(19, Status.DONE);
-        taskManager.addSubtask(subtask5, epic.getId());
+        taskManager.addSubtask(subtask5);
 
         System.out.println();
         System.out.println("taskManager.getEpics() = " + taskManager.getEpics());
 
         System.out.println();
-        System.out.println("taskManager.addSubtask(subtask5, epic.getId()) = " + taskManager.addSubtask(subtask5, epic.getId()));
+        System.out.println("taskManager.addSubtask(subtask5, epic.getId()) = " + taskManager.addSubtask(subtask5));
 
         printTasks(taskManager);
         System.out.println("-------------------------------------------обновление статуса эпика---------------------------------------------------");
