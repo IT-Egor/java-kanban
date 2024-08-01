@@ -224,7 +224,7 @@ public class Main {
         System.out.println("taskManager.addSubtask(subtask5, epic.getId()) = " + taskManager.addSubtask(subtask5, epic.getId()));
 
         printTasks(taskManager);
-        System.out.print("-------------------------------------------обновление статуса эпика---------------------------------------------------");
+        System.out.println("-------------------------------------------обновление статуса эпика---------------------------------------------------");
     }
 
     public static void printTasks(TaskManager taskManager) {

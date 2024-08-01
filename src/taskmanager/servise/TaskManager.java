@@ -14,16 +14,20 @@ public class TaskManager {
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
-    public HashMap<Integer, Task> getTasks() {
-        return tasks;
+//    не совсем понял логику замены на ArrayList,
+//    если причина в том, что HashMap, вне класса TaskManager можно модифицировать,
+//    то почему мы так свободно возвращаемыми значениями всех типов задач?
+//    их тоже можно модифицировать вне TaskManager, только, как по мне, это может навредить еще больше, чем HashMap
+    public ArrayList<Task> getTasks() {
+        return new ArrayList<>(tasks.values());
     }
 
-    public HashMap<Integer, Epic> getEpics() {
-        return epics;
+    public ArrayList<Epic> getEpics() {
+        return new ArrayList<>(epics.values());
     }
 
-    public HashMap<Integer, Subtask> getSubtasks() {
-        return subtasks;
+    public ArrayList<Subtask> getSubtasks() {
+        return new ArrayList<>(subtasks.values());
     }
 
     public int addTask(Task task) {
@@ -57,24 +61,24 @@ public class TaskManager {
         return subtaskId;
     }
 
-    public HashMap<Integer, Task> clearTasks() {
-        HashMap<Integer, Task> out = new HashMap<>(tasks);
+    public ArrayList<Task> clearTasks() {
+        ArrayList<Task> out = new ArrayList<>(tasks.values());
         tasks.clear();
         return out;
     }
 
-    public HashMap<Integer, Epic> clearEpics() {
-        HashMap<Integer, Epic> out = new HashMap<>(epics);
+    public ArrayList<Epic> clearEpics() {
+        ArrayList<Epic> out = new ArrayList<>(epics.values());
         epics.clear();
         subtasks.clear();
         return out;
     }
 
-    public HashMap<Integer, Subtask> clearSubtasks() {
+    public ArrayList<Subtask> clearSubtasks() {
         for (Epic epic : epics.values()) {
             epic.clearSubtasksIds();
         }
-        HashMap<Integer, Subtask> out = new HashMap<>(subtasks);
+        ArrayList<Subtask> out = new ArrayList<>(subtasks.values());
         subtasks.clear();
         return out;
     }
