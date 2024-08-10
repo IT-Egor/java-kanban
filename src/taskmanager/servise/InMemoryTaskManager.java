@@ -92,6 +92,10 @@ public class InMemoryTaskManager implements TaskManager {
         }
         ArrayList<Subtask> out = new ArrayList<>(subtasks.values());
         subtasks.clear();
+        for (Epic epic : epics.values()) {
+            int epicId = epic.getId();
+            setSubtasksStatusToEpic(epicId);
+        }
         return out;
     }
 
