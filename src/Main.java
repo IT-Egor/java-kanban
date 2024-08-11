@@ -1,7 +1,8 @@
-import taskmanager.servise.InMemoryTaskManager;
+import taskmanager.servise.TaskManager;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Task;
 import taskmanager.tasktypes.Subtask;
+import taskmanager.utility.Managers;
 import taskmanager.utility.Status;
 
 public class Main {
@@ -9,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
 
         System.out.print("-----------------------------------------добавление и поиск-----------------------------------------------------------");
-        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
+        TaskManager inMemoryTaskManager = Managers.getDefaultTaskManager();
         Task task = new Task("task1", "taskTesting");
         Epic epic = new Epic("epic1", "epicTesting");
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", 10);
@@ -237,7 +238,7 @@ public class Main {
         System.out.println("-------------------------------------------обновление статуса эпика---------------------------------------------------");
     }
 
-    public static void printTasks(InMemoryTaskManager inMemoryTaskManager) {
+    public static void printTasks(TaskManager inMemoryTaskManager) {
         System.out.println();
         System.out.println("taskManager.getTasks() = " + inMemoryTaskManager.getTasks());
         System.out.println("taskManager.getEpics() = " + inMemoryTaskManager.getEpics());
