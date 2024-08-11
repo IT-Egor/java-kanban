@@ -1,7 +1,7 @@
 package taskmanager.utility;
 
-import taskmanager.servise.InMemoryTaskManager;
-import taskmanager.servise.TaskManager;
+import taskmanager.servise.TaskManagers.InMemoryTaskManager;
+import taskmanager.servise.TaskManagers.TaskManager;
 
 public class Managers {
     public static int getNextId() {
