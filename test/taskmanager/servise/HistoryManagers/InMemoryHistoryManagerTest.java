@@ -36,17 +36,19 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void arrayShouldNotChangeWhenTryingToAddMoreThen10TasksToHistory() {
+    public void arrayShouldRemoveLastTaskWhenTryingToAddMoreThan10Tasks() {
         for (int i = 0; i < 10; i++) {
             Task task = new Task("name test", "description test");
             task.setId(i);
             inMemoryHistoryManager.add(task);
         }
-        ArrayList<Task> expected = inMemoryHistoryManager.getHistory();
+        ArrayList<Task> expected = new ArrayList<>(inMemoryHistoryManager.getHistory());
         for (int i = 11; i < 15; i++) {
             Task task = new Task("name test", "description test");
             task.setId(i);
             inMemoryHistoryManager.add(task);
+            expected.addFirst(task);
+            expected.removeLast();
         }
         ArrayList<Task> actual = inMemoryHistoryManager.getHistory();
         assertArrayEquals(expected.toArray(), actual.toArray());
@@ -66,7 +68,7 @@ class InMemoryHistoryManagerTest {
         inMemoryHistoryManager.add(task);
         Task task2 = new Task("name test2", "description test2");
         inMemoryHistoryManager.add(task2);
-        ArrayList<Task> expected = new ArrayList<>(Arrays.asList(task, task2));
+        ArrayList<Task> expected = new ArrayList<>(Arrays.asList(task2, task));
         ArrayList<Task> actual = inMemoryHistoryManager.getHistory();
         assertArrayEquals(expected.toArray(), actual.toArray());
     }

@@ -50,4 +50,6 @@ public interface TaskManager {
     Subtask setSubtaskStatus(int id, Status status);
 
     ArrayList<Integer> getEpicSubtasksIds(int epicId);
+
+    ArrayList<Task> getHistory();
 }

@@ -1,5 +1,6 @@
 package taskmanager.servise.TaskManagers;
 
+import taskmanager.servise.HistoryManagers.HistoryManager;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
@@ -13,6 +14,11 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private HistoryManager historyManager;
+
+    public InMemoryTaskManager(HistoryManager historyManager) {
+        this.historyManager = historyManager;
+    }
 
     @Override
     public ArrayList<Task> getTasks() {
@@ -101,17 +107,29 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task findTask(int id) {
-        return tasks.get(id);
+        Task task = tasks.get(id);
+        if (task != null) {
+            historyManager.add(task);
+        }
+        return task;
     }
 
     @Override
     public Epic findEpic(int id) {
-        return epics.get(id);
+        Epic epic = epics.get(id);
+        if (epic != null) {
+            historyManager.add(epic);
+        }
+        return epic;
     }
 
     @Override
     public Subtask findSubtask(int id) {
-        return subtasks.get(id);
+        Subtask subtask = subtasks.get(id);
+        if (subtask != null) {
+            historyManager.add(subtask);
+        }
+        return subtask;
     }
 
     @Override
@@ -219,6 +237,11 @@ public class InMemoryTaskManager implements TaskManager {
             return null;
         }
         return epics.get(epicId).getSubtasksIds();
+    }
+
+    @Override
+    public ArrayList<Task> getHistory() {
+        return historyManager.getHistory();
     }
 
     private void setSubtasksStatusToEpic(int epicId) {

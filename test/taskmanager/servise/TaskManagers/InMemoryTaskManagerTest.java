@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
+import taskmanager.utility.Managers;
 import taskmanager.utility.Status;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ class InMemoryTaskManagerTest {
 
     @BeforeEach
     public void beforeEach() {
-        inMemoryTaskManager = new InMemoryTaskManager();
+        inMemoryTaskManager = new InMemoryTaskManager(Managers.getDefaultHistoryManager());
     }
 
 
@@ -56,6 +57,7 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
         inMemoryTaskManager.addSubtask(subtask);
+        System.out.println("subtask.getId() = " + subtask.getId());
         ArrayList<Subtask> expected = new ArrayList<>(Arrays.asList(subtask));
         ArrayList<Subtask> actual = inMemoryTaskManager.getSubtasks();
         assertArrayEquals(expected.toArray(), actual.toArray());
@@ -654,5 +656,79 @@ class InMemoryTaskManagerTest {
         expectedStatusesOfEpics.add(Status.NEW);
 
         assertArrayEquals(expectedStatusesOfEpics.toArray(),actualStatusesOfEpics.toArray());
+    }
+
+
+
+    @Test
+    public void shouldAddReviewedTasksToViewsHistory() {
+        Task task = new Task("task1", "taskTesting");
+        Task task2 = new Task("task2", "taskTesting2");
+        inMemoryTaskManager.addTask(task);
+        inMemoryTaskManager.addTask(task2);
+        inMemoryTaskManager.findTask(task.getId());
+        ArrayList<Task> expected = new ArrayList<>(Arrays.asList(task));
+        ArrayList<Task> actual = inMemoryTaskManager.getHistory();
+        assertArrayEquals(expected.toArray(),actual.toArray());
+    }
+
+    @Test
+    public void shouldAddReviewedEpicsToViewsHistory() {
+        Epic epic = new Epic("epic1", "epicTesting");
+        Epic epic2 = new Epic("epic2", "epicTesting2");
+        inMemoryTaskManager.addEpic(epic);
+        inMemoryTaskManager.addEpic(epic2);
+        inMemoryTaskManager.findEpic(epic.getId());
+        ArrayList<Task> expected = new ArrayList<>(Arrays.asList(epic));
+        ArrayList<Task> actual = inMemoryTaskManager.getHistory();
+        assertArrayEquals(expected.toArray(),actual.toArray());
+    }
+
+    @Test
+    public void shouldAddReviewedSubtasksToViewsHistory() {
+        Epic epic = new Epic("epic1", "epicTesting");
+        Epic epic2 = new Epic("epic2", "epicTesting2");
+        inMemoryTaskManager.addEpic(epic);
+        inMemoryTaskManager.addEpic(epic2);
+        Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic2.getId());
+        inMemoryTaskManager.addSubtask(subtask);
+        inMemoryTaskManager.addSubtask(subtask2);
+        inMemoryTaskManager.findSubtask(subtask.getId());
+        ArrayList<Task> expected = new ArrayList<>(Arrays.asList(subtask));
+        ArrayList<Task> actual = inMemoryTaskManager.getHistory();
+        assertArrayEquals(expected.toArray(),actual.toArray());
+    }
+
+    @Test
+    public void shouldAddReviewedAllTypesOfTasksToView() {
+        Task task = new Task("task1", "taskTesting");
+        Task task2 = new Task("task2", "taskTesting2");
+        inMemoryTaskManager.addTask(task);
+        inMemoryTaskManager.addTask(task2);
+        inMemoryTaskManager.findTask(task.getId());
+        Epic epic = new Epic("epic1", "epicTesting");
+        Epic epic2 = new Epic("epic2", "epicTesting2");
+        inMemoryTaskManager.addEpic(epic);
+        inMemoryTaskManager.addEpic(epic2);
+        inMemoryTaskManager.findEpic(epic.getId());
+        Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic2.getId());
+        inMemoryTaskManager.addSubtask(subtask);
+        inMemoryTaskManager.addSubtask(subtask2);
+        inMemoryTaskManager.findSubtask(subtask.getId());
+        ArrayList<Task> expected = new ArrayList<>(Arrays.asList(subtask, epic, task));
+        ArrayList<Task> actual = inMemoryTaskManager.getHistory();
+        assertArrayEquals(expected.toArray(),actual.toArray());
+    }
+
+    @Test
+    public void shouldNotAddToHistoryMoreThan10Tasks() {
+        for (int i = 0; i < 15; i++) {
+            Task task = new Task("task" + i, "taskTesting" + i);
+            inMemoryTaskManager.addTask(task);
+            inMemoryTaskManager.findTask(task.getId());
+        }
+        assertEquals(10,inMemoryTaskManager.getHistory().size());
     }
 }
