@@ -57,7 +57,6 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
         inMemoryTaskManager.addSubtask(subtask);
-        System.out.println("subtask.getId() = " + subtask.getId());
         ArrayList<Subtask> expected = new ArrayList<>(Arrays.asList(subtask));
         ArrayList<Subtask> actual = inMemoryTaskManager.getSubtasks();
         assertArrayEquals(expected.toArray(), actual.toArray());
@@ -730,5 +729,99 @@ class InMemoryTaskManagerTest {
             inMemoryTaskManager.findTask(task.getId());
         }
         assertEquals(10,inMemoryTaskManager.getHistory().size());
+    }
+
+
+
+
+    @Test
+    public void shouldRemoveTaskFromHistoryWhenRemovingTaskFromManager() {
+        Task task = new Task("task1", "taskTesting");
+        inMemoryTaskManager.addTask(task);
+        inMemoryTaskManager.findTask(task.getId());
+        inMemoryTaskManager.removeTask(task.getId());
+        assertEquals(0,inMemoryTaskManager.getHistory().size());
+    }
+
+    @Test
+    public void shouldRemoveTaskFromHistoryWhenClearingTaskFromManager() {
+        Task task = new Task("task1", "taskTesting");
+        Task task2 = new Task("task2", "taskTesting2");
+        inMemoryTaskManager.addTask(task);
+        inMemoryTaskManager.addTask(task);
+        inMemoryTaskManager.findTask(task.getId());
+        inMemoryTaskManager.findTask(task2.getId());
+        inMemoryTaskManager.clearTasks();
+        assertEquals(0,inMemoryTaskManager.getHistory().size());
+    }
+
+    @Test
+    public void shouldRemoveEpicFromHistoryWhenRemovingEpicFromManager() {
+        Epic epic = new Epic("epic1", "epicTesting");
+        inMemoryTaskManager.addEpic(epic);
+        inMemoryTaskManager.findEpic(epic.getId());
+        inMemoryTaskManager.removeEpic(epic.getId());
+        assertEquals(0,inMemoryTaskManager.getHistory().size());
+    }
+
+    @Test
+    public void shouldRemoveEpicFromHistoryWhenClearingEpicFromManager() {
+        Epic epic = new Epic("epic1", "epicTesting");
+        Epic epic2 = new Epic("epic2", "epicTesting2");
+        inMemoryTaskManager.addEpic(epic);
+        inMemoryTaskManager.addEpic(epic2);
+        inMemoryTaskManager.findEpic(epic.getId());
+        inMemoryTaskManager.clearEpics();
+        assertEquals(0,inMemoryTaskManager.getHistory().size());
+    }
+
+    @Test
+    public void shouldRemoveSubtaskFromHistoryWhenRemovingEpicFromManager() {
+        Epic epic = new Epic("epic1", "epicTesting");
+        inMemoryTaskManager.addEpic(epic);
+        Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        inMemoryTaskManager.addSubtask(subtask);
+        inMemoryTaskManager.findSubtask(subtask.getId());
+        inMemoryTaskManager.removeEpic(epic.getId());
+        assertEquals(0,inMemoryTaskManager.getHistory().size());
+    }
+
+    @Test
+    public void shouldRemoveSubtaskFromHistoryWhenClearingEpicFromManager() {
+        Epic epic = new Epic("epic1", "epicTesting");
+        inMemoryTaskManager.addEpic(epic);
+        Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        inMemoryTaskManager.addSubtask(subtask);
+        inMemoryTaskManager.findSubtask(subtask.getId());
+        inMemoryTaskManager.clearEpics();
+        assertEquals(0,inMemoryTaskManager.getHistory().size());
+    }
+
+    @Test
+    public void shouldRemoveSubtaskFromHistoryWhenRemovingSubtaskFromManager() {
+        Epic epic = new Epic("epic1", "epicTesting");
+        inMemoryTaskManager.addEpic(epic);
+        Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic.getId());
+        inMemoryTaskManager.addSubtask(subtask);
+        inMemoryTaskManager.addSubtask(subtask2);
+        inMemoryTaskManager.findSubtask(subtask.getId());
+        inMemoryTaskManager.findSubtask(subtask2.getId());
+        inMemoryTaskManager.removeSubtask(subtask.getId());
+        assertArrayEquals(new Subtask[]{subtask2}, inMemoryTaskManager.getHistory().toArray());
+    }
+
+    @Test
+    public void shouldRemoveSubtaskFromHistoryWhenClearingSubtaskFromManager() {
+        Epic epic = new Epic("epic1", "epicTesting");
+        inMemoryTaskManager.addEpic(epic);
+        Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic.getId());
+        inMemoryTaskManager.addSubtask(subtask);
+        inMemoryTaskManager.addSubtask(subtask2);
+        inMemoryTaskManager.findSubtask(subtask.getId());
+        inMemoryTaskManager.findSubtask(subtask2.getId());
+        inMemoryTaskManager.clearSubtasks();
+        assertEquals(0,inMemoryTaskManager.getHistory().size());
     }
 }

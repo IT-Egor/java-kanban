@@ -79,6 +79,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public ArrayList<Task> clearTasks() {
         ArrayList<Task> out = new ArrayList<>(tasks.values());
+        for (Task task : tasks.values()) {
+            historyManager.remove(task);
+        }
         tasks.clear();
         return out;
     }
@@ -86,6 +89,12 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public ArrayList<Epic> clearEpics() {
         ArrayList<Epic> out = new ArrayList<>(epics.values());
+        for (Epic epic : epics.values()) {
+            historyManager.remove(epic);
+        }
+        for (Subtask subtask : subtasks.values()) {
+            historyManager.remove(subtask);
+        }
         epics.clear();
         subtasks.clear();
         return out;
@@ -95,6 +104,9 @@ public class InMemoryTaskManager implements TaskManager {
     public ArrayList<Subtask> clearSubtasks() {
         for (Epic epic : epics.values()) {
             epic.clearSubtasksIds();
+        }
+        for (Subtask subtask : subtasks.values()) {
+            historyManager.remove(subtask);
         }
         ArrayList<Subtask> out = new ArrayList<>(subtasks.values());
         subtasks.clear();
@@ -181,6 +193,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task removeTask(int id) {
+        historyManager.remove(tasks.get(id));
         return tasks.remove(id);
     }
 
@@ -191,6 +204,11 @@ public class InMemoryTaskManager implements TaskManager {
         }
         Epic epic = epics.get(id);
         ArrayList<Integer> subtaskIds = epic.getSubtasksIds();
+        historyManager.remove(epic);
+        for (Integer subtaskId : subtaskIds) {
+            Subtask subtask = subtasks.get(subtaskId);
+            historyManager.remove(subtask);
+        }
         for (int subtaskId : subtaskIds) {  //нужно удалить подзадачи принадлежащие этому эпику
             subtasks.remove(subtaskId);
         }
@@ -203,6 +221,7 @@ public class InMemoryTaskManager implements TaskManager {
             return null;
         }
         Subtask subtask = subtasks.get(id);
+        historyManager.remove(subtask);
         Epic containingEpic = epics.get(subtask.getContainingEpicId());
         containingEpic.removeSubtaskId(id); //нужно удалить эту подзадачу из содержащего эпика
         Subtask removedSubtask = subtasks.remove(id);
