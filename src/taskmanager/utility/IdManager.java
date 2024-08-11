@@ -1,6 +1,6 @@
 package taskmanager.utility;
 
-public class IdManager {
+class IdManager {
     private static int id = 1;
 
     public static int generateId() {

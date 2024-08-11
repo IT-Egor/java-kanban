@@ -3,7 +3,7 @@ package taskmanager.servise;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
-import taskmanager.utility.IdManager;
+import taskmanager.utility.Managers;
 import taskmanager.utility.Status;
 
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (tasks.containsKey(task.getId())) {  //если такая задача уже есть
             return -5;
         }
-        int id = IdManager.generateId();
+        int id = Managers.getNextId();
         task.setId(id);
         tasks.put(id, task);
         return id;
@@ -46,7 +46,7 @@ public class InMemoryTaskManager implements TaskManager {
 
             return -5;
         }
-        int id = IdManager.generateId();
+        int id = Managers.getNextId();
         epic.setId(id);
         epics.put(id, epic);
         return id;
@@ -61,7 +61,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!epics.containsKey(epicId)) {
             return -1;
         }
-        int subtaskId = IdManager.generateId();
+        int subtaskId = Managers.getNextId();
         subtask.setId(subtaskId);
         subtasks.put(subtaskId, subtask);
         Epic containingEpic = epics.get(epicId);
