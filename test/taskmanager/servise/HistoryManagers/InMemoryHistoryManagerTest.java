@@ -7,6 +7,7 @@ import taskmanager.tasktypes.Task;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,7 +52,7 @@ class InMemoryHistoryManagerTest {
             expected.addFirst(task);
             expected.removeLast();
         }
-        ArrayList<Task> actual = inMemoryHistoryManager.getHistory();
+        LinkedList<Task> actual = inMemoryHistoryManager.getHistory();
         assertArrayEquals(expected.toArray(), actual.toArray());
     }
 
@@ -70,7 +71,7 @@ class InMemoryHistoryManagerTest {
         Task task2 = new Task("name test2", "description test2");
         inMemoryHistoryManager.add(task2);
         ArrayList<Task> expected = new ArrayList<>(Arrays.asList(task2, task));
-        ArrayList<Task> actual = inMemoryHistoryManager.getHistory();
+        LinkedList<Task> actual = inMemoryHistoryManager.getHistory();
         assertArrayEquals(expected.toArray(), actual.toArray());
     }
 }

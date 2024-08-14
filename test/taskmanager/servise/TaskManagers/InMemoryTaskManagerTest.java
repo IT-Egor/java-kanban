@@ -11,6 +11,7 @@ import taskmanager.utility.Status;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -668,7 +669,7 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addTask(task2);
         inMemoryTaskManager.findTask(task.getId());
         ArrayList<Task> expected = new ArrayList<>(Arrays.asList(task));
-        ArrayList<Task> actual = inMemoryTaskManager.getHistory();
+        LinkedList<Task> actual = inMemoryTaskManager.getHistory();
         assertArrayEquals(expected.toArray(),actual.toArray());
     }
 
@@ -680,7 +681,7 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addEpic(epic2);
         inMemoryTaskManager.findEpic(epic.getId());
         ArrayList<Task> expected = new ArrayList<>(Arrays.asList(epic));
-        ArrayList<Task> actual = inMemoryTaskManager.getHistory();
+        LinkedList<Task> actual = inMemoryTaskManager.getHistory();
         assertArrayEquals(expected.toArray(),actual.toArray());
     }
 
@@ -696,7 +697,7 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addSubtask(subtask2);
         inMemoryTaskManager.findSubtask(subtask.getId());
         ArrayList<Task> expected = new ArrayList<>(Arrays.asList(subtask));
-        ArrayList<Task> actual = inMemoryTaskManager.getHistory();
+        LinkedList<Task> actual = inMemoryTaskManager.getHistory();
         assertArrayEquals(expected.toArray(),actual.toArray());
     }
 
@@ -718,7 +719,7 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addSubtask(subtask2);
         inMemoryTaskManager.findSubtask(subtask.getId());
         ArrayList<Task> expected = new ArrayList<>(Arrays.asList(subtask, epic, task));
-        ArrayList<Task> actual = inMemoryTaskManager.getHistory();
+        LinkedList<Task> actual = inMemoryTaskManager.getHistory();
         assertArrayEquals(expected.toArray(),actual.toArray());
     }
 

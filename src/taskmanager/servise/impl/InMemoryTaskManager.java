@@ -10,6 +10,7 @@ import taskmanager.utility.Status;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
@@ -260,7 +261,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public LinkedList<Task> getHistory() {
         return historyManager.getHistory();
     }
 

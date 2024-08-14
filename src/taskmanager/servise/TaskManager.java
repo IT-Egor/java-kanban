@@ -6,6 +6,7 @@ import taskmanager.tasktypes.Task;
 import taskmanager.utility.Status;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public interface TaskManager {
 
@@ -51,5 +52,5 @@ public interface TaskManager {
 
     ArrayList<Integer> getEpicSubtasksIds(int epicId);
 
-    ArrayList<Task> getHistory();
+    LinkedList<Task> getHistory();
 }
