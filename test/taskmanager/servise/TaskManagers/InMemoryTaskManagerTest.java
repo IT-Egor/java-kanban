@@ -25,7 +25,6 @@ class InMemoryTaskManagerTest {
     }
 
 
-
     @Test
     public void shouldAddTask() {
         Task task = new Task("task1", "taskTesting");
@@ -224,18 +223,6 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldReturnMinus3AndNotUpdateTaskWhenStatusesIsDifferent() {
-        Task task = new Task("task1", "taskTesting1");
-        Task updatedTask = new Task("task2", "taskTesting2");
-        inMemoryTaskManager.addTask(task);
-        updatedTask.setId(task.getId());
-        updatedTask.setStatus(Status.DONE);
-        int expected = -3;
-        int actual = inMemoryTaskManager.updateTask(updatedTask);
-        assertEquals(expected, actual);
-    }
-
-    @Test
     public void shouldUpdateEpic() {
         Epic epic = new Epic("epic1", "epicTesting");
         Epic updatedEpic = new Epic("epic2", "epicTesting2");
@@ -319,21 +306,6 @@ class InMemoryTaskManagerTest {
         int actual = inMemoryTaskManager.updateSubtask(updatedSubtask);
         assertEquals(expected, actual);
     }
-
-    @Test
-    public void shouldReturnMinus3AndNotUpdateSubtaskWhenStatusesIsDifferent() {
-        Epic epic = new Epic("epic1", "epicTesting");
-        inMemoryTaskManager.addEpic(epic);
-        Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
-        inMemoryTaskManager.addSubtask(subtask);
-        Subtask updatedSubtask = new Subtask("subtask2", "subtaskTesting2", epic.getId());
-        updatedSubtask.setId(subtask.getId());
-        updatedSubtask.setStatus(Status.DONE);
-        int expected = -3;
-        int actual = inMemoryTaskManager.updateSubtask(updatedSubtask);
-        assertEquals(expected, actual);
-    }
-
 
 
 
@@ -442,43 +414,29 @@ class InMemoryTaskManagerTest {
 
 
     @Test
-    public void shouldReturnTaskWithUpdatedStatus() {
+    public void shouldReturnIdOfUpdatedTaskWhenUpdatingTaskStatus() {
         Task task = new Task("task1", "taskTesting");
         inMemoryTaskManager.addTask(task);
-        inMemoryTaskManager.setTaskStatus(task.getId(), Status.DONE);
-        Task expected = new Task("task1", "taskTesting");
-        expected.setStatus(Status.DONE);
-        expected.setId(task.getId());
-        assertEquals(expected, task);
-    }
-
-    @Test
-    public void shouldReturnNullWhenTryingToSetStatusToNonexistentTask() {
-        Task task = new Task("task1", "taskTesting");
-        inMemoryTaskManager.addTask(task);
-        assertNull(inMemoryTaskManager.setTaskStatus(-1, Status.DONE));
-    }
-
-    @Test
-    public void shouldReturnSubtaskWithUpdatedStatus() {
-        Epic epic = new Epic("epic1", "epicTesting");
-        inMemoryTaskManager.addEpic(epic);
-        Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
-        inMemoryTaskManager.addSubtask(subtask);
-        Subtask actual = inMemoryTaskManager.setSubtaskStatus(subtask.getId(), Status.DONE);
-        Subtask expected = new Subtask("subtask1", "subtaskTesting", epic.getId());
-        expected.setStatus(Status.DONE);
-        expected.setId(subtask.getId());
+        Task updatedTask = new Task("task2", "taskTesting2");
+        updatedTask.setId(task.getId());
+        updatedTask.setStatus(Status.DONE);
+        int actual = inMemoryTaskManager.updateTask(updatedTask);
+        int expected = task.getId();
         assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldReturnNullWhenTryingToSetStatusToNonexistentSubtask() {
+    public void shouldReturnUpdatedSubtaskIdWhenUpdatingSubtaskStatus() {
         Epic epic = new Epic("epic1", "epicTesting");
         inMemoryTaskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
         inMemoryTaskManager.addSubtask(subtask);
-        assertNull(inMemoryTaskManager.setSubtaskStatus(-1, Status.DONE));
+        Subtask updatedSubtask = new Subtask("subtask2", "subtaskTesting2", epic.getId());
+        updatedSubtask.setId(subtask.getId());
+        updatedSubtask.setStatus(Status.DONE);
+        int actual = inMemoryTaskManager.updateSubtask(updatedSubtask);
+        int expected = subtask.getId();
+        assertEquals(expected, actual);
     }
 
 
@@ -529,10 +487,23 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addSubtask(subtask3);
         inMemoryTaskManager.addSubtask(subtask4);
 
-        inMemoryTaskManager.setSubtaskStatus(subtask.getId(), Status.NEW);
-        inMemoryTaskManager.setSubtaskStatus(subtask2.getId(), Status.DONE);
-        inMemoryTaskManager.setSubtaskStatus(subtask3.getId(), Status.IN_PROGRESS);
-        inMemoryTaskManager.setSubtaskStatus(subtask4.getId(), Status.IN_PROGRESS);
+        Subtask updatedSubtask = new Subtask("updatedSubtask", "updatedSubtaskTesting", epic.getId());
+        updatedSubtask.setId(subtask.getId());
+        updatedSubtask.setStatus(Status.NEW);
+        Subtask updatedSubtask2 = new Subtask("updatedSubtask2", "updatedSubtaskTesting2", epic.getId());
+        updatedSubtask2.setId(subtask2.getId());
+        updatedSubtask2.setStatus(Status.DONE);
+        Subtask updatedSubtask3 = new Subtask("updatedSubtask3", "updatedSubtaskTesting3", epic2.getId());
+        updatedSubtask3.setId(subtask3.getId());
+        updatedSubtask3.setStatus(Status.IN_PROGRESS);
+        Subtask updatedSubtask4 = new Subtask("updatedSubtask4", "updatedSubtaskTesting4", epic2.getId());
+        updatedSubtask4.setId(subtask4.getId());
+        updatedSubtask4.setStatus(Status.IN_PROGRESS);
+
+        inMemoryTaskManager.updateSubtask(updatedSubtask);
+        inMemoryTaskManager.updateSubtask(updatedSubtask2);
+        inMemoryTaskManager.updateSubtask(updatedSubtask3);
+        inMemoryTaskManager.updateSubtask(updatedSubtask4);
 
         ArrayList<Status> actualStatusesOfEpics = new ArrayList<>();
         actualStatusesOfEpics.add(epic.getStatus());
@@ -555,8 +526,15 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addSubtask(subtask);
         inMemoryTaskManager.addSubtask(subtask2);
 
-        inMemoryTaskManager.setSubtaskStatus(subtask.getId(), Status.DONE);
-        inMemoryTaskManager.setSubtaskStatus(subtask2.getId(), Status.DONE);
+        Subtask updatedSubtask = new Subtask("updatedSubtask", "updatedSubtaskTesting", epic.getId());
+        updatedSubtask.setId(subtask.getId());
+        updatedSubtask.setStatus(Status.DONE);
+        Subtask updatedSubtask2 = new Subtask("updatedSubtask2", "updatedSubtaskTesting2", epic.getId());
+        updatedSubtask2.setId(subtask2.getId());
+        updatedSubtask2.setStatus(Status.DONE);
+
+        inMemoryTaskManager.updateSubtask(updatedSubtask);
+        inMemoryTaskManager.updateSubtask(updatedSubtask2);
 
         Status actual = epic.getStatus();
         Status expected = Status.DONE;
@@ -603,8 +581,15 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addSubtask(subtask);
         inMemoryTaskManager.addSubtask(subtask2);
 
-        inMemoryTaskManager.setSubtaskStatus(subtask.getId(), Status.DONE);
-        inMemoryTaskManager.setSubtaskStatus(subtask2.getId(), Status.NEW);
+        Subtask updatedSubtask = new Subtask("updatedSubtask", "updatedSubtaskTesting", epic.getId());
+        updatedSubtask.setId(subtask.getId());
+        updatedSubtask.setStatus(Status.DONE);
+        Subtask updatedSubtask2 = new Subtask("updatedSubtask2", "updatedSubtaskTesting2", epic.getId());
+        updatedSubtask2.setId(subtask2.getId());
+        updatedSubtask2.setStatus(Status.NEW);
+
+        inMemoryTaskManager.updateSubtask(updatedSubtask);
+        inMemoryTaskManager.updateSubtask(updatedSubtask2);
 
         ArrayList<Status> actualStatusesOfEpics = new ArrayList<>();
         actualStatusesOfEpics.add(epic.getStatus());
@@ -615,8 +600,16 @@ class InMemoryTaskManagerTest {
         actualStatusesOfEpics.add(epic.getStatus());
         expectedStatusesOfEpics.add(Status.NEW);
 
-        inMemoryTaskManager.setSubtaskStatus(subtask2.getId(), Status.DONE);
-        inMemoryTaskManager.setSubtaskStatus(subtask5.getId(), Status.DONE);
+        Subtask updatedSubtask22 = new Subtask("updatedSubtask22", "updatedSubtaskTesting22", epic.getId());
+        updatedSubtask22.setId(subtask2.getId());
+        updatedSubtask22.setStatus(Status.DONE);
+        Subtask updatedSubtask5 = new Subtask("updatedSubtask5", "updatedSubtaskTesting5", epic.getId());
+        updatedSubtask5.setId(subtask5.getId());
+        updatedSubtask5.setStatus(Status.DONE);
+
+        inMemoryTaskManager.updateSubtask(updatedSubtask22);
+        inMemoryTaskManager.updateSubtask(updatedSubtask5);
+
         actualStatusesOfEpics.add(epic.getStatus());
         expectedStatusesOfEpics.add(Status.DONE);
 

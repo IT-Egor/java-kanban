@@ -46,10 +46,6 @@ public interface TaskManager {
 
     Subtask removeSubtask(int id);
 
-    Task setTaskStatus(int id, Status status);
-
-    Subtask setSubtaskStatus(int id, Status status);
-
     ArrayList<Integer> getEpicSubtasksIds(int epicId);
 
     LinkedList<Task> getHistory();

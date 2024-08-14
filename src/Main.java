@@ -154,10 +154,10 @@ public class Main {
         System.out.println("-------------------------------------------получение подзадач эпика---------------------------------------------------\n");
 
         System.out.println("----------------------------------------------установка статусов------------------------------------------------------");
-        System.out.println("taskManager.setTaskStatus(100, Status.IN_PROGRESS) = " + inMemoryTaskManager.setTaskStatus(100, Status.IN_PROGRESS));
-        System.out.println("taskManager.setSubtaskStatus(100, Status.IN_PROGRESS) = " + inMemoryTaskManager.setSubtaskStatus(100, Status.IN_PROGRESS));
-        System.out.println("taskManager.setTaskStatus(11, Status.IN_PROGRESS) = " + inMemoryTaskManager.setTaskStatus(11, Status.IN_PROGRESS));
-        System.out.println("taskManager.setSubtaskStatus(16, Status.IN_PROGRESS) = " + inMemoryTaskManager.setSubtaskStatus(16, Status.IN_PROGRESS));
+//        System.out.println("taskManager.setTaskStatus(100, Status.IN_PROGRESS) = " + inMemoryTaskManager.setTaskStatus(100, Status.IN_PROGRESS));
+//        System.out.println("taskManager.setSubtaskStatus(100, Status.IN_PROGRESS) = " + inMemoryTaskManager.setSubtaskStatus(100, Status.IN_PROGRESS));
+//        System.out.println("taskManager.setTaskStatus(11, Status.IN_PROGRESS) = " + inMemoryTaskManager.setTaskStatus(11, Status.IN_PROGRESS));
+//        System.out.println("taskManager.setSubtaskStatus(16, Status.IN_PROGRESS) = " + inMemoryTaskManager.setSubtaskStatus(16, Status.IN_PROGRESS));
 
         printTasks(inMemoryTaskManager);
 
@@ -204,28 +204,28 @@ public class Main {
 
         printTasks(inMemoryTaskManager);
 
-        inMemoryTaskManager.setSubtaskStatus(19, Status.NEW);
-        inMemoryTaskManager.setSubtaskStatus(20, Status.DONE);
-        inMemoryTaskManager.setSubtaskStatus(21, Status.IN_PROGRESS);
-        inMemoryTaskManager.setSubtaskStatus(22, Status.IN_PROGRESS);
+//        inMemoryTaskManager.setSubtaskStatus(19, Status.NEW);
+//        inMemoryTaskManager.setSubtaskStatus(20, Status.DONE);
+//        inMemoryTaskManager.setSubtaskStatus(21, Status.IN_PROGRESS);
+//        inMemoryTaskManager.setSubtaskStatus(22, Status.IN_PROGRESS);
 
         System.out.println();
         System.out.println("taskManager.getEpics() = " + inMemoryTaskManager.getEpics());
 
-        inMemoryTaskManager.setSubtaskStatus(19, Status.DONE);
-        inMemoryTaskManager.setSubtaskStatus(21, Status.NEW);
-        inMemoryTaskManager.setSubtaskStatus(22, Status.NEW);
+//        inMemoryTaskManager.setSubtaskStatus(19, Status.DONE);
+//        inMemoryTaskManager.setSubtaskStatus(21, Status.NEW);
+//        inMemoryTaskManager.setSubtaskStatus(22, Status.NEW);
 
         System.out.println();
         System.out.println("taskManager.getEpics() = " + inMemoryTaskManager.getEpics());
 
-        inMemoryTaskManager.setSubtaskStatus(19, Status.NEW);
+        //inMemoryTaskManager.setSubtaskStatus(19, Status.NEW);
         inMemoryTaskManager.removeSubtask(20);
 
         System.out.println();
         System.out.println("taskManager.getEpics() = " + inMemoryTaskManager.getEpics());
 
-        inMemoryTaskManager.setSubtaskStatus(19, Status.DONE);
+        //inMemoryTaskManager.setSubtaskStatus(19, Status.DONE);
         inMemoryTaskManager.addSubtask(subtask5);
 
         System.out.println();

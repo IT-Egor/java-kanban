@@ -141,10 +141,6 @@ public class InMemoryTaskManager implements TaskManager {
         if (!tasks.containsKey(updatedTask.getId())) {
             return -1;
         }
-        Task oldTask = tasks.get(updatedTask.getId());  //их id равны
-        if (oldTask.getStatus() != updatedTask.getStatus()) {
-            return -3;
-        }
         tasks.put(updatedTask.getId(), updatedTask);
         return updatedTask.getId();
     }
@@ -173,13 +169,12 @@ public class InMemoryTaskManager implements TaskManager {
             return -1;
         }
         Subtask oldSubtask = subtasks.get(updatedSubtask.getId());  //их id равны
-        if (oldSubtask.getContainingEpicId() != updatedSubtask.getContainingEpicId()) {
+        int oldSubtaskContainingEpicId = oldSubtask.getContainingEpicId();
+        if (oldSubtaskContainingEpicId != updatedSubtask.getContainingEpicId()) {
             return -2;
         }
-        if (oldSubtask.getStatus() != updatedSubtask.getStatus()) {
-            return -3;
-        }
         subtasks.put(updatedSubtask.getId(), updatedSubtask);
+        setSubtasksStatusToEpic(oldSubtaskContainingEpicId);
         return updatedSubtask.getId();
     }
 
@@ -219,27 +214,6 @@ public class InMemoryTaskManager implements TaskManager {
         Subtask removedSubtask = subtasks.remove(id);
         setSubtasksStatusToEpic(containingEpic.getId());
         return removedSubtask;
-    }
-
-    @Override
-    public Task setTaskStatus(int id, Status status) {
-        if (!tasks.containsKey(id)) {
-            return null;
-        }
-        Task task = tasks.get(id);
-        task.setStatus(status);
-        return task;
-    }
-
-    @Override
-    public Subtask setSubtaskStatus(int id, Status status) {
-        if (!subtasks.containsKey(id)) {
-            return null;
-        }
-        Subtask subtask = subtasks.get(id);
-        subtask.setStatus(status);
-        setSubtasksStatusToEpic(subtask.getContainingEpicId());
-        return subtask;
     }
 
     @Override
