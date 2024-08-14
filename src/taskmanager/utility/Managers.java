@@ -1,9 +1,9 @@
 package taskmanager.utility;
 
-import taskmanager.servise.HistoryManagers.HistoryManager;
-import taskmanager.servise.HistoryManagers.InMemoryHistoryManager;
-import taskmanager.servise.TaskManagers.InMemoryTaskManager;
-import taskmanager.servise.TaskManagers.TaskManager;
+import taskmanager.servise.HistoryManager;
+import taskmanager.servise.impl.InMemoryHistoryManager;
+import taskmanager.servise.impl.InMemoryTaskManager;
+import taskmanager.servise.TaskManager;
 
 public class Managers {
     public static int getNextId() {

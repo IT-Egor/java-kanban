@@ -2,6 +2,7 @@ package taskmanager.servise.TaskManagers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import taskmanager.servise.impl.InMemoryTaskManager;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;

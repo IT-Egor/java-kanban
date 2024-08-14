@@ -1,5 +1,6 @@
-package taskmanager.servise.HistoryManagers;
+package taskmanager.servise.impl;
 
+import taskmanager.servise.HistoryManager;
 import taskmanager.tasktypes.Task;
 
 import java.util.ArrayList;

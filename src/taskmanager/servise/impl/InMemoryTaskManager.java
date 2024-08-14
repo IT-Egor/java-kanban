@@ -1,6 +1,7 @@
-package taskmanager.servise.TaskManagers;
+package taskmanager.servise.impl;
 
-import taskmanager.servise.HistoryManagers.HistoryManager;
+import taskmanager.servise.HistoryManager;
+import taskmanager.servise.TaskManager;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;

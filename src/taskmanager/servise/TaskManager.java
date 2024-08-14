@@ -1,4 +1,4 @@
-package taskmanager.servise.TaskManagers;
+package taskmanager.servise;
 
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;

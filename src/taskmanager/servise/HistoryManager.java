@@ -1,4 +1,4 @@
-package taskmanager.servise.HistoryManagers;
+package taskmanager.servise;
 
 import taskmanager.tasktypes.Task;
 
