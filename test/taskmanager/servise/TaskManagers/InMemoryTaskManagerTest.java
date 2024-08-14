@@ -129,38 +129,6 @@ class InMemoryTaskManagerTest {
 
 
     @Test
-    public void shouldNotAddExistingTask() {
-        Task task = new Task("task1", "taskTesting");
-        inMemoryTaskManager.addTask(task);
-        int expected = -5;
-        int actual = inMemoryTaskManager.addTask(task);
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldNotAddExistingEpic() {
-        Epic epic = new Epic("epic1", "epicTesting");
-        inMemoryTaskManager.addEpic(epic);
-        int expected = -5;
-        int actual = inMemoryTaskManager.addEpic(epic);
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldNotAddExistingSubtask() {
-        Epic epic = new Epic("epic1", "epicTesting");
-        inMemoryTaskManager.addEpic(epic);
-        Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
-        inMemoryTaskManager.addSubtask(subtask);
-        int expected = -5;
-        int actual = inMemoryTaskManager.addSubtask(subtask);
-        assertEquals(expected, actual);
-    }
-
-
-
-
-    @Test
     public void shouldClearTasks() {
         Task task = new Task("task1", "taskTesting");
         Task task2 = new Task("task2", "taskTesting2");
