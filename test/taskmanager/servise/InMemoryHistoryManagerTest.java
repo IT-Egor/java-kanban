@@ -1,7 +1,8 @@
-package taskmanager.servise.impl;
+package taskmanager.servise;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import taskmanager.servise.impl.InMemoryHistoryManager;
 import taskmanager.tasktypes.Task;
 
 import java.util.ArrayList;
