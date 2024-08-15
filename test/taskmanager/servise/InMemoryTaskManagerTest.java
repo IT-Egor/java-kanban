@@ -470,6 +470,8 @@ class InMemoryTaskManagerTest {
     @Test void shouldChangeStatusOfEpicToIN_PROGRESSWhenStatusesOfContainedSubtasksIsDifferent() {
         Epic epic = new Epic("epic1", "epicTesting");
         Epic epic2 = new Epic("epic2", "epicTesting2");
+        // не могу придумать, как это можно обернуть в for, тк мне нужно работать с каждой переменной отдельно
+        // и у них чередуются содержащие эпики, по-моему, здесь это только усложнение
         Subtask subtask = new Subtask("subtask1", "subtaskTesting");
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2");
         Subtask subtask3 = new Subtask("subtask3", "subtaskTesting3");

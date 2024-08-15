@@ -50,10 +50,10 @@ class TaskTest {
     @Test
     public void sameTaskButDifferentObjectsShouldBeEqual() {
         Task task1 = new Task("Task Name", "Task Description");
-        Task task2 = new Task("Task Name", "Task Description");
+        Task task2 = new Task("Task2 Name", "Task2 Description");
         task1.setId(10);
         task2.setId(10);
-        task1.setStatus(Status.DONE);
+        task1.setStatus(Status.IN_PROGRESS);
         task2.setStatus(Status.DONE);
         assertEquals(task1, task2);
     }
@@ -69,14 +69,15 @@ class TaskTest {
     @Test
     public void hashCodesOfSameTasksShouldBeEqual() {
         Task task1 = new Task("Task Name", "Task Description");
-        Task task2 = new Task("Task Name", "Task Description");
+        Task task2 = new Task("Task2 Name", "Task2 Description");
         task1.setId(10);
         task2.setId(10);
-        task1.setStatus(Status.DONE);
+        task1.setStatus(Status.IN_PROGRESS);
         task2.setStatus(Status.DONE);
         assertEquals(task1.hashCode(), task2.hashCode());
     }
 
+    @Test
     public void hashCodesOfDifferentTasksShouldNotBeEqual() {
         Task task1 = new Task("Task Name", "Task Description");
         Task task2 = new Task("Task Name", "Task Description");
@@ -85,6 +86,7 @@ class TaskTest {
         assertNotEquals(task1.hashCode(), task2.hashCode());
     }
 
+    // я этот тест скорее для себя сделал, чтобы спокойнее было и потом в случае чего не путаться
     @Test
     public void toStringOfTask() {
         Task task = new Task("Task Name", "Task Description");
