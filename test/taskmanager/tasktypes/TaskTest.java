@@ -86,7 +86,6 @@ class TaskTest {
         assertNotEquals(task1.hashCode(), task2.hashCode());
     }
 
-    // я этот тест скорее для себя сделал, чтобы спокойнее было и потом в случае чего не путаться
     @Test
     public void toStringOfTask() {
         Task task = new Task("Task Name", "Task Description");

@@ -5,10 +5,11 @@ import taskmanager.tasktypes.Task;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private static final int MAX_HISTORY_SIZE = 10;
-    private LinkedList<Task> history = new LinkedList<>();
+    private List<Task> history = new LinkedList<>();
 
     @Override
     public void add(Task task) {
@@ -26,7 +27,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public LinkedList<Task> getHistory() {
+    public List<Task> getHistory() {
+        // TODO: возвращать копию
         return history;
     }
 }
