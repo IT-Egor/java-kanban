@@ -36,6 +36,18 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
+    public void shouldRemoveLastTaskFromHistory() {
+        Task task = new Task("name test", "description test");
+        Task task2 = new Task("name test2", "description test2");
+        task2.setId(1);
+        inMemoryHistoryManager.add(task);
+        inMemoryHistoryManager.add(task2);
+        inMemoryHistoryManager.remove(task2.getId());
+        inMemoryHistoryManager.remove(task.getId());
+        assertEquals(0, inMemoryHistoryManager.getHistory().size());
+    }
+
+    @Test
     public void shouldReturnHistory() {
         Task task = new Task("name test", "description test");
         inMemoryHistoryManager.add(task);
