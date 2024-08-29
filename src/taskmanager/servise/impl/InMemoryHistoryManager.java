@@ -28,7 +28,6 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public List<Task> getHistory() {
-        // TODO: возвращать копию
-        return history;
+        return new LinkedList<>(history);
     }
 }
