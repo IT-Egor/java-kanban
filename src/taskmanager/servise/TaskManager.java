@@ -3,10 +3,7 @@ package taskmanager.servise;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
-import taskmanager.utility.Status;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public interface TaskManager {

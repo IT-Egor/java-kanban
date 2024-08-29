@@ -11,7 +11,6 @@ import taskmanager.utility.Status;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -681,6 +680,20 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addSubtask(subtask2);
         inMemoryTaskManager.findSubtask(subtask.getId());
         List<Task> expected = new ArrayList<>(Arrays.asList(task, epic, subtask));
+        List<Task> actual = inMemoryTaskManager.getHistory();
+        assertArrayEquals(expected.toArray(),actual.toArray());
+    }
+
+    @Test
+    public void shouldReturnUpdatedHistoryWhenViewingTaskThatAlreadyViewed() {
+        Task task = new Task("task1", "taskTesting");
+        Task task2 = new Task("task2", "taskTesting2");
+        inMemoryTaskManager.addTask(task);
+        inMemoryTaskManager.addTask(task2);
+        inMemoryTaskManager.findTask(task.getId());
+        inMemoryTaskManager.findTask(task2.getId());
+        inMemoryTaskManager.findTask(task.getId());
+        List<Task> expected = new ArrayList<>(Arrays.asList(task2, task));
         List<Task> actual = inMemoryTaskManager.getHistory();
         assertArrayEquals(expected.toArray(),actual.toArray());
     }

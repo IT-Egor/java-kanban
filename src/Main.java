@@ -91,6 +91,7 @@ public class Main {
         System.out.println("taskManager.getHistory() = " + taskManager.getHistory());
         printTasks(taskManager);
         System.out.println("-".repeat(cutWidth) + "очистка задач" + "-".repeat(cutWidth));
+        System.out.println();
 
 
         System.out.println("-".repeat(cutWidth) + "проверка истории на удаление и дубликаты" + "-".repeat(cutWidth));
@@ -123,11 +124,13 @@ public class Main {
         taskManager.findEpic(epic1.getId());
 
         System.out.println("taskManager.getHistory() = " + taskManager.getHistory());
+        System.out.println();
 
         taskManager.removeTask(task2.getId());
         taskManager.removeEpic(epic1.getId());
 
         System.out.println("taskManager.getHistory() = " + taskManager.getHistory());
+        System.out.println("-".repeat(cutWidth) + "проверка истории на удаление и дубликаты" + "-".repeat(cutWidth));
     }
 
     public static void printTasks(TaskManager taskManager) {
