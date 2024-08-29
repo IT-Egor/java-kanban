@@ -680,19 +680,9 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addSubtask(subtask);
         inMemoryTaskManager.addSubtask(subtask2);
         inMemoryTaskManager.findSubtask(subtask.getId());
-        List<Task> expected = new ArrayList<>(Arrays.asList(subtask, epic, task));
+        List<Task> expected = new ArrayList<>(Arrays.asList(task, epic, subtask));
         List<Task> actual = inMemoryTaskManager.getHistory();
         assertArrayEquals(expected.toArray(),actual.toArray());
-    }
-
-    @Test
-    public void shouldNotAddToHistoryMoreThan10Tasks() {
-        for (int i = 0; i < 15; i++) {
-            Task task = new Task("task" + i, "taskTesting" + i);
-            inMemoryTaskManager.addTask(task);
-            inMemoryTaskManager.findTask(task.getId());
-        }
-        assertEquals(10,inMemoryTaskManager.getHistory().size());
     }
 
 
@@ -701,20 +691,27 @@ class InMemoryTaskManagerTest {
     @Test
     public void shouldRemoveTaskFromHistoryWhenRemovingTaskFromManager() {
         Task task = new Task("task1", "taskTesting");
+        Task task2 = new Task("task2", "taskTesting2");
+        Task task3 = new Task("task3", "taskTesting3");
         inMemoryTaskManager.addTask(task);
+        inMemoryTaskManager.addTask(task2);
+        inMemoryTaskManager.addTask(task3);
         inMemoryTaskManager.findTask(task.getId());
-        inMemoryTaskManager.removeTask(task.getId());
-        assertEquals(0,inMemoryTaskManager.getHistory().size());
+        inMemoryTaskManager.findTask(task2.getId());
+        inMemoryTaskManager.findTask(task3.getId());
+        inMemoryTaskManager.removeTask(task2.getId());
+        List<Task> expected = new ArrayList<>(Arrays.asList(task, task3));
+        List<Task> actual = inMemoryTaskManager.getHistory();
+        assertArrayEquals(expected.toArray(),actual.toArray());
     }
 
     @Test
     public void shouldRemoveTaskFromHistoryWhenClearingTaskFromManager() {
-        Task task = new Task("task1", "taskTesting");
-        Task task2 = new Task("task2", "taskTesting2");
-        inMemoryTaskManager.addTask(task);
-        inMemoryTaskManager.addTask(task);
-        inMemoryTaskManager.findTask(task.getId());
-        inMemoryTaskManager.findTask(task2.getId());
+        for (int i = 0; i < 10; i++) {
+            Task task = new Task("task" + i, "taskTesting" + i);
+            inMemoryTaskManager.addTask(task);
+            inMemoryTaskManager.findTask(task.getId());
+        }
         inMemoryTaskManager.clearTasks();
         assertEquals(0,inMemoryTaskManager.getHistory().size());
     }
