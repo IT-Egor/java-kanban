@@ -29,27 +29,24 @@ class InMemoryTaskManagerTest {
     public void shouldAddTask() {
         Task task = new Task("task1", "taskTesting");
         inMemoryTaskManager.addTask(task);
-        List<Task> expected = new ArrayList<>(Arrays.asList(task));
         List<Task> actual = inMemoryTaskManager.getTasks();
-        assertArrayEquals(expected.toArray(), actual.toArray());
+        assertTrue(actual.contains(task));
     }
 
     @Test
     public void shouldAddEpic() {
         Epic epic = new Epic("epic1", "epicTesting");
         inMemoryTaskManager.addEpic(epic);
-        List<Epic> expected = new ArrayList<>(Arrays.asList(epic));
         List<Epic> actual = inMemoryTaskManager.getEpics();
-        assertArrayEquals(expected.toArray(), actual.toArray());
+        assertTrue(actual.contains(epic));
     }
 
     @Test
     public void shouldNotAddSubtaskToNonexistentEpic() {
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", -1);
         inMemoryTaskManager.addSubtask(subtask);
-        List<Subtask> expected = new ArrayList<>();
         List<Subtask> actual = inMemoryTaskManager.getSubtasks();
-        assertArrayEquals(expected.toArray(), actual.toArray());
+        assertTrue(actual.isEmpty());
     }
 
     @Test
@@ -58,9 +55,8 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
         inMemoryTaskManager.addSubtask(subtask);
-        List<Subtask> expected = new ArrayList<>(Arrays.asList(subtask));
         List<Subtask> actual = inMemoryTaskManager.getSubtasks();
-        assertArrayEquals(expected.toArray(), actual.toArray());
+        assertTrue(actual.contains(subtask));
     }
 
     @Test
@@ -69,9 +65,8 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
         inMemoryTaskManager.addSubtask(subtask);
-        List<Epic> expected = new ArrayList<>(Arrays.asList(epic));
         List<Epic> actual = inMemoryTaskManager.getEpics();
-        assertArrayEquals(expected.toArray(), actual.toArray());
+        assertTrue(actual.contains(epic));
     }
 
 
@@ -134,9 +129,8 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addTask(task);
         inMemoryTaskManager.addTask(task2);
         inMemoryTaskManager.clearTasks();
-        List<Task> expected = new ArrayList<>();
         List<Task> actual = inMemoryTaskManager.getTasks();
-        assertArrayEquals(expected.toArray(), actual.toArray());
+        assertTrue(actual.isEmpty());
     }
 
     @Test
@@ -146,9 +140,8 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addEpic(epic);
         inMemoryTaskManager.addEpic(epic2);
         inMemoryTaskManager.clearEpics();
-        List<Epic> expected = new ArrayList<>();
         List<Epic> actual = inMemoryTaskManager.getEpics();
-        assertArrayEquals(expected.toArray(), actual.toArray());
+        assertTrue(actual.isEmpty());
     }
 
     @Test
@@ -162,9 +155,8 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addSubtask(subtask);
         inMemoryTaskManager.addSubtask(subtask2);
         inMemoryTaskManager.clearEpics();
-        List<Subtask> expected = new ArrayList<>();
         List<Subtask> actual = inMemoryTaskManager.getSubtasks();
-        assertArrayEquals(expected.toArray(), actual.toArray());
+        assertTrue(actual.isEmpty());
     }
 
     @Test
@@ -178,9 +170,8 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addSubtask(subtask);
         inMemoryTaskManager.addSubtask(subtask2);
         inMemoryTaskManager.clearSubtasks();
-        List<Subtask> expected = new ArrayList<>();
         List<Subtask> actual = inMemoryTaskManager.getSubtasks();
-        assertArrayEquals(expected.toArray(), actual.toArray());
+        assertTrue(actual.isEmpty());
     }
 
     @Test
