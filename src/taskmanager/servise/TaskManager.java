@@ -3,18 +3,16 @@ package taskmanager.servise;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
-import taskmanager.utility.Status;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 public interface TaskManager {
 
-    ArrayList<Task> getTasks();
+    List<Task> getTasks();
 
-    ArrayList<Epic> getEpics();
+    List<Epic> getEpics();
 
-    ArrayList<Subtask> getSubtasks();
+    List<Subtask> getSubtasks();
 
     int addTask(Task task);
 
@@ -22,11 +20,11 @@ public interface TaskManager {
 
     int addSubtask(Subtask subtask);
 
-    ArrayList<Task> clearTasks();
+    List<Task> clearTasks();
 
-    ArrayList<Epic> clearEpics();
+    List<Epic> clearEpics();
 
-    ArrayList<Subtask> clearSubtasks();
+    List<Subtask> clearSubtasks();
 
     Task findTask(int id);
 
@@ -46,7 +44,7 @@ public interface TaskManager {
 
     Subtask removeSubtask(int id);
 
-    ArrayList<Integer> getEpicSubtasksIds(int epicId);
+    List<Integer> getEpicSubtasksIds(int epicId);
 
-    LinkedList<Task> getHistory();
+    List<Task> getHistory();
 }

@@ -1,20 +1,21 @@
 package taskmanager.tasktypes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task {
-    protected ArrayList<Integer> subtasksIds;
+    protected List<Integer> subtasksIds;
 
     public Epic(String name, String description) {
         super(name, description);
         subtasksIds = new ArrayList<>();
     }
 
-    public ArrayList<Integer> getSubtasksIds() {
+    public List<Integer> getSubtasksIds() {
         return subtasksIds;
     }
 
-    public void setSubtasksIds(ArrayList<Integer> subtasksIds) {
+    public void setSubtasksIds(List<Integer> subtasksIds) {
         this.subtasksIds = subtasksIds;
     }
 
@@ -26,8 +27,8 @@ public class Epic extends Task {
         subtasksIds.remove(subtaskId);
     }
 
-    public ArrayList<Integer> clearSubtasksIds() {
-        ArrayList<Integer> out = new ArrayList<>(subtasksIds);
+    public List<Integer> clearSubtasksIds() {
+        List<Integer> out = new ArrayList<>(subtasksIds);
         subtasksIds.clear();
         return out;
     }

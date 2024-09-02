@@ -7,7 +7,7 @@ import taskmanager.tasktypes.Task;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,39 +28,22 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void shouldNotAddTaskToHistoryWhenSizeIs10() {
-        for (int i = 0; i < 15; i++) {
-            Task task = new Task("name test", "description test");
-            task.setId(i);
-            inMemoryHistoryManager.add(task);
-        }
-        assertEquals(10, inMemoryHistoryManager.getHistory().size());
-    }
-
-    @Test
-    public void arrayShouldRemoveLastTaskWhenTryingToAddMoreThan10Tasks() {
-        for (int i = 0; i < 10; i++) {
-            Task task = new Task("name test", "description test");
-            task.setId(i);
-            inMemoryHistoryManager.add(task);
-        }
-        ArrayList<Task> expected = new ArrayList<>(inMemoryHistoryManager.getHistory());
-        for (int i = 11; i < 15; i++) {
-            Task task = new Task("name test", "description test");
-            task.setId(i);
-            inMemoryHistoryManager.add(task);
-            expected.addFirst(task);
-            expected.removeLast();
-        }
-        LinkedList<Task> actual = inMemoryHistoryManager.getHistory();
-        assertArrayEquals(expected.toArray(), actual.toArray());
-    }
-
-    @Test
     public void shouldRemoveTaskFromHistory() {
         Task task = new Task("name test", "description test");
         inMemoryHistoryManager.add(task);
-        inMemoryHistoryManager.remove(task);
+        inMemoryHistoryManager.remove(task.getId());
+        assertEquals(0, inMemoryHistoryManager.getHistory().size());
+    }
+
+    @Test
+    public void shouldRemoveLastTaskFromHistory() {
+        Task task = new Task("name test", "description test");
+        Task task2 = new Task("name test2", "description test2");
+        task2.setId(1);
+        inMemoryHistoryManager.add(task);
+        inMemoryHistoryManager.add(task2);
+        inMemoryHistoryManager.remove(task2.getId());
+        inMemoryHistoryManager.remove(task.getId());
         assertEquals(0, inMemoryHistoryManager.getHistory().size());
     }
 
@@ -69,9 +52,23 @@ class InMemoryHistoryManagerTest {
         Task task = new Task("name test", "description test");
         inMemoryHistoryManager.add(task);
         Task task2 = new Task("name test2", "description test2");
+        task2.setId(1);
         inMemoryHistoryManager.add(task2);
-        ArrayList<Task> expected = new ArrayList<>(Arrays.asList(task2, task));
-        LinkedList<Task> actual = inMemoryHistoryManager.getHistory();
+        List<Task> expected = new ArrayList<>(Arrays.asList(task, task2));
+        List<Task> actual = inMemoryHistoryManager.getHistory();
+        assertArrayEquals(expected.toArray(), actual.toArray());
+    }
+
+    @Test
+    public void shouldUpdateHistoryWhenTryingToAddTaskThatAlreadyViewed() {
+        Task task = new Task("name test", "description test");
+        inMemoryHistoryManager.add(task);
+        Task task2 = new Task("name test2", "description test2");
+        task2.setId(1);
+        inMemoryHistoryManager.add(task2);
+        inMemoryHistoryManager.add(task);
+        List<Task> expected = new ArrayList<>(Arrays.asList(task2, task));
+        List<Task> actual = inMemoryHistoryManager.getHistory();
         assertArrayEquals(expected.toArray(), actual.toArray());
     }
 }

@@ -91,6 +91,46 @@ public class Main {
         System.out.println("taskManager.getHistory() = " + taskManager.getHistory());
         printTasks(taskManager);
         System.out.println("-".repeat(cutWidth) + "очистка задач" + "-".repeat(cutWidth));
+        System.out.println();
+
+
+        System.out.println("-".repeat(cutWidth) + "проверка истории на удаление и дубликаты" + "-".repeat(cutWidth));
+        task1 = new Task("task1", "taskTesting1");
+        task2 = new Task("task2", "taskTesting2");
+        epic1 = new Epic("epic1", "epicTesting1");
+        epic2 = new Epic("epic2", "epicTesting2");
+
+        taskManager.addTask(task1);
+        taskManager.addTask(task2);
+        taskManager.addEpic(epic1);
+        taskManager.addEpic(epic2);
+        subtask1 = new Subtask("subtask1", "subtaskTesting1", epic1.getId());
+        subtask2 = new Subtask("subtask2", "subtaskTesting2", epic1.getId());
+        subtask3 = new Subtask("subtask3", "subtaskTesting3", epic1.getId());
+        taskManager.addSubtask(subtask1);
+        taskManager.addSubtask(subtask2);
+        taskManager.addSubtask(subtask3);
+
+        taskManager.findTask(task1.getId());
+        taskManager.findTask(task2.getId());
+        taskManager.findEpic(epic1.getId());
+        taskManager.findEpic(epic2.getId());
+        taskManager.findSubtask(subtask1.getId());
+        taskManager.findSubtask(subtask2.getId());
+        taskManager.findSubtask(subtask3.getId());
+        taskManager.findTask(task1.getId());
+        taskManager.findSubtask(subtask1.getId());
+        taskManager.findSubtask(subtask3.getId());
+        taskManager.findEpic(epic1.getId());
+
+        System.out.println("taskManager.getHistory() = " + taskManager.getHistory());
+        System.out.println();
+
+        taskManager.removeTask(task2.getId());
+        taskManager.removeEpic(epic1.getId());
+
+        System.out.println("taskManager.getHistory() = " + taskManager.getHistory());
+        System.out.println("-".repeat(cutWidth) + "проверка истории на удаление и дубликаты" + "-".repeat(cutWidth));
     }
 
     public static void printTasks(TaskManager taskManager) {
