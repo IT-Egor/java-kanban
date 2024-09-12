@@ -30,4 +30,9 @@ public class Subtask extends Task {
                 ", containingEpicId=" + containingEpicId +
                 '}';
     }
+
+    @Override
+    public String toCSV() {
+        return id + ",SUBTASK," + name + "," + description + "," + status + "," + containingEpicId + ",";
+    }
 }

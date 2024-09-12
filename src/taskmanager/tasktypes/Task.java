@@ -70,4 +70,8 @@ public class Task {
                 ", status=" + status +
                 '}';
     }
+
+    public String toCSV() {
+        return id + ",TASK," + name + "," + description + "," + status + ",";
+    }
 }

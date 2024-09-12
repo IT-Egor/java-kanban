@@ -109,14 +109,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     public void save() {
         try (Writer writer = new FileWriter(fileToSavePath.toFile())) {
             //writer.write("test");
+            writer.write("id,type,name,description,status,epic" + "\n");
             for (Task task : getTasks()) {
-                writer.write(task.toString() + "\n");
+                writer.write(task.toCSV() + "\n");
             }
             for (Epic epic : getEpics()) {
-                writer.write(epic.toString() + "\n");
+                writer.write(epic.toCSV() + "\n");
             }
             for (Subtask subtask : getSubtasks()) {
-                writer.write(subtask.toString() + "\n");
+                writer.write(subtask.toCSV() + "\n");
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка записи в файл");
