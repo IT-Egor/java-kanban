@@ -1,5 +1,7 @@
 package taskmanager.tasktypes;
 
+import taskmanager.utility.Status;
+
 public class Subtask extends Task {
     protected int containingEpicId;
 
@@ -32,7 +34,16 @@ public class Subtask extends Task {
     }
 
     @Override
-    public String toCSV() {
-        return id + ",SUBTASK," + name + "," + description + "," + status + "," + containingEpicId + ",";
+    public String toCSVLine() {
+        return "SUBTASK," + id + "," + name + "," + description + "," + status + "," + containingEpicId + ",";
+    }
+
+    public static Subtask fromCSVLine(String csvLine) {
+        String[] values = csvLine.split(",");
+        Subtask subtask = new Subtask(values[2], values[3]);
+        subtask.setId(Integer.parseInt(values[1]));
+        subtask.setStatus(Status.valueOf(values[4]));
+        subtask.setContainingEpicId(Integer.parseInt(values[5]));
+        return subtask;
     }
 }

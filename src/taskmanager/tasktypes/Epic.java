@@ -1,5 +1,7 @@
 package taskmanager.tasktypes;
 
+import taskmanager.utility.Status;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +47,15 @@ public class Epic extends Task {
     }
 
     @Override
-    public String toCSV() {
-        return id + ",EPIC," + name + "," + description + "," + status + ",";
+    public String toCSVLine() {
+        return "EPIC," + id + "," + name + "," + description + "," + status + ",";
+    }
+
+    public static Epic fromCSVLine(String csvLine) {
+        String[] values = csvLine.split(",");
+        Epic epic = new Epic(values[2], values[3]);
+        epic.setId(Integer.parseInt(values[1]));
+        epic.setStatus(Status.valueOf(values[4]));
+        return epic;
     }
 }
