@@ -7,6 +7,7 @@ import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -14,11 +15,11 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
-    private Path fileToSavePath;
+    private File file;
 
-    public FileBackedTaskManager(Path path, HistoryManager historyManager) {
+    public FileBackedTaskManager(File file, HistoryManager historyManager) {
         super(historyManager);
-        fileToSavePath = path;
+        this.file = file;
     }
 
     @Override
@@ -107,7 +108,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
 
     public void save() {
-        try (Writer writer = new FileWriter(fileToSavePath.toFile())) {
+        try (Writer writer = new FileWriter(file)) {
             //writer.write("test");
             writer.write("id,type,name,description,status,epic" + "\n");
             for (Task task : getTasks()) {

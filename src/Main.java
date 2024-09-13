@@ -6,6 +6,7 @@ import taskmanager.tasktypes.Subtask;
 import taskmanager.utility.Managers;
 import taskmanager.utility.Status;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -15,7 +16,8 @@ public class Main {
         TaskManager taskManager = Managers.getDefaultTaskManager();
 
         Path path = Paths.get("/Users/egor.belousov/Desktop/Develop/Java/Courses/Projects/java-kanban/src/taskmanager/resourses/test.csv");
-        taskManager = new FileBackedTaskManager(path, Managers.getDefaultHistoryManager());
+        File csvFile = path.toFile();
+        taskManager = new FileBackedTaskManager(csvFile, Managers.getDefaultHistoryManager());
         int cutWidth = 80;
 
         System.out.print("-".repeat(cutWidth) + "создание задач" + "-".repeat(cutWidth));
