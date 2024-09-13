@@ -17,7 +17,7 @@ public class Main {
 
         Path path = Paths.get("/Users/egor.belousov/Desktop/Develop/Java/Courses/Projects/java-kanban/src/taskmanager/resourses/test.csv");
         File csvFile = path.toFile();
-        taskManager = new FileBackedTaskManager(csvFile, Managers.getDefaultHistoryManager());
+        taskManager = Managers.getFileTaskManager(csvFile);
         int cutWidth = 80;
 
         System.out.print("-".repeat(cutWidth) + "создание задач" + "-".repeat(cutWidth));
@@ -171,7 +171,7 @@ public class Main {
 
         printTasks(taskManager);
 
-        TaskManager newTaskManager = FileBackedTaskManager.loadFromFile(csvFile);
+        TaskManager newTaskManager = Managers.loadTaskManagerFromFile(csvFile);
         printTasks(newTaskManager);
         System.out.println("-".repeat(cutWidth) + "проверка чтения задач из файла" + "-".repeat(cutWidth));
     }
