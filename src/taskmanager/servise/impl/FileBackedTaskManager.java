@@ -127,30 +127,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     public static FileBackedTaskManager loadFromFile(File file) {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             FileBackedTaskManager taskManager = new FileBackedTaskManager(file, Managers.getDefaultHistoryManager());
-            HashMap<Integer, Integer> fromOldToNewEpicId = new HashMap<>();
 
-            String readLine;
-            List<String> lines = new ArrayList<>();
+            String line;
             br.readLine();
 
             while (br.ready()) {
-                readLine = br.readLine();
-                lines.add(readLine);
-            }
-
-            for (String line : lines) {
+                line = br.readLine();
                 if (line.startsWith("TASK")) {
                     Task task = Task.fromCSVLine(line);
-                    taskManager.addTask(task);
+                    taskManager.tasks.put(task.getId(), task);
                 } else if (line.startsWith("EPIC")) {
                     Epic epic = Epic.fromCSVLine(line);
-                    int oldId = epic.getId();
-                    taskManager.addEpic(epic);
-                    fromOldToNewEpicId.put(oldId, epic.getId());
+                    taskManager.epics.put(epic.getId(), epic);
                 } else if (line.startsWith("SUBTASK")) {
                     Subtask subtask = Subtask.fromCSVLine(line);
-                    subtask.setContainingEpicId(fromOldToNewEpicId.get(subtask.getContainingEpicId()));
-                    taskManager.addSubtask(subtask);
+                    Epic containingEpic = taskManager.epics.get(subtask.getContainingEpicId());
+                    containingEpic.addSubtaskId(subtask.getId());
+                    taskManager.subtasks.put(subtask.getId(), subtask);
                 }
             }
             return taskManager;
