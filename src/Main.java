@@ -1,22 +1,15 @@
 import taskmanager.servise.TaskManager;
+import taskmanager.servise.impl.FileBackedTaskManager;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Task;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.utility.Managers;
 import taskmanager.utility.Status;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 public class Main {
 
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefaultTaskManager();
-
-        Path path = Paths.get("/Users/egor.belousov/Desktop/Develop/Java/Courses/Projects/java-kanban/src/taskmanager/resourses/test.csv");
-        File csvFile = path.toFile();
-        taskManager = Managers.getFileTaskManager(csvFile);
         int cutWidth = 80;
 
         System.out.print("-".repeat(cutWidth) + "создание задач" + "-".repeat(cutWidth));
@@ -170,7 +163,7 @@ public class Main {
 
         printTasks(taskManager);
 
-        TaskManager newTaskManager = Managers.loadTaskManagerFromFile(csvFile);
+        TaskManager newTaskManager = FileBackedTaskManager.loadFromFile(Managers.CSV_FILE);
         printTasks(newTaskManager);
         System.out.println("-".repeat(cutWidth) + "проверка чтения задач из файла" + "-".repeat(cutWidth));
     }

@@ -118,7 +118,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 writer.write(subtask.toCSVLine() + "\n");
             }
         } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка записи в файл", e.getCause());
+            throw new ManagerSaveException("Ошибка записи в файл: " + e.getMessage(), e.getCause());
         }
     }
 
@@ -147,7 +147,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             return taskManager;
 
         } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка чтения из файла", e.getCause());
+            throw new ManagerSaveException("Ошибка чтения из файла: " + e.getMessage(), e.getCause());
         }
     }
 }
