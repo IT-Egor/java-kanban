@@ -100,7 +100,7 @@ class FileBackedTaskManagerTest extends AbstractTaskManagerTest<FileBackedTaskMa
         taskManager.addSubtask(subtask2);
         taskManager.addSubtask(subtask3);
 
-        FileBackedTaskManager newTaskManager = (FileBackedTaskManager) Managers.loadTaskManagerFromFile(tempFile);
+        FileBackedTaskManager newTaskManager = FileBackedTaskManager.loadFromFile(tempFile);
 
         assertArrayEquals(taskManager.getTasks().toArray(), newTaskManager.getTasks().toArray());
         assertArrayEquals(taskManager.getEpics().toArray(), newTaskManager.getEpics().toArray());
@@ -111,7 +111,7 @@ class FileBackedTaskManagerTest extends AbstractTaskManagerTest<FileBackedTaskMa
     public void shouldBeEmptyWhenLoadingFromEmptyFile() {
         try {
             File tempFile2 = File.createTempFile("emptyTest", ".csv");
-            FileBackedTaskManager newTaskManager = (FileBackedTaskManager) Managers.loadTaskManagerFromFile(tempFile2);
+            FileBackedTaskManager newTaskManager = FileBackedTaskManager.loadFromFile(tempFile2);
             assertTrue(newTaskManager.getTasks().isEmpty());
             assertTrue(newTaskManager.getEpics().isEmpty());
             assertTrue(newTaskManager.getSubtasks().isEmpty());
