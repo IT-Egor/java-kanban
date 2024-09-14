@@ -6,7 +6,9 @@ import taskmanager.servise.TaskManager;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
+import taskmanager.utility.Converter;
 import taskmanager.utility.Managers;
+import taskmanager.utility.Type;
 
 import java.io.*;
 import java.util.List;
@@ -107,18 +109,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     public void save() {
         try (Writer writer = new FileWriter(file)) {
             //writer.write("test");
-            writer.write("type,id,name,description,status,epic" + "\n");
+            writer.write("type,id,name,description,status,epic\n");
             for (Task task : getTasks()) {
-                writer.write(task.toCSVLine() + "\n");
+                writer.write(Converter.anyTaskToCSVLine(task));
             }
             for (Epic epic : getEpics()) {
-                writer.write(epic.toCSVLine() + "\n");
+                writer.write(Converter.anyTaskToCSVLine(epic));
             }
             for (Subtask subtask : getSubtasks()) {
-                writer.write(subtask.toCSVLine() + "\n");
+                writer.write(Converter.anyTaskToCSVLine(subtask));
             }
         } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка записи в файл: " + e.getMessage(), e.getCause());
+            throw new ManagerSaveException("Error writing to a file: " + e.getMessage(), e.getCause());
         }
     }
 
@@ -131,23 +133,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
             while (br.ready()) {
                 line = br.readLine();
-                if (line.startsWith("TASK")) {
-                    Task task = Task.fromCSVLine(line);
+                Task task = Converter.fromCSVLineToAnyTask(line);
+                if (task.getType() == Type.TASK) {
                     taskManager.tasks.put(task.getId(), task);
-                } else if (line.startsWith("EPIC")) {
-                    Epic epic = Epic.fromCSVLine(line);
-                    taskManager.epics.put(epic.getId(), epic);
-                } else if (line.startsWith("SUBTASK")) {
-                    Subtask subtask = Subtask.fromCSVLine(line);
-                    Epic containingEpic = taskManager.epics.get(subtask.getContainingEpicId());
-                    containingEpic.addSubtaskId(subtask.getId());
-                    taskManager.subtasks.put(subtask.getId(), subtask);
+                } else if (task.getType() == Type.EPIC) {
+                    taskManager.epics.put(task.getId(), (Epic) task);
+                } else if (task.getType() == Type.SUBTASK) {
+                    taskManager.subtasks.put(task.getId(), (Subtask) task);
                 }
             }
             return taskManager;
 
         } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка чтения из файла: " + e.getMessage(), e.getCause());
+            throw new ManagerSaveException("Error reading from a file: " + e.getMessage(), e.getCause());
         }
     }
 }

@@ -78,16 +78,4 @@ public class Task {
                 ", status=" + status +
                 '}';
     }
-
-    public String toCSVLine() {
-        return "TASK," + id + "," + name + "," + description + "," + status + ",";
-    }
-
-    public static Task fromCSVLine(String csvLine) {
-        String[] values = csvLine.split(",");
-        Task task = new Task(values[2], values[3]);
-        task.setId(Integer.parseInt(values[1]));
-        task.setStatus(Status.valueOf(values[4]));
-        return task;
-    }
 }
