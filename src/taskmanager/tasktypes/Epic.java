@@ -1,6 +1,5 @@
 package taskmanager.tasktypes;
 
-import taskmanager.utility.Status;
 import taskmanager.utility.Type;
 
 import java.util.ArrayList;
