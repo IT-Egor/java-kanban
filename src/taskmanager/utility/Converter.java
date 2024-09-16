@@ -1,6 +1,6 @@
 package taskmanager.utility;
 
-import taskmanager.exceptions.TaskTypeDoesNotExistException;
+import taskmanager.exceptions.TaskConversionException;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
@@ -31,7 +31,7 @@ public class Converter {
             task = new Subtask(values[2], values[3]);
             ((Subtask) task).setContainingEpicId(Integer.parseInt(values[5]));
         } else {
-            throw new TaskTypeDoesNotExistException("Unknown task type: " + values[0]);
+            throw new TaskConversionException("Unknown task type: " + values[0]);
         }
 
         task.setId(Integer.parseInt(values[1]));
