@@ -1,5 +1,7 @@
 package taskmanager.tasktypes;
 
+import taskmanager.utility.Type;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ public class Epic extends Task {
     public Epic(String name, String description) {
         super(name, description);
         subtasksIds = new ArrayList<>();
+        type = Type.EPIC;
     }
 
     public List<Integer> getSubtasksIds() {

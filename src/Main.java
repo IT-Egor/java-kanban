@@ -1,4 +1,5 @@
 import taskmanager.servise.TaskManager;
+import taskmanager.servise.impl.FileBackedTaskManager;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Task;
 import taskmanager.tasktypes.Subtask;
@@ -130,7 +131,41 @@ public class Main {
         taskManager.removeEpic(epic1.getId());
 
         System.out.println("taskManager.getHistory() = " + taskManager.getHistory());
+        System.out.println();
+        printTasks(taskManager);
+
         System.out.println("-".repeat(cutWidth) + "проверка истории на удаление и дубликаты" + "-".repeat(cutWidth));
+        System.out.println();
+
+
+        System.out.print("-".repeat(cutWidth) + "проверка чтения задач из файла" + "-".repeat(cutWidth));
+        taskManager.clearTasks();
+        taskManager.clearEpics();
+        taskManager.clearSubtasks();
+
+        task1 = new Task("task1", "taskTesting1");
+        task2 = new Task("task2", "taskTesting2");
+        epic1 = new Epic("epic1", "epicTesting1");
+        epic2 = new Epic("epic2", "epicTesting2");
+
+        taskManager.addTask(task1);
+        taskManager.addTask(task2);
+        taskManager.addEpic(epic1);
+        taskManager.addEpic(epic2);
+        subtask1 = new Subtask("subtask1", "subtaskTesting1", epic1.getId());
+        subtask2 = new Subtask("subtask2", "subtaskTesting2", epic1.getId());
+        subtask3 = new Subtask("subtask3", "subtaskTesting3", epic2.getId());
+        subtask1.setStatus(Status.DONE);
+        subtask3.setStatus(Status.DONE);
+        taskManager.addSubtask(subtask1);
+        taskManager.addSubtask(subtask2);
+        taskManager.addSubtask(subtask3);
+
+        printTasks(taskManager);
+
+        TaskManager newTaskManager = FileBackedTaskManager.loadFromFile(Managers.CSV_FILE);
+        printTasks(newTaskManager);
+        System.out.println("-".repeat(cutWidth) + "проверка чтения задач из файла" + "-".repeat(cutWidth));
     }
 
     public static void printTasks(TaskManager taskManager) {

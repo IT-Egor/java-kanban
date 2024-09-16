@@ -1,6 +1,8 @@
 package taskmanager.tasktypes;
 
 import taskmanager.utility.Status;
+import taskmanager.utility.Type;
+
 import java.util.Objects;
 
 public class Task {
@@ -8,12 +10,14 @@ public class Task {
     protected String description;
     protected int id;
     protected Status status;
+    protected Type type;
 
     public Task(String name, String description) {
         this.description = description;
         this.name = name;
         status = Status.NEW;
         id = 0;
+        type = Type.TASK;
     }
 
     public String getName() {
@@ -46,6 +50,10 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     @Override
