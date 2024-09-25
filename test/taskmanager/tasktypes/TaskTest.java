@@ -3,6 +3,9 @@ package taskmanager.tasktypes;
 import org.junit.jupiter.api.Test;
 import taskmanager.utility.Status;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TaskTest {
@@ -91,7 +94,9 @@ class TaskTest {
         Task task = new Task("Task Name", "Task Description");
         task.setStatus(Status.DONE);
         task.setId(10);
-        String expected = "Task{name='Task Name', description='Task Description', id=10, status=DONE}";
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ZERO);
+        String expected = "Task{name='Task Name', description='Task Description', id=10, status=DONE, startTime='01-01-0001 00:00:00', endTime='01-01-0001 00:00:00', duration='0m'}";
         assertEquals(expected, task.toString());
     }
 }
