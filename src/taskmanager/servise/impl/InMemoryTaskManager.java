@@ -1,5 +1,6 @@
 package taskmanager.servise.impl;
 
+import taskmanager.exceptions.NullTimesOfTaskException;
 import taskmanager.servise.HistoryManager;
 import taskmanager.servise.TaskManager;
 import taskmanager.tasktypes.Epic;
@@ -41,6 +42,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int addTask(Task task) {
+        throwIfTaskTimesIsNull(task);
         int id = Managers.getNextId();
         task.setId(id);
         tasks.put(id, task);
@@ -57,6 +59,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int addSubtask(Subtask subtask) {
+        throwIfTaskTimesIsNull(subtask);
         int epicId = subtask.getContainingEpicId();
         if (!epics.containsKey(epicId)) {
             return -1;
@@ -142,6 +145,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int updateTask(Task updatedTask) {
+        throwIfTaskTimesIsNull(updatedTask);
         if (!tasks.containsKey(updatedTask.getId())) {
             return -1;
         }
@@ -169,6 +173,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int updateSubtask(Subtask updatedSubtask) {
+        throwIfTaskTimesIsNull(updatedSubtask);
         if (!subtasks.containsKey(updatedSubtask.getId())) {
             return -1;
         }
@@ -234,6 +239,12 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
+    private void throwIfTaskTimesIsNull(Task task) {
+        if (task.getStartTime() == null || task.getDuration() == null) {
+            throw new NullTimesOfTaskException("Task with id=" + task.getId() + " has null times");
+        }
+    }
+
     private void setSubtasksStatusToEpic(int epicId) {
         Epic epic = epics.get(epicId);
         List<Integer> subtaskIds = epic.getSubtasksIds();
@@ -274,6 +285,13 @@ public class InMemoryTaskManager implements TaskManager {
     private void setTimesToEpic(int epicId) {
         Epic epic = epics.get(epicId);
         List<Integer> subtaskIds = epic.getSubtasksIds();
+        if (subtaskIds.isEmpty()) {
+            epic.setStartTime(null);
+            epic.setDuration(null);
+            epic.setEndTime(null);
+            return;
+        }
+
         LocalDateTime subtasksMinTime = subtasks.get(subtaskIds.getFirst()).getStartTime();
         LocalDateTime subtasksMaxTime = subtasks.get(subtaskIds.getFirst()).getEndTime();
 

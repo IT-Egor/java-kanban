@@ -7,6 +7,8 @@ import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
 import taskmanager.utility.Status;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +29,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldAddTask() {
         Task task = new Task("task1", "taskTesting");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         taskManager.addTask(task);
         List<Task> actual = taskManager.getTasks();
         assertTrue(actual.contains(task));
@@ -43,6 +47,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldNotAddSubtaskToNonexistentEpic() {
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", -1);
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         List<Subtask> actual = taskManager.getSubtasks();
         assertTrue(actual.isEmpty());
@@ -53,6 +59,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         List<Subtask> actual = taskManager.getSubtasks();
         assertTrue(actual.contains(subtask));
@@ -63,6 +71,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         List<Epic> actual = taskManager.getEpics();
         assertTrue(actual.contains(epic));
@@ -73,6 +83,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldNotFindNonexistentTask() {
         Task task = new Task("task1", "taskTesting");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         taskManager.addTask(task);
         assertNull(taskManager.findTask(-1));
     }
@@ -89,6 +101,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ZERO);
         taskManager.addSubtask(subtask);
         assertNull(taskManager.findSubtask(-1));
     }
@@ -96,6 +110,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldFindTask() {
         Task task = new Task("task1", "taskTesting");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         taskManager.addTask(task);
         Task actual = taskManager.findTask(task.getId());
         assertEquals(task, actual);
@@ -114,6 +130,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         Subtask actual = taskManager.findSubtask(subtask.getId());
         assertEquals(subtask, actual);
@@ -124,7 +142,11 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldClearTasks() {
         Task task = new Task("task1", "taskTesting");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        task2.setDuration(Duration.ofMinutes(2));
         taskManager.addTask(task);
         taskManager.addTask(task2);
         taskManager.clearTasks();
@@ -149,10 +171,16 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic2 = new Epic("epic2", "epicTesting2");
         taskManager.addEpic(epic);
         taskManager.addEpic(epic2);
+
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic2.getId());
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
+
         taskManager.clearEpics();
         List<Subtask> actual = taskManager.getSubtasks();
         assertTrue(actual.isEmpty());
@@ -164,10 +192,16 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic2 = new Epic("epic2", "epicTesting2");
         taskManager.addEpic(epic);
         taskManager.addEpic(epic2);
+
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic2.getId());
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
+
         taskManager.clearSubtasks();
         List<Subtask> actual = taskManager.getSubtasks();
         assertTrue(actual.isEmpty());
@@ -179,10 +213,16 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic2 = new Epic("epic2", "epicTesting2");
         taskManager.addEpic(epic);
         taskManager.addEpic(epic2);
+
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic2.getId());
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
+
         taskManager.clearSubtasks();
         int expected = 0;
         int actual = epic.getSubtasksIds().size() + epic2.getSubtasksIds().size();
@@ -194,7 +234,12 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldUpdateTask() {
         Task task = new Task("task1", "taskTesting1");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         Task updatedTask = new Task("task2", "taskTesting2");
+        updatedTask.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        updatedTask.setDuration(Duration.ofMinutes(2));
+
         taskManager.addTask(task);
         updatedTask.setId(task.getId());
         int expected = updatedTask.getId();
@@ -205,7 +250,12 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldReturnMinus1AAndNotUpdateNonexistentTask() {
         Task task = new Task("task1", "taskTesting1");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         Task updatedTask = new Task("task2", "taskTesting2");
+        updatedTask.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        updatedTask.setDuration(Duration.ofMinutes(2));
+
         taskManager.addTask(task);
         int expected = -1;
         int actual = taskManager.updateTask(updatedTask);
@@ -240,6 +290,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         taskManager.addEpic(epic);
         updatedEpic.setId(epic.getId());
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         int expected = -2;
         int actual = taskManager.updateEpic(updatedEpic);
@@ -263,9 +315,15 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
+
         Subtask updatedSubtask = new Subtask("subtask2", "subtaskTesting2", epic.getId());
         updatedSubtask.setId(subtask.getId());
+        updatedSubtask.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        updatedSubtask.setDuration(Duration.ofMinutes(2));
+
         int expected = updatedSubtask.getId();
         int actual = taskManager.updateSubtask(updatedSubtask);
         assertEquals(expected, actual);
@@ -276,8 +334,12 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         Subtask updatedSubtask = new Subtask("subtask2", "subtaskTesting2", epic.getId());
+        updatedSubtask.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        updatedSubtask.setDuration(Duration.ofMinutes(2));
         int expected = -1;
         int actual = taskManager.updateSubtask(updatedSubtask);
         assertEquals(expected, actual);
@@ -288,10 +350,14 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         Subtask updatedSubtask = new Subtask("subtask2", "subtaskTesting2", epic.getId());
         updatedSubtask.setId(subtask.getId());
         updatedSubtask.setContainingEpicId(-1);
+        updatedSubtask.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        updatedSubtask.setDuration(Duration.ofMinutes(2));
         int expected = -2;
         int actual = taskManager.updateSubtask(updatedSubtask);
         assertEquals(expected, actual);
@@ -302,6 +368,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldRemoveTask() {
         Task task = new Task("task1", "taskTesting");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         taskManager.addTask(task);
         taskManager.removeTask(task.getId());
         int expected = 0;
@@ -312,6 +380,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldReturnRemovedTask() {
         Task task = new Task("task1", "taskTesting");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         taskManager.addTask(task);
         Task actual = taskManager.removeTask(task.getId());
         assertEquals(task, actual);
@@ -340,11 +410,17 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
+
         Epic epic2 = new Epic("epic2", "epicTesting2");
         taskManager.addEpic(epic2);
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic2.getId());
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
         taskManager.addSubtask(subtask2);
+
         taskManager.removeEpic(epic2.getId());
         List<Subtask> expected = new ArrayList<>(Arrays.asList(subtask));
         List<Subtask> actual = taskManager.getSubtasks();
@@ -363,6 +439,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         taskManager.removeSubtask(subtask.getId());
         int expected = 0;
@@ -375,6 +453,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         Subtask actual = taskManager.removeSubtask(subtask.getId());
         assertEquals(subtask, actual);
@@ -385,6 +465,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         taskManager.removeSubtask(subtask.getId());
         int expected = 0;
@@ -397,6 +479,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         assertNull(taskManager.removeSubtask(-1));
     }
@@ -406,10 +490,14 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldReturnIdOfUpdatedTaskWhenUpdatingTaskStatus() {
         Task task = new Task("task1", "taskTesting");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         taskManager.addTask(task);
         Task updatedTask = new Task("task2", "taskTesting2");
         updatedTask.setId(task.getId());
         updatedTask.setStatus(Status.DONE);
+        updatedTask.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        updatedTask.setDuration(Duration.ofMinutes(2));
         int actual = taskManager.updateTask(updatedTask);
         int expected = task.getId();
         assertEquals(expected, actual);
@@ -420,10 +508,14 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         Subtask updatedSubtask = new Subtask("subtask2", "subtaskTesting2", epic.getId());
         updatedSubtask.setId(subtask.getId());
         updatedSubtask.setStatus(Status.DONE);
+        updatedSubtask.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        updatedSubtask.setDuration(Duration.ofMinutes(2));
         int actual = taskManager.updateSubtask(updatedSubtask);
         int expected = subtask.getId();
         assertEquals(expected, actual);
@@ -436,9 +528,15 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
+
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic.getId());
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
         taskManager.addSubtask(subtask2);
+
         List<Integer> expected = new ArrayList<>(Arrays.asList(subtask.getId(), subtask2.getId()));
         List<Integer> actual = taskManager.getEpicSubtasksIds(epic.getId());
         assertArrayEquals(expected.toArray(),actual.toArray());
@@ -449,8 +547,12 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic.getId());
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
         taskManager.addSubtask(subtask2);
         assertNull(taskManager.getEpicSubtasksIds(-1));
     }
@@ -467,11 +569,27 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Subtask subtask5 = new Subtask("subtask5", "subtaskTesting5");
         taskManager.addEpic(epic);
         taskManager.addEpic(epic2);
+
         subtask.setContainingEpicId(epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
+
         subtask2.setContainingEpicId(epic.getId());
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
+
         subtask3.setContainingEpicId(epic2.getId());
+        subtask3.setStartTime(LocalDateTime.of(3,1,1, 0,0,0));
+        subtask3.setDuration(Duration.ofMinutes(3));
+
         subtask4.setContainingEpicId(epic2.getId());
+        subtask4.setStartTime(LocalDateTime.of(4,1,1, 0,0,0));
+        subtask4.setDuration(Duration.ofMinutes(4));
+
         subtask5.setContainingEpicId(epic.getId());
+        subtask5.setStartTime(LocalDateTime.of(5,1,1, 0,0,0));
+        subtask5.setDuration(Duration.ofMinutes(5));
+
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
         taskManager.addSubtask(subtask3);
@@ -480,15 +598,26 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Subtask updatedSubtask = new Subtask("updatedSubtask", "updatedSubtaskTesting", epic.getId());
         updatedSubtask.setId(subtask.getId());
         updatedSubtask.setStatus(Status.NEW);
+        updatedSubtask.setStartTime(LocalDateTime.of(6,1,1, 0,0,0));
+        updatedSubtask.setDuration(Duration.ofMinutes(6));
+
         Subtask updatedSubtask2 = new Subtask("updatedSubtask2", "updatedSubtaskTesting2", epic.getId());
         updatedSubtask2.setId(subtask2.getId());
         updatedSubtask2.setStatus(Status.DONE);
+        updatedSubtask2.setStartTime(LocalDateTime.of(7,1,1, 0,0,0));
+        updatedSubtask2.setDuration(Duration.ofMinutes(7));
+
         Subtask updatedSubtask3 = new Subtask("updatedSubtask3", "updatedSubtaskTesting3", epic2.getId());
         updatedSubtask3.setId(subtask3.getId());
         updatedSubtask3.setStatus(Status.IN_PROGRESS);
+        updatedSubtask3.setStartTime(LocalDateTime.of(8,1,1, 0,0,0));
+        updatedSubtask3.setDuration(Duration.ofMinutes(8));
+
         Subtask updatedSubtask4 = new Subtask("updatedSubtask4", "updatedSubtaskTesting4", epic2.getId());
         updatedSubtask4.setId(subtask4.getId());
         updatedSubtask4.setStatus(Status.IN_PROGRESS);
+        updatedSubtask4.setStartTime(LocalDateTime.of(9,1,1, 0,0,0));
+        updatedSubtask4.setDuration(Duration.ofMinutes(9));
 
         taskManager.updateSubtask(updatedSubtask);
         taskManager.updateSubtask(updatedSubtask2);
@@ -511,17 +640,27 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Subtask subtask = new Subtask("subtask1", "subtaskTesting");
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2");
         taskManager.addEpic(epic);
+
         subtask.setContainingEpicId(epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         subtask2.setContainingEpicId(epic.getId());
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
+
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
 
         Subtask updatedSubtask = new Subtask("updatedSubtask", "updatedSubtaskTesting", epic.getId());
         updatedSubtask.setId(subtask.getId());
         updatedSubtask.setStatus(Status.DONE);
+        updatedSubtask.setStartTime(LocalDateTime.of(3,1,1, 0,0,0));
+        updatedSubtask.setDuration(Duration.ofMinutes(3));
         Subtask updatedSubtask2 = new Subtask("updatedSubtask2", "updatedSubtaskTesting2", epic.getId());
         updatedSubtask2.setId(subtask2.getId());
         updatedSubtask2.setStatus(Status.DONE);
+        updatedSubtask2.setStartTime(LocalDateTime.of(4,1,1, 0,0,0));
+        updatedSubtask2.setDuration(Duration.ofMinutes(4));
 
         taskManager.updateSubtask(updatedSubtask);
         taskManager.updateSubtask(updatedSubtask2);
@@ -536,7 +675,12 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     void shouldChangeStatusOfEpicToNEWWhenAllStatusesOfContainedSubtasksIsNEW() {
         Epic epic = new Epic("epic1", "epicTesting");
         Subtask subtask = new Subtask("subtask1", "subtaskTesting");
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2");
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
+
         taskManager.addEpic(epic);
         subtask.setContainingEpicId(epic.getId());
         subtask2.setContainingEpicId(epic.getId());
@@ -562,8 +706,15 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     void shouldChangeStatusOfEpicNEWWhenRemovingSubtasks() {
         Epic epic = new Epic("epic1", "epicTesting");
         Subtask subtask = new Subtask("subtask1", "subtaskTesting");
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2");
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
         Subtask subtask5 = new Subtask("subtask5", "subtaskTesting5");
+        subtask5.setStartTime(LocalDateTime.of(3,1,1, 0,0,0));
+        subtask5.setDuration(Duration.ofMinutes(3));
+
         taskManager.addEpic(epic);
         subtask.setContainingEpicId(epic.getId());
         subtask2.setContainingEpicId(epic.getId());
@@ -574,9 +725,14 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Subtask updatedSubtask = new Subtask("updatedSubtask", "updatedSubtaskTesting", epic.getId());
         updatedSubtask.setId(subtask.getId());
         updatedSubtask.setStatus(Status.DONE);
+        updatedSubtask.setStartTime(LocalDateTime.of(4,1,1, 0,0,0));
+        updatedSubtask.setDuration(Duration.ofMinutes(4));
+
         Subtask updatedSubtask2 = new Subtask("updatedSubtask2", "updatedSubtaskTesting2", epic.getId());
         updatedSubtask2.setId(subtask2.getId());
         updatedSubtask2.setStatus(Status.NEW);
+        updatedSubtask2.setStartTime(LocalDateTime.of(5,1,1, 0,0,0));
+        updatedSubtask2.setDuration(Duration.ofMinutes(5));
 
         taskManager.updateSubtask(updatedSubtask);
         taskManager.updateSubtask(updatedSubtask2);
@@ -593,9 +749,14 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Subtask updatedSubtask22 = new Subtask("updatedSubtask22", "updatedSubtaskTesting22", epic.getId());
         updatedSubtask22.setId(subtask2.getId());
         updatedSubtask22.setStatus(Status.DONE);
+        updatedSubtask22.setStartTime(LocalDateTime.of(6,1,1, 0,0,0));
+        updatedSubtask22.setDuration(Duration.ofMinutes(6));
+
         Subtask updatedSubtask5 = new Subtask("updatedSubtask5", "updatedSubtaskTesting5", epic.getId());
         updatedSubtask5.setId(subtask5.getId());
         updatedSubtask5.setStatus(Status.DONE);
+        updatedSubtask5.setStartTime(LocalDateTime.of(7,1,1, 0,0,0));
+        updatedSubtask5.setDuration(Duration.ofMinutes(7));
 
         taskManager.updateSubtask(updatedSubtask22);
         taskManager.updateSubtask(updatedSubtask5);
@@ -615,7 +776,12 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldAddReviewedTasksToViewsHistory() {
         Task task = new Task("task1", "taskTesting");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        task2.setDuration(Duration.ofMinutes(2));
+
         taskManager.addTask(task);
         taskManager.addTask(task2);
         taskManager.findTask(task.getId());
@@ -643,7 +809,11 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         taskManager.addEpic(epic);
         taskManager.addEpic(epic2);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic2.getId());
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
         taskManager.findSubtask(subtask.getId());
@@ -655,17 +825,28 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldAddReviewedAllTypesOfTasksToView() {
         Task task = new Task("task1", "taskTesting");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        task2.setDuration(Duration.ofMinutes(2));
         taskManager.addTask(task);
         taskManager.addTask(task2);
         taskManager.findTask(task.getId());
+
         Epic epic = new Epic("epic1", "epicTesting");
         Epic epic2 = new Epic("epic2", "epicTesting2");
         taskManager.addEpic(epic);
         taskManager.addEpic(epic2);
         taskManager.findEpic(epic.getId());
+
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(3,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(3));
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic2.getId());
+        subtask2.setStartTime(LocalDateTime.of(4,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(4));
+
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
         taskManager.findSubtask(subtask.getId());
@@ -677,7 +858,12 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldReturnUpdatedHistoryWhenViewingTaskThatAlreadyViewed() {
         Task task = new Task("task1", "taskTesting");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        task2.setDuration(Duration.ofMinutes(2));
+
         taskManager.addTask(task);
         taskManager.addTask(task2);
         taskManager.findTask(task.getId());
@@ -694,8 +880,15 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldRemoveTaskFromHistoryWhenRemovingTaskFromManager() {
         Task task = new Task("task1", "taskTesting");
+        task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task.setDuration(Duration.ofMinutes(1));
         Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        task2.setDuration(Duration.ofMinutes(2));
         Task task3 = new Task("task3", "taskTesting3");
+        task3.setStartTime(LocalDateTime.of(3,1,1, 0,0,0));
+        task3.setDuration(Duration.ofMinutes(3));
+
         taskManager.addTask(task);
         taskManager.addTask(task2);
         taskManager.addTask(task3);
@@ -712,6 +905,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
     public void shouldRemoveTaskFromHistoryWhenClearingTaskFromManager() {
         for (int i = 0; i < 10; i++) {
             Task task = new Task("task" + i, "taskTesting" + i);
+            task.setStartTime(LocalDateTime.of(i+1,1,1, 0,0,0));
+            task.setDuration(Duration.ofMinutes(i+1));
             taskManager.addTask(task);
             taskManager.findTask(task.getId());
         }
@@ -744,6 +939,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         taskManager.findSubtask(subtask.getId());
         taskManager.removeEpic(epic.getId());
@@ -755,6 +952,8 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         taskManager.addSubtask(subtask);
         taskManager.findSubtask(subtask.getId());
         taskManager.clearEpics();
@@ -766,7 +965,11 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic.getId());
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
         taskManager.findSubtask(subtask.getId());
@@ -780,7 +983,11 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("epic1", "epicTesting");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ofMinutes(1));
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic.getId());
+        subtask2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(2));
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
         taskManager.findSubtask(subtask.getId());
