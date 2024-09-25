@@ -108,8 +108,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     public void save() {
         try (Writer writer = new FileWriter(file)) {
-            //writer.write("test");
-            writer.write("type,id,name,description,status,epic\n");
+            writer.write("type,id,name,description,status,startTime,duration,endTime,epic\n");
             for (Task task : getTasks()) {
                 writer.write(Converter.anyTaskToCSVLine(task));
             }
@@ -140,6 +139,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                     taskManager.epics.put(task.getId(), (Epic) task);
                 } else if (task.getType() == Type.SUBTASK) {
                     taskManager.subtasks.put(task.getId(), (Subtask) task);
+                    taskManager.epics.get(((Subtask) task).getContainingEpicId()).addSubtaskId(task.getId());
                 }
             }
             return taskManager;

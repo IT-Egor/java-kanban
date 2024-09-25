@@ -61,15 +61,34 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
+        String startTimeString;
+        String endTimeString;
+        String durationString;
+        if (startTime == null) {
+            startTimeString = "null";
+        } else {
+            startTimeString = startTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+        }
+        if (endTime == null) {
+            endTimeString = "null";
+        } else {
+            endTimeString = endTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+        }
+        if (duration == null) {
+            durationString = "null";
+        } else {
+            durationString = Long.toString(duration.toMinutes()) + "m'";
+        }
+
         return "Epic{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status=" + status +
                 ", subtasks.size=" + subtasksIds.size() +
-                ", startTime='" + startTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + '\'' +
-                ", endTime='" + endTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + '\'' +
-                ", duration='" + duration.toMinutes() + "m'" +
+                ", startTime='" + startTimeString + '\'' +
+                ", endTime='" + endTimeString + '\'' +
+                ", duration='" + durationString +
                 '}';
     }
 }

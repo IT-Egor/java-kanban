@@ -178,12 +178,7 @@ public class Main {
         task1.setDuration(Duration.ofHours(1));
 
         Epic epic1 = new Epic("epic1", "epicTesting1");
-        epic1.setStartTime(LocalDateTime.now().plusHours(1));
-        epic1.setDuration(Duration.ofHours(2));
-
         Epic epic2 = new Epic("epic2", "epicTesting2");
-        epic2.setStartTime(LocalDateTime.now().plusHours(2));
-        epic2.setDuration(Duration.ofHours(3));
 
         taskManager.addTask(task1);
         taskManager.addEpic(epic1);
@@ -225,6 +220,9 @@ public class Main {
         taskManager.removeSubtask(subtask4.getId());
 
         printTasks(taskManager);
+        TaskManager newTaskManager = FileBackedTaskManager.loadFromFile(Managers.CSV_FILE);
+        printTasks(newTaskManager);
+
         System.out.println("-".repeat(cutWidth) + "проверка времени" + "-".repeat(cutWidth));
         System.out.println();
     }

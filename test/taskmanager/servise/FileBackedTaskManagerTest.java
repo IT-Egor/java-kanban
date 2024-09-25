@@ -12,6 +12,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,11 @@ class FileBackedTaskManagerTest extends AbstractTaskManagerTest<FileBackedTaskMa
     @Test
     public void shouldWriteTasksToFile() {
         Task task1 = new Task("task1", "taskTesting1");
+        task1.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task1.setDuration(Duration.ofMinutes(1));
         Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        task2.setDuration(Duration.ofMinutes(2));
         Epic epic1 = new Epic("epic1", "epicTesting1");
         Epic epic2 = new Epic("epic2", "epicTesting2");
 
@@ -45,8 +51,14 @@ class FileBackedTaskManagerTest extends AbstractTaskManagerTest<FileBackedTaskMa
         taskManager.addEpic(epic1);
         taskManager.addEpic(epic2);
         Subtask subtask1 = new Subtask("subtask1", "subtaskTesting1", epic1.getId());
+        subtask1.setStartTime(LocalDateTime.of(3,1,1, 0,0,0));
+        subtask1.setDuration(Duration.ofMinutes(3));
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic1.getId());
+        subtask2.setStartTime(LocalDateTime.of(4,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(4));
         Subtask subtask3 = new Subtask("subtask3", "subtaskTesting3", epic2.getId());
+        subtask3.setStartTime(LocalDateTime.of(5,1,1, 0,0,0));
+        subtask3.setDuration(Duration.ofMinutes(5));
         subtask1.setStatus(Status.DONE);
         subtask3.setStatus(Status.DONE);
         taskManager.addSubtask(subtask1);
@@ -54,14 +66,14 @@ class FileBackedTaskManagerTest extends AbstractTaskManagerTest<FileBackedTaskMa
         taskManager.addSubtask(subtask3);
 
         List<String> lines = new ArrayList<>();
-        String expected = String.format("type,id,name,description,status,epic\n" +
-                "TASK,%d,task1,taskTesting1,NEW,\n" +
-                "TASK,%d,task2,taskTesting2,NEW,\n" +
-                "EPIC,%d,epic1,epicTesting1,IN_PROGRESS,\n" +
-                "EPIC,%d,epic2,epicTesting2,DONE,\n" +
-                "SUBTASK,%d,subtask1,subtaskTesting1,DONE,%d,\n" +
-                "SUBTASK,%d,subtask2,subtaskTesting2,NEW,%d,\n" +
-                "SUBTASK,%d,subtask3,subtaskTesting3,DONE,%d,",
+        String expected = String.format("type,id,name,description,status,startTime,duration,endTime,epic\n" +
+                        "TASK,%d,task1,taskTesting1,NEW,-62135596800,60,-62135596740,\n" +
+                        "TASK,%d,task2,taskTesting2,NEW,-62104060800,120,-62104060680,\n" +
+                        "EPIC,%d,epic1,epicTesting1,IN_PROGRESS,-62072524800,420,-62040988800,\n" +
+                        "EPIC,%d,epic2,epicTesting2,DONE,-62009366400,300,-62009366100,\n" +
+                        "SUBTASK,%d,subtask1,subtaskTesting1,DONE,-62072524800,180,-62072524620,%d,\n" +
+                        "SUBTASK,%d,subtask2,subtaskTesting2,NEW,-62040988800,240,-62040988560,%d,\n" +
+                        "SUBTASK,%d,subtask3,subtaskTesting3,DONE,-62009366400,300,-62009366100,%d,\n",
                 task1.getId(), task2.getId(),
                 epic1.getId(), epic2.getId(),
                 subtask1.getId(), subtask1.getContainingEpicId(),
@@ -83,7 +95,11 @@ class FileBackedTaskManagerTest extends AbstractTaskManagerTest<FileBackedTaskMa
     @Test
     public void shouldLoadTasksFromFile() {
         Task task1 = new Task("task1", "taskTesting1");
+        task1.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        task1.setDuration(Duration.ofMinutes(1));
         Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(LocalDateTime.of(2,1,1, 0,0,0));
+        task2.setDuration(Duration.ofMinutes(2));
         Epic epic1 = new Epic("epic1", "epicTesting1");
         Epic epic2 = new Epic("epic2", "epicTesting2");
 
@@ -92,8 +108,14 @@ class FileBackedTaskManagerTest extends AbstractTaskManagerTest<FileBackedTaskMa
         taskManager.addEpic(epic1);
         taskManager.addEpic(epic2);
         Subtask subtask1 = new Subtask("subtask1", "subtaskTesting1", epic1.getId());
+        subtask1.setStartTime(LocalDateTime.of(3,1,1, 0,0,0));
+        subtask1.setDuration(Duration.ofMinutes(3));
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic1.getId());
+        subtask2.setStartTime(LocalDateTime.of(4,1,1, 0,0,0));
+        subtask2.setDuration(Duration.ofMinutes(4));
         Subtask subtask3 = new Subtask("subtask3", "subtaskTesting3", epic2.getId());
+        subtask3.setStartTime(LocalDateTime.of(5,1,1, 0,0,0));
+        subtask3.setDuration(Duration.ofMinutes(5));
         subtask1.setStatus(Status.DONE);
         subtask3.setStatus(Status.DONE);
         taskManager.addSubtask(subtask1);
