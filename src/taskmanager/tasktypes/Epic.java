@@ -2,11 +2,14 @@ package taskmanager.tasktypes;
 
 import taskmanager.utility.Type;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
     protected List<Integer> subtasksIds;
+    protected LocalDateTime endTime;
 
     public Epic(String name, String description) {
         super(name, description);
@@ -37,6 +40,26 @@ public class Epic extends Task {
     }
 
     @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+//    @Override
+//    public String toString() {
+//        return "Epic{" +
+//                "name='" + name + '\'' +
+//                ", description='" + description + '\'' +
+//                ", id=" + id +
+//                ", status=" + status +
+//                ", subtasks.size=" + subtasksIds.size() +
+//                '}';
+//    }
+
+    @Override
     public String toString() {
         return "Epic{" +
                 "name='" + name + '\'' +
@@ -44,6 +67,9 @@ public class Epic extends Task {
                 ", id=" + id +
                 ", status=" + status +
                 ", subtasks.size=" + subtasksIds.size() +
+                ", startTime='" + startTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + '\'' +
+                ", endTime='" + endTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + '\'' +
+                ", duration='" + duration.toMinutes() + "m'" +
                 '}';
     }
 }

@@ -8,6 +8,8 @@ import taskmanager.tasktypes.Task;
 import taskmanager.utility.Managers;
 import taskmanager.utility.Status;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +67,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic containingEpic = epics.get(epicId);
         containingEpic.addSubtaskId(subtask.getId());
         setSubtasksStatusToEpic(containingEpic.getId());
+        setTimesToEpic(containingEpic.getId());
         return subtaskId;
     }
 
@@ -105,6 +108,7 @@ public class InMemoryTaskManager implements TaskManager {
         for (Epic epic : epics.values()) {
             int epicId = epic.getId();
             setSubtasksStatusToEpic(epicId);
+            setTimesToEpic(epicId);
         }
         return out;
     }
@@ -175,6 +179,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         subtasks.put(updatedSubtask.getId(), updatedSubtask);
         setSubtasksStatusToEpic(oldSubtaskContainingEpicId);
+        setTimesToEpic(oldSubtaskContainingEpicId);
         return updatedSubtask.getId();
     }
 
@@ -212,6 +217,7 @@ public class InMemoryTaskManager implements TaskManager {
         containingEpic.removeSubtaskId(id); //нужно удалить эту подзадачу из содержащего эпика
         Subtask removedSubtask = subtasks.remove(id);
         setSubtasksStatusToEpic(containingEpic.getId());
+        setTimesToEpic(containingEpic.getId());
         return removedSubtask;
     }
 
@@ -263,5 +269,32 @@ public class InMemoryTaskManager implements TaskManager {
         } else if (numberOfNEWs == subtaskIds.size()) {
             epic.setStatus(Status.NEW);
         }
+    }
+
+    private void setTimesToEpic(int epicId) {
+        Epic epic = epics.get(epicId);
+        List<Integer> subtaskIds = epic.getSubtasksIds();
+        LocalDateTime subtasksMinTime = subtasks.get(subtaskIds.getFirst()).getStartTime();
+        LocalDateTime subtasksMaxTime = subtasks.get(subtaskIds.getFirst()).getEndTime();
+
+        Duration subtasksSumDuration = Duration.ZERO;
+
+        for (int subtaskId : subtaskIds) {
+            Subtask subtask = subtasks.get(subtaskId);
+            LocalDateTime subtaskStartTime = subtask.getStartTime();
+            LocalDateTime subtaskEndTime = subtask.getEndTime();
+
+            subtasksSumDuration = subtasksSumDuration.plus(subtask.getDuration());
+
+            if (subtasksMinTime.isAfter(subtaskStartTime)) {
+                subtasksMinTime = subtaskStartTime;
+            }
+            if (subtasksMaxTime.isBefore(subtaskEndTime)) {
+                subtasksMaxTime = subtaskStartTime;
+            }
+        }
+        epic.setStartTime(subtasksMinTime);
+        epic.setEndTime(subtasksMaxTime);
+        epic.setDuration(subtasksSumDuration);
     }
 }

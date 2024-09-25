@@ -3,6 +3,9 @@ package taskmanager.tasktypes;
 import taskmanager.utility.Status;
 import taskmanager.utility.Type;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -11,6 +14,8 @@ public class Task {
     protected int id;
     protected Status status;
     protected Type type;
+    protected LocalDateTime startTime;
+    protected Duration duration;
 
     public Task(String name, String description) {
         this.description = description;
@@ -56,6 +61,26 @@ public class Task {
         return type;
     }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -69,6 +94,16 @@ public class Task {
         return Objects.hashCode(id);
     }
 
+//    @Override
+//    public String toString() {
+//        return "Task{" +
+//                "name='" + name + '\'' +
+//                ", description='" + description + '\'' +
+//                ", id=" + id +
+//                ", status=" + status +
+//                '}';
+//    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -76,6 +111,9 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status=" + status +
+                ", startTime='" + startTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + '\'' +
+                ", endTime='" + getEndTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + '\'' +
+                ", duration='" + duration.toMinutes() + "m'" +
                 '}';
     }
 }
