@@ -94,16 +94,6 @@ public class Task {
         return Objects.hashCode(id);
     }
 
-//    @Override
-//    public String toString() {
-//        return "Task{" +
-//                "name='" + name + '\'' +
-//                ", description='" + description + '\'' +
-//                ", id=" + id +
-//                ", status=" + status +
-//                '}';
-//    }
-
     @Override
     public String toString() {
         return "Task{" +

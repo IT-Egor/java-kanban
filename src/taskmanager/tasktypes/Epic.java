@@ -48,17 +48,6 @@ public class Epic extends Task {
         this.endTime = endTime;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Epic{" +
-//                "name='" + name + '\'' +
-//                ", description='" + description + '\'' +
-//                ", id=" + id +
-//                ", status=" + status +
-//                ", subtasks.size=" + subtasksIds.size() +
-//                '}';
-//    }
-
     @Override
     public String toString() {
         String startTimeString;
@@ -77,7 +66,7 @@ public class Epic extends Task {
         if (duration == null) {
             durationString = "null";
         } else {
-            durationString = Long.toString(duration.toMinutes()) + "m'";
+            durationString = duration.toMinutes() + "m'";
         }
 
         return "Epic{" +

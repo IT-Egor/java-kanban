@@ -211,6 +211,9 @@ public class Main {
 
         printTasks(taskManager);
 
+        System.out.println();
+        System.out.println("taskManager.getPrioritizedTasks() = " + taskManager.getPrioritizedTasks());
+
         Subtask updatedSubtask1 = new Subtask("updatedSubtask1", "updatedSubtaskTesting1");
         updatedSubtask1.setStartTime(LocalDateTime.of(2024, Month.SEPTEMBER, 25, 0,0,0));
         updatedSubtask1.setId(subtask1.getId());
@@ -219,9 +222,15 @@ public class Main {
         taskManager.updateSubtask(updatedSubtask1);
         taskManager.removeSubtask(subtask4.getId());
 
+        System.out.println();
+        System.out.println("taskManager.getPrioritizedTasks() = " + taskManager.getPrioritizedTasks());
+
         printTasks(taskManager);
         TaskManager newTaskManager = FileBackedTaskManager.loadFromFile(Managers.CSV_FILE);
         printTasks(newTaskManager);
+
+        System.out.println();
+        System.out.println("taskManager.getPrioritizedTasks() = " + taskManager.getPrioritizedTasks());
 
         System.out.println("-".repeat(cutWidth) + "проверка времени" + "-".repeat(cutWidth));
         System.out.println();

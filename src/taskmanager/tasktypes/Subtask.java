@@ -26,17 +26,6 @@ public class Subtask extends Task {
         this.containingEpicId = containingEpicId;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Subtask{" +
-//                "name='" + name + '\'' +
-//                ", description='" + description + '\'' +
-//                ", id=" + id +
-//                ", status=" + status +
-//                ", containingEpicId=" + containingEpicId +
-//                '}';
-//    }
-
     @Override
     public String toString() {
         return "Subtask{" +
