@@ -28,15 +28,17 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Subtask{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                ", containingEpicId=" + containingEpicId +
-                ", startTime='" + startTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + '\'' +
-                ", endTime='" + getEndTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + '\'' +
-                ", duration=" + duration.toMinutes() + "m'" +
-                '}';
+        return String.format("Subtask{name='%s', description='%s', id=%d, status=%s, " +
+                        "containingEpicId=%d, startTime='%s', endTime='%s', duration='%s'}",
+                name, description, id, status, containingEpicId,
+                getStartTime()
+                        .map(startTime -> startTime.format(DateTimeFormatter
+                                .ofPattern("dd-MM-yyyy HH:mm:ss")))
+                        .orElse("null"),
+                getEndTime()
+                        .map(endTime -> endTime.format(DateTimeFormatter
+                                .ofPattern("dd-MM-yyyy HH:mm:ss")))
+                        .orElse("null"),
+                getDuration().map(duration1 -> duration.toMinutes() + "m").orElse("null"));
     }
 }

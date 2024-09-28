@@ -17,21 +17,19 @@ public class Converter {
         builder.append(task.getName()).append(",");
         builder.append(task.getDescription()).append(",");
         builder.append(task.getStatus()).append(",");
-        if (task.getStartTime() != null) {
-            builder.append(task.getStartTime().toEpochSecond(ZoneOffset.UTC)).append(",");
-        } else {
-            builder.append("null,");
-        }
-        if (task.getDuration() != null) {
-            builder.append(task.getDuration().toSeconds()).append(",");
-        } else {
-            builder.append("null,");
-        }
-        if (task.getStartTime() != null && task.getDuration() != null) {
-            builder.append(task.getEndTime().toEpochSecond(ZoneOffset.UTC)).append(",");
-        } else {
-            builder.append("null,");
-        }
+
+        builder.append(task.getStartTime()
+                .map(startTime -> String.valueOf(startTime.toEpochSecond(ZoneOffset.UTC)))
+                .orElse("null")).append(",");
+
+        builder.append(task.getDuration()
+                .map(duration -> String.valueOf(duration.toSeconds()))
+                .orElse("null")).append(",");
+
+        builder.append(task.getEndTime()
+                .map(endTime -> String.valueOf(endTime.toEpochSecond(ZoneOffset.UTC)))
+                .orElse("null")).append(",");
+
         if (task.getType() == Type.SUBTASK) {
             builder.append(((Subtask) task).getContainingEpicId()).append(",");
         }

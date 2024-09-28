@@ -18,7 +18,8 @@ public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Integer, Epic> epics = new HashMap<>();
     protected HashMap<Integer, Subtask> subtasks = new HashMap<>();
     protected HistoryManager historyManager;
-    protected Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+    protected Set<Task> prioritizedTasks = new TreeSet<>(
+            Comparator.comparing(task -> task.getStartTime().get()));
 
     public InMemoryTaskManager(HistoryManager historyManager) {
         this.historyManager = historyManager;
@@ -255,7 +256,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     private void throwIfTaskTimesIsNull(Task task) {
-        if (task.getStartTime() == null || task.getDuration() == null) {
+        if (task.getStartTime().isEmpty() || task.getDuration().isEmpty()) {
             throw new NullTimesOfTaskException("Task with id=" + task.getId() + " has null times");
         }
     }
@@ -307,17 +308,18 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
 
-        LocalDateTime subtasksMinTime = subtasks.get(subtaskIds.getFirst()).getStartTime();
-        LocalDateTime subtasksMaxTime = subtasks.get(subtaskIds.getFirst()).getEndTime();
+        // менеджер работает в тепличных условиях, поэтому null не можно не обрабатывать
+        LocalDateTime subtasksMinTime = subtasks.get(subtaskIds.getFirst()).getStartTime().get();
+        LocalDateTime subtasksMaxTime = subtasks.get(subtaskIds.getFirst()).getEndTime().get();
 
         Duration subtasksSumDuration = Duration.ZERO;
 
         for (int subtaskId : subtaskIds) {
             Subtask subtask = subtasks.get(subtaskId);
-            LocalDateTime subtaskStartTime = subtask.getStartTime();
-            LocalDateTime subtaskEndTime = subtask.getEndTime();
+            LocalDateTime subtaskStartTime = subtask.getStartTime().get();
+            LocalDateTime subtaskEndTime = subtask.getEndTime().get();
 
-            subtasksSumDuration = subtasksSumDuration.plus(subtask.getDuration());
+            subtasksSumDuration = subtasksSumDuration.plus(subtask.getDuration().get());
 
             if (subtasksMinTime.isAfter(subtaskStartTime)) {
                 subtasksMinTime = subtaskStartTime;

@@ -141,6 +141,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                     taskManager.subtasks.put(task.getId(), (Subtask) task);
                     taskManager.epics.get(((Subtask) task).getContainingEpicId()).addSubtaskId(task.getId());
                 }
+                taskManager.prioritizedTasks.add(task);
             }
             return taskManager;
 

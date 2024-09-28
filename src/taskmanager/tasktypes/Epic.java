@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Epic extends Task {
     protected List<Integer> subtasksIds;
@@ -40,8 +41,8 @@ public class Epic extends Task {
     }
 
     @Override
-    public LocalDateTime getEndTime() {
-        return endTime;
+    public Optional<LocalDateTime> getEndTime() {
+        return Optional.ofNullable(endTime);
     }
 
     public void setEndTime(LocalDateTime endTime) {
@@ -50,34 +51,17 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        String startTimeString;
-        String endTimeString;
-        String durationString;
-        if (startTime == null) {
-            startTimeString = "null";
-        } else {
-            startTimeString = startTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-        }
-        if (endTime == null) {
-            endTimeString = "null";
-        } else {
-            endTimeString = endTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-        }
-        if (duration == null) {
-            durationString = "null";
-        } else {
-            durationString = duration.toMinutes() + "m'";
-        }
-
-        return "Epic{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                ", subtasks.size=" + subtasksIds.size() +
-                ", startTime='" + startTimeString + '\'' +
-                ", endTime='" + endTimeString + '\'' +
-                ", duration='" + durationString +
-                '}';
+        return String.format("Epic{name='%s', description='%s', id=%d, status=%s, subtasks.size=%d," +
+                " startTime='%s', endTime='%s', duration='%s'}",
+                name, description, id, status, subtasksIds.size(),
+                getStartTime()
+                        .map(startTime -> startTime.format(DateTimeFormatter
+                                .ofPattern("dd-MM-yyyy HH:mm:ss")))
+                        .orElse("null"),
+                getEndTime()
+                        .map(endTime -> endTime.format(DateTimeFormatter
+                                .ofPattern("dd-MM-yyyy HH:mm:ss")))
+                        .orElse("null"),
+                getDuration().map(duration1 -> duration.toMinutes() + "m").orElse("null"));
     }
 }

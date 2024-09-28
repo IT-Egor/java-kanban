@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Task {
     protected String name;
@@ -61,24 +62,26 @@ public class Task {
         return type;
     }
 
-    public LocalDateTime getStartTime() {
-        return startTime;
+    public Optional<LocalDateTime> getStartTime() {
+        return Optional.ofNullable(startTime);
     }
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public Duration getDuration() {
-        return duration;
+    public Optional<Duration> getDuration() {
+        return Optional.ofNullable(duration);
     }
 
     public void setDuration(Duration duration) {
         this.duration = duration;
     }
 
-    public LocalDateTime getEndTime() {
-        return startTime.plus(duration);
+    public Optional<LocalDateTime> getEndTime() {
+        return Optional.ofNullable(startTime)
+                .flatMap(start -> Optional.ofNullable(duration)
+                        .map(dur -> start.plus(dur)));
     }
 
     @Override
@@ -96,14 +99,17 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                ", startTime='" + startTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + '\'' +
-                ", endTime='" + getEndTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + '\'' +
-                ", duration='" + duration.toMinutes() + "m'" +
-                '}';
+        return String.format("Task{name='%s', description='%s', id=%d, status=%s, " +
+                        "startTime='%s', endTime='%s', duration='%s'}",
+                name, description, id, status,
+                getStartTime()
+                        .map(startTime -> startTime.format(DateTimeFormatter
+                                .ofPattern("dd-MM-yyyy HH:mm:ss")))
+                        .orElse("null"),
+                getEndTime()
+                        .map(endTime -> endTime.format(DateTimeFormatter
+                                .ofPattern("dd-MM-yyyy HH:mm:ss")))
+                        .orElse("null"),
+                getDuration().map(duration1 -> duration.toMinutes() + "m").orElse("null"));
     }
 }
