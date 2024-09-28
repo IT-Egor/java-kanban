@@ -2,6 +2,8 @@ package taskmanager.servise;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import taskmanager.exceptions.NullTimesOfTaskException;
+import taskmanager.exceptions.TasksOverlapsInTimeException;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
@@ -9,9 +11,8 @@ import taskmanager.utility.Status;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.ZoneOffset;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -994,5 +995,146 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         taskManager.findSubtask(subtask2.getId());
         taskManager.clearSubtasks();
         assertEquals(0, taskManager.getHistory().size());
+    }
+
+
+
+    @Test
+    public void shouldThrowNullTimeExceptionWhenAddingTaskWithNullStartTimeOrNullDuration() {
+        Task task = new Task("task1", "taskTesting");
+        Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(LocalDateTime.now());
+        Task task3 = new Task("task3", "taskTesting3");
+        task3.setDuration(Duration.ofHours(1));
+
+        assertThrows(NullTimesOfTaskException.class, () -> {
+            taskManager.addTask(task);
+        });
+        assertThrows(NullTimesOfTaskException.class, () -> {
+            taskManager.addTask(task2);
+        });
+        assertThrows(NullTimesOfTaskException.class, () -> {
+            taskManager.addTask(task3);
+        });
+    }
+
+    @Test
+    public void shouldUpdateTimeInTask() {
+        Task task = new Task("task1", "taskTesting");
+        task.setStartTime(LocalDateTime.now());
+        task.setDuration(Duration.ofHours(1));
+        taskManager.addTask(task);
+        Task updatedTask = new Task("updatedTask", "updatedTaskTesting");
+        updatedTask.setStartTime(LocalDateTime.now().plusHours(1));
+        updatedTask.setDuration(Duration.ofHours(10));
+        updatedTask.setId(task.getId());
+        taskManager.updateTask(updatedTask);
+        assertEquals(updatedTask.getStartTime().get(), taskManager.findTask(updatedTask.getId()).getStartTime().get());
+    }
+
+    @Test
+    public void shouldSetTimesToEpic() {
+        Epic epic = new Epic("epic1", "epicTesting");
+        taskManager.addEpic(epic);
+        LocalDateTime start = LocalDateTime.now();
+
+        Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(start);
+        subtask.setDuration(Duration.ofMinutes(1));
+        Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic.getId());
+        subtask2.setStartTime(start.plusHours(1));
+        subtask2.setDuration(Duration.ofMinutes(2));
+        Subtask subtask3 = new Subtask("subtask3", "subtaskTesting3", epic.getId());
+        subtask3.setStartTime(start.plusHours(2));
+        subtask3.setDuration(Duration.ofMinutes(3));
+        Subtask subtask4 = new Subtask("subtask4", "subtaskTesting4", epic.getId());
+        subtask4.setStartTime(start.plusHours(3));
+        subtask4.setDuration(Duration.ofMinutes(4));
+
+        taskManager.addSubtask(subtask);
+        taskManager.addSubtask(subtask2);
+        taskManager.addSubtask(subtask3);
+        taskManager.addSubtask(subtask4);
+
+        Subtask updatedSubtask = new Subtask("updatedSubtask", "updatedSubtaskTesting", epic.getId());
+        updatedSubtask.setStartTime(start.plusHours(4));
+        updatedSubtask.setDuration(Duration.ofMinutes(5));
+        updatedSubtask.setId(subtask.getId());
+
+        taskManager.removeSubtask(subtask4.getId());
+        taskManager.updateSubtask(updatedSubtask);
+
+        assertEquals(epic.getStartTime().get(), start.plusHours(1));
+        assertEquals(epic.getEndTime().get(), start.plusHours(4).plusMinutes(5));
+        assertEquals(epic.getDuration().get(), Duration.ofMinutes(10));
+    }
+
+    @Test
+    public void shouldShouldPrioritizeTasks() {
+        Epic epic = new Epic("epic1", "epicTesting");
+        taskManager.addEpic(epic);
+        LocalDateTime start = LocalDateTime.now();
+
+        Subtask subtask = new Subtask("subtask1", "subtaskTesting", epic.getId());
+        subtask.setStartTime(start);
+        subtask.setDuration(Duration.ofMinutes(1));
+        Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2", epic.getId());
+        subtask2.setStartTime(start.plusHours(1));
+        subtask2.setDuration(Duration.ofMinutes(2));
+        Subtask subtask3 = new Subtask("subtask3", "subtaskTesting3", epic.getId());
+        subtask3.setStartTime(start.plusHours(2));
+        subtask3.setDuration(Duration.ofMinutes(3));
+        Subtask subtask4 = new Subtask("subtask4", "subtaskTesting4", epic.getId());
+        subtask4.setStartTime(start.plusHours(3));
+        subtask4.setDuration(Duration.ofMinutes(4));
+
+        Task task = new Task("task1", "taskTesting");
+        task.setStartTime(start.plusHours(4));
+        task.setDuration(Duration.ofMinutes(6));
+
+        taskManager.addTask(task);
+        taskManager.addSubtask(subtask4);
+        taskManager.addSubtask(subtask2);
+        taskManager.addSubtask(subtask3);
+        taskManager.addSubtask(subtask);
+
+        System.out.println("taskManager.getPrioritizedTasks() = " + taskManager.getPrioritizedTasks());
+
+        List<Long> actual = taskManager.getPrioritizedTasks().stream()
+                .map(currentTask -> currentTask.getStartTime().get().toEpochSecond(ZoneOffset.UTC))
+                .toList();
+
+        List<Long> expected = new ArrayList<>(Arrays.asList(
+                subtask.getStartTime().get().toEpochSecond(ZoneOffset.UTC),
+                subtask2.getStartTime().get().toEpochSecond(ZoneOffset.UTC),
+                subtask3.getStartTime().get().toEpochSecond(ZoneOffset.UTC),
+                subtask4.getStartTime().get().toEpochSecond(ZoneOffset.UTC),
+                task.getStartTime().get().toEpochSecond(ZoneOffset.UTC)));
+
+        assertArrayEquals(expected.toArray(), actual.toArray());
+    }
+
+    @Test
+    public void shouldThrowTasksOverlapsInTimeExceptionWhenAddingOverlapingTask() {
+        Task task = new Task("task1", "taskTesting");
+        LocalDateTime start = LocalDateTime.now();
+        task.setStartTime(start);
+        task.setDuration(Duration.ofHours(1));
+        taskManager.addTask(task);
+
+        Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(start.plusMinutes(30));
+        task2.setDuration(Duration.ofHours(1));
+
+        Task task3 = new Task("task3", "taskTesting3");
+        task3.setStartTime(start.plusHours(2));
+        task3.setDuration(Duration.ofHours(1));
+
+        assertThrows(TasksOverlapsInTimeException.class, () -> {
+            taskManager.addTask(task2);
+        });
+        assertDoesNotThrow(() -> {
+            taskManager.addTask(task3);
+        });
     }
 }
