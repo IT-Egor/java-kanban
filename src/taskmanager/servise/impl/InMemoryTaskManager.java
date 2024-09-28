@@ -1,6 +1,7 @@
 package taskmanager.servise.impl;
 
 import taskmanager.exceptions.NullTimesOfTaskException;
+import taskmanager.exceptions.TasksOverlapsInTimeException;
 import taskmanager.servise.HistoryManager;
 import taskmanager.servise.TaskManager;
 import taskmanager.tasktypes.Epic;
@@ -43,6 +44,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int addTask(Task task) {
         throwIfTaskTimesIsNull(task);
+        throwIfTasksOverlaps(task);
         int id = Managers.getNextId();
         task.setId(id);
         tasks.put(id, task);
@@ -61,6 +63,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int addSubtask(Subtask subtask) {
         throwIfTaskTimesIsNull(subtask);
+        throwIfTasksOverlaps(subtask);
         int epicId = subtask.getContainingEpicId();
         if (!epics.containsKey(epicId)) {
             return -1;
@@ -151,6 +154,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int updateTask(Task updatedTask) {
         throwIfTaskTimesIsNull(updatedTask);
+        throwIfTasksOverlaps(updatedTask);
         if (!tasks.containsKey(updatedTask.getId())) {
             return -1;
         }
@@ -182,6 +186,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int updateSubtask(Subtask updatedSubtask) {
         throwIfTaskTimesIsNull(updatedSubtask);
+        throwIfTasksOverlaps(updatedSubtask);
         if (!subtasks.containsKey(updatedSubtask.getId())) {
             return -1;
         }
@@ -255,6 +260,28 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
 
+    private boolean isTasksOverlaps(Task task) {
+        return !prioritizedTasks.isEmpty() && prioritizedTasks.stream()
+                .allMatch(currentTask -> {
+                    LocalDateTime currentTaskStartTime = currentTask.getStartTime().get();
+                    LocalDateTime taskStartTime = task.getStartTime().get();
+                    LocalDateTime currentTaskEndTime = currentTask.getEndTime().get();
+                    LocalDateTime taskEndTime = task.getEndTime().get();
+                    if (taskStartTime.isBefore(currentTaskStartTime)) {
+                        return taskEndTime.isAfter(currentTaskStartTime);
+                    } else {
+                        return currentTaskEndTime.isAfter(taskStartTime);
+                    }
+                });
+    }
+
+    private void throwIfTasksOverlaps(Task task) {
+        if (isTasksOverlaps(task)) {
+            throw new TasksOverlapsInTimeException(String.format("%s with name='%s'" +
+                    " overlaps in time with one of the tasks in the manager", task.getType(), task.getName()));
+        }
+    }
+
     private void throwIfTaskTimesIsNull(Task task) {
         if (task.getStartTime().isEmpty() || task.getDuration().isEmpty()) {
             throw new NullTimesOfTaskException("Task with id=" + task.getId() + " has null times");
@@ -308,7 +335,7 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
 
-        // менеджер работает в тепличных условиях, поэтому null не можно не обрабатывать
+        // менеджер работает в тепличных условиях, поэтому null можно не обрабатывать
         LocalDateTime subtasksMinTime = subtasks.get(subtaskIds.getFirst()).getStartTime().get();
         LocalDateTime subtasksMaxTime = subtasks.get(subtaskIds.getFirst()).getEndTime().get();
 

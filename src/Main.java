@@ -1,3 +1,4 @@
+import taskmanager.exceptions.TasksOverlapsInTimeException;
 import taskmanager.servise.TaskManager;
 import taskmanager.servise.impl.FileBackedTaskManager;
 import taskmanager.tasktypes.Epic;
@@ -172,6 +173,7 @@ public class Main {
 //        printTasks(newTaskManager);
 //        System.out.println("-".repeat(cutWidth) + "проверка чтения задач из файла" + "-".repeat(cutWidth));
 
+
         System.out.println("-".repeat(cutWidth) + "проверка времени" + "-".repeat(cutWidth));
         Task task1 = new Task("task1", "taskTesting1");
         task1.setStartTime(LocalDateTime.now());
@@ -233,6 +235,33 @@ public class Main {
         System.out.println("taskManager.getPrioritizedTasks() = " + taskManager.getPrioritizedTasks());
 
         System.out.println("-".repeat(cutWidth) + "проверка времени" + "-".repeat(cutWidth));
+        System.out.println();
+
+
+        System.out.println("-".repeat(cutWidth) + "проверка пересечений" + "-".repeat(cutWidth));
+        taskManager.clearTasks();
+        taskManager.clearEpics();
+        taskManager.clearSubtasks();
+
+        epic1 = new Epic("epic1", "epicTesting1");
+        taskManager.addEpic(epic1);
+
+        subtask1 = new Subtask("subtask1", "subtaskTesting1", epic1.getId());
+        subtask1.setStartTime(LocalDateTime.now().plusHours(1));
+        subtask1.setDuration(Duration.ofHours(1));
+
+        subtask2 = new Subtask("subtask2", "subtaskTesting2", epic1.getId());
+        subtask2.setStartTime(LocalDateTime.now().plusMinutes(30));
+        subtask2.setDuration(Duration.ofMinutes(30));
+
+        try {
+            taskManager.addSubtask(subtask1);
+            taskManager.addSubtask(subtask2);
+        } catch (TasksOverlapsInTimeException e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("-".repeat(cutWidth) + "проверка пересечений" + "-".repeat(cutWidth));
         System.out.println();
     }
 
