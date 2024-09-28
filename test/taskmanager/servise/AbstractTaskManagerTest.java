@@ -1098,8 +1098,6 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         taskManager.addSubtask(subtask3);
         taskManager.addSubtask(subtask);
 
-        System.out.println("taskManager.getPrioritizedTasks() = " + taskManager.getPrioritizedTasks());
-
         List<Long> actual = taskManager.getPrioritizedTasks().stream()
                 .map(currentTask -> currentTask.getStartTime().get().toEpochSecond(ZoneOffset.UTC))
                 .toList();
