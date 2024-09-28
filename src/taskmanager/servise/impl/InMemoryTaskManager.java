@@ -162,7 +162,7 @@ public class InMemoryTaskManager implements TaskManager {
             return -1;
         }
         tasks.put(updatedTask.getId(), updatedTask);
-        Task oldTask= tasks.get(updatedTask.getId());
+        Task oldTask = tasks.get(updatedTask.getId());
         prioritizedTasks.remove(oldTask);
         prioritizedTasks.add(updatedTask);
         return updatedTask.getId();
