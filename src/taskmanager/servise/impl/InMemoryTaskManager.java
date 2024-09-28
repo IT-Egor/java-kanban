@@ -82,10 +82,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> clearTasks() {
         List<Task> out = new ArrayList<>(tasks.values());
-        for (Task task : tasks.values()) {
+
+        tasks.values().forEach(task -> {
             historyManager.remove(task.getId());
             prioritizedTasks.remove(task);
-        }
+        });
         tasks.clear();
         return out;
     }
@@ -93,13 +94,15 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Epic> clearEpics() {
         List<Epic> out = new ArrayList<>(epics.values());
-        for (Epic epic : epics.values()) {
+
+        epics.values().forEach(epic -> {
             historyManager.remove(epic.getId());
-        }
-        for (Subtask subtask : subtasks.values()) {
+        });
+
+        subtasks.values().forEach(subtask -> {
             historyManager.remove(subtask.getId());
             prioritizedTasks.remove(subtask);
-        }
+        });
         epics.clear();
         subtasks.clear();
         return out;
@@ -107,20 +110,20 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Subtask> clearSubtasks() {
-        for (Epic epic : epics.values()) {
-            epic.clearSubtasksIds();
-        }
-        for (Subtask subtask : subtasks.values()) {
-            historyManager.remove(subtask.getId());
-            prioritizedTasks.remove(subtask);
-        }
+        epics.values().forEach(Epic::clearSubtasksIds);
+
+        subtasks.values().forEach(subtask -> {
+                    historyManager.remove(subtask.getId());
+                    prioritizedTasks.remove(subtask);
+        });
         List<Subtask> out = new ArrayList<>(subtasks.values());
         subtasks.clear();
-        for (Epic epic : epics.values()) {
+
+        epics.values().forEach(epic -> {
             int epicId = epic.getId();
             setSubtasksStatusToEpic(epicId);
             setTimesToEpic(epicId);
-        }
+        });
         return out;
     }
 
