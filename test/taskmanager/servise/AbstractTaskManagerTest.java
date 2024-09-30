@@ -2,8 +2,7 @@ package taskmanager.servise;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import taskmanager.exceptions.NullTimesOfTaskException;
-import taskmanager.exceptions.TasksOverlapsInTimeException;
+import taskmanager.exceptions.TaskValidationException;
 import taskmanager.tasktypes.Epic;
 import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
@@ -1007,13 +1006,13 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         Task task3 = new Task("task3", "taskTesting3");
         task3.setDuration(Duration.ofHours(1));
 
-        assertThrows(NullTimesOfTaskException.class, () -> {
+        assertThrows(TaskValidationException.class, () -> {
             taskManager.addTask(task);
         });
-        assertThrows(NullTimesOfTaskException.class, () -> {
+        assertThrows(TaskValidationException.class, () -> {
             taskManager.addTask(task2);
         });
-        assertThrows(NullTimesOfTaskException.class, () -> {
+        assertThrows(TaskValidationException.class, () -> {
             taskManager.addTask(task3);
         });
     }
@@ -1128,7 +1127,7 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         task3.setStartTime(start.plusHours(2));
         task3.setDuration(Duration.ofHours(1));
 
-        assertThrows(TasksOverlapsInTimeException.class, () -> {
+        assertThrows(TaskValidationException.class, () -> {
             taskManager.addTask(task2);
         });
         assertDoesNotThrow(() -> {

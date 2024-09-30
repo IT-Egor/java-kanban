@@ -1,4 +1,4 @@
-import taskmanager.exceptions.TasksOverlapsInTimeException;
+import taskmanager.exceptions.TaskValidationException;
 import taskmanager.servise.TaskManager;
 import taskmanager.servise.impl.FileBackedTaskManager;
 import taskmanager.tasktypes.Epic;
@@ -259,7 +259,7 @@ public class Main {
         try {
             taskManager.addSubtask(subtask1);
             taskManager.addSubtask(subtask2);
-        } catch (TasksOverlapsInTimeException e) {
+        } catch (TaskValidationException e) {
             System.out.println(e.getMessage());
         }
 

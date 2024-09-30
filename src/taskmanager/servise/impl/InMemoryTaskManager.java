@@ -1,7 +1,6 @@
 package taskmanager.servise.impl;
 
-import taskmanager.exceptions.NullTimesOfTaskException;
-import taskmanager.exceptions.TasksOverlapsInTimeException;
+import taskmanager.exceptions.TaskValidationException;
 import taskmanager.servise.HistoryManager;
 import taskmanager.servise.TaskManager;
 import taskmanager.tasktypes.Epic;
@@ -280,14 +279,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     private void throwIfTasksOverlaps(Task task) {
         if (isTasksOverlaps(task)) {
-            throw new TasksOverlapsInTimeException(String.format("%s with name='%s'" +
+            throw new TaskValidationException(String.format("%s with name='%s'" +
                     " overlaps in time with one of the tasks in the manager", task.getType(), task.getName()));
         }
     }
 
     private void throwIfTaskTimesIsNull(Task task) {
         if (task.getStartTime().isEmpty() || task.getDuration().isEmpty()) {
-            throw new NullTimesOfTaskException("Task with id=" + task.getId() + " has null times");
+            throw new TaskValidationException("Task with id=" + task.getId() + " has null times");
         }
     }
 
