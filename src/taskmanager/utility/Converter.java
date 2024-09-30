@@ -27,9 +27,11 @@ public class Converter {
                 .map(duration -> String.valueOf(duration.toSeconds()))
                 .orElse("null")).append(",");
 
-        builder.append(task.getEndTime()
-                .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::format)
-                .orElse("null")).append(",");
+        if (task.getType() == Type.EPIC) {
+            builder.append(task.getEndTime()
+                    .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::format)
+                    .orElse("null")).append(",");
+        }
 
         if (task.getType() == Type.SUBTASK) {
             builder.append(((Subtask) task).getContainingEpicId()).append(",");
@@ -52,7 +54,7 @@ public class Converter {
             }
         } else if (values[0].equals("SUBTASK")) {
             task = new Subtask(values[2], values[3]);
-            ((Subtask) task).setContainingEpicId(Integer.parseInt(values[8]));
+            ((Subtask) task).setContainingEpicId(Integer.parseInt(values[7]));
         } else {
             throw new TaskConversionException("Unknown task type: " + values[0]);
         }
