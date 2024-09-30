@@ -258,10 +258,8 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    public Set<Task> getPrioritizedTasks() {
-        Set<Task> copy = new TreeSet<>(Comparator.comparing(task -> task.getStartTime().get()));
-        copy.addAll(prioritizedTasks);
-        return copy;
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks);
     }
 
 
