@@ -67,13 +67,13 @@ class FileBackedTaskManagerTest extends AbstractTaskManagerTest<FileBackedTaskMa
 
         List<String> lines = new ArrayList<>();
         String expected = String.format("type,id,name,description,status,startTime,duration,endTime,epic\n" +
-                        "TASK,%d,task1,taskTesting1,NEW,-62135596800,60,-62135596740,\n" +
-                        "TASK,%d,task2,taskTesting2,NEW,-62104060800,120,-62104060680,\n" +
-                        "EPIC,%d,epic1,epicTesting1,IN_PROGRESS,-62072524800,420,-62040988800,\n" +
-                        "EPIC,%d,epic2,epicTesting2,DONE,-62009366400,300,-62009366100,\n" +
-                        "SUBTASK,%d,subtask1,subtaskTesting1,DONE,-62072524800,180,-62072524620,%d,\n" +
-                        "SUBTASK,%d,subtask2,subtaskTesting2,NEW,-62040988800,240,-62040988560,%d,\n" +
-                        "SUBTASK,%d,subtask3,subtaskTesting3,DONE,-62009366400,300,-62009366100,%d,\n",
+                        "TASK,%d,task1,taskTesting1,NEW,0001-01-01T00:00:00,60,0001-01-01T00:01:00,\n" +
+                        "TASK,%d,task2,taskTesting2,NEW,0002-01-01T00:00:00,120,0002-01-01T00:02:00,\n" +
+                        "EPIC,%d,epic1,epicTesting1,IN_PROGRESS,0003-01-01T00:00:00,420,0004-01-01T00:00:00,\n" +
+                        "EPIC,%d,epic2,epicTesting2,DONE,0005-01-01T00:00:00,300,0005-01-01T00:05:00,\n" +
+                        "SUBTASK,%d,subtask1,subtaskTesting1,DONE,0003-01-01T00:00:00,180,0003-01-01T00:03:00,%d,\n" +
+                        "SUBTASK,%d,subtask2,subtaskTesting2,NEW,0004-01-01T00:00:00,240,0004-01-01T00:04:00,%d,\n" +
+                        "SUBTASK,%d,subtask3,subtaskTesting3,DONE,0005-01-01T00:00:00,300,0005-01-01T00:05:00,%d,\n",
                 task1.getId(), task2.getId(),
                 epic1.getId(), epic2.getId(),
                 subtask1.getId(), subtask1.getContainingEpicId(),

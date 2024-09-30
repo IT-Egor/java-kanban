@@ -96,7 +96,8 @@ class TaskTest {
         task.setId(10);
         task.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
         task.setDuration(Duration.ZERO);
-        String expected = "Task{name='Task Name', description='Task Description', id=10, status=DONE, startTime='01-01-0001 00:00:00', endTime='01-01-0001 00:00:00', duration='0m'}";
+        String expected = "Task{name='Task Name', description='Task Description', id=10, status=DONE, " +
+                "startTime='0001-01-01T00:00:00', endTime='0001-01-01T00:00:00', duration='0m'}";
         assertEquals(expected, task.toString());
     }
 }

@@ -83,7 +83,7 @@ class EpicTest {
         epic.setEndTime(LocalDateTime.of(2,1,1, 0,0,0));
         epic.setDuration(Duration.ZERO);
         String expected = "Epic{name='Epic Name', description='Epic Description', id=10, status=DONE, subtasks.size=2, " +
-                "startTime='01-01-0001 00:00:00', endTime='01-01-0002 00:00:00', duration='0m'}";
+                "startTime='0001-01-01T00:00:00', endTime='0002-01-01T00:00:00', duration='0m'}";
         assertEquals(expected, epic.toString());
     }
 }

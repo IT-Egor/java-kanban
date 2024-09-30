@@ -32,12 +32,10 @@ public class Subtask extends Task {
                         "containingEpicId=%d, startTime='%s', endTime='%s', duration='%s'}",
                 name, description, id, status, containingEpicId,
                 getStartTime()
-                        .map(startTime -> startTime.format(DateTimeFormatter
-                                .ofPattern("dd-MM-yyyy HH:mm:ss")))
+                        .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::format)
                         .orElse("null"),
                 getEndTime()
-                        .map(endTime -> endTime.format(DateTimeFormatter
-                                .ofPattern("dd-MM-yyyy HH:mm:ss")))
+                        .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::format)
                         .orElse("null"),
                 getDuration().map(duration1 -> duration.toMinutes() + "m").orElse("null"));
     }

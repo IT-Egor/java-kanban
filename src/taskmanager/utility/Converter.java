@@ -8,6 +8,7 @@ import taskmanager.tasktypes.Task;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 public class Converter {
     public static String anyTaskToCSVLine(Task task) {
@@ -19,7 +20,7 @@ public class Converter {
         builder.append(task.getStatus()).append(",");
 
         builder.append(task.getStartTime()
-                .map(startTime -> String.valueOf(startTime.toEpochSecond(ZoneOffset.UTC)))
+                .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::format)
                 .orElse("null")).append(",");
 
         builder.append(task.getDuration()
@@ -27,7 +28,7 @@ public class Converter {
                 .orElse("null")).append(",");
 
         builder.append(task.getEndTime()
-                .map(endTime -> String.valueOf(endTime.toEpochSecond(ZoneOffset.UTC)))
+                .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::format)
                 .orElse("null")).append(",");
 
         if (task.getType() == Type.SUBTASK) {
@@ -47,8 +48,7 @@ public class Converter {
             if (values[7].equals("null")) {
                 ((Epic) task).setEndTime(null);
             } else {
-                ((Epic) task).setEndTime(LocalDateTime.ofEpochSecond(
-                        Long.parseLong(values[7]), 0, ZoneOffset.UTC));
+                ((Epic) task).setEndTime(LocalDateTime.from(DateTimeFormatter.ISO_LOCAL_DATE_TIME.parse(values[7])));
             }
         } else if (values[0].equals("SUBTASK")) {
             task = new Subtask(values[2], values[3]);
@@ -62,7 +62,7 @@ public class Converter {
         if (values[5].equals("null")) {
             task.setStartTime(null);
         } else {
-            task.setStartTime(LocalDateTime.ofEpochSecond(Long.parseLong(values[5]), 0, ZoneOffset.UTC));
+            task.setStartTime(LocalDateTime.from(DateTimeFormatter.ISO_LOCAL_DATE_TIME.parse(values[5])));
         }
         if (values[6].equals("null")) {
             task.setDuration(null);
