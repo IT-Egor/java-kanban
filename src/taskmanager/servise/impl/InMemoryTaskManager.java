@@ -264,16 +264,19 @@ public class InMemoryTaskManager implements TaskManager {
 
     private boolean isTasksOverlaps(Task task) {
         return !prioritizedTasks.isEmpty() && prioritizedTasks.stream()
-                .allMatch(currentTask -> {
+                .anyMatch(currentTask -> {
                     LocalDateTime currentTaskStartTime = currentTask.getStartTime().get();
                     LocalDateTime taskStartTime = task.getStartTime().get();
                     LocalDateTime currentTaskEndTime = currentTask.getEndTime().get();
                     LocalDateTime taskEndTime = task.getEndTime().get();
-                    if (taskStartTime.isBefore(currentTaskStartTime)) {
-                        return taskEndTime.isAfter(currentTaskStartTime);
-                    } else {
-                        return currentTaskEndTime.isAfter(taskStartTime);
-                    }
+
+                    return ((taskStartTime.isBefore(currentTaskStartTime)
+                            || taskStartTime.isEqual(currentTaskStartTime))
+                            && taskEndTime.isAfter(currentTaskStartTime))
+                            ||
+                            ((currentTaskStartTime.isBefore(taskStartTime)
+                            || currentTaskStartTime.isEqual(taskStartTime))
+                            && currentTaskEndTime.isAfter(taskStartTime));
                 });
     }
 

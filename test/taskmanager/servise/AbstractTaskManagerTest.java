@@ -1111,8 +1111,10 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         assertArrayEquals(expected.toArray(), actual.toArray());
     }
 
+
+
     @Test
-    public void shouldThrowTasksOverlapsInTimeExceptionWhenAddingOverlapingTask() {
+    public void shouldThrowTasksOverlapsInTimeExceptionWhenAddingOverlappingTask() {
         Task task = new Task("task1", "taskTesting");
         LocalDateTime start = LocalDateTime.now();
         task.setStartTime(start);
@@ -1120,18 +1122,120 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
         taskManager.addTask(task);
 
         Task task2 = new Task("task2", "taskTesting2");
-        task2.setStartTime(start.plusMinutes(30));
+        task2.setStartTime(start.plusHours(2));
         task2.setDuration(Duration.ofHours(1));
 
         Task task3 = new Task("task3", "taskTesting3");
         task3.setStartTime(start.plusHours(2));
-        task3.setDuration(Duration.ofHours(1));
+        task3.setDuration(Duration.ofMinutes(30));
+
+        assertDoesNotThrow(() -> {
+            taskManager.addTask(task2);
+        });
+        assertThrows(TaskValidationException.class, () -> {
+            taskManager.addTask(task3);
+        });
+    }
+
+    @Test
+    public void shouldThrowTasksOverlapsInTimeExceptionWhenOneTaskTimeNotInsideAnother() {
+        LocalDateTime start = LocalDateTime.now();
+        Task task = new Task("task1", "taskTesting");
+        task.setStartTime(start.plusHours(1));
+        task.setDuration(Duration.ofHours(1));
+        taskManager.addTask(task);
+
+        Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(start.plusMinutes(30));
+        task2.setDuration(Duration.ofHours(3));
 
         assertThrows(TaskValidationException.class, () -> {
             taskManager.addTask(task2);
         });
+    }
+
+    @Test
+    public void shouldThrowTasksOverlapsInTimeExceptionWhenAddingTaskIsBeforeExisting() {
+        LocalDateTime start = LocalDateTime.now();
+        Task task = new Task("task1", "taskTesting");
+        task.setStartTime(start.plusHours(2));
+        task.setDuration(Duration.ofHours(3));
+        taskManager.addTask(task);
+
+        Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(start.plusHours(1));
+        task2.setDuration(Duration.ofMinutes(90));
+
+        assertThrows(TaskValidationException.class, () -> {
+            taskManager.addTask(task2);
+        });
+    }
+
+    @Test
+    public void shouldThrowTasksOverlapsInTimeExceptionWhenAddingTaskIsInsideExisting() {
+        LocalDateTime start = LocalDateTime.now();
+        Task task = new Task("task1", "taskTesting");
+        task.setStartTime(start.plusHours(2));
+        task.setDuration(Duration.ofHours(3));
+        taskManager.addTask(task);
+
+        Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(start.plusMinutes(150));
+        task2.setDuration(Duration.ofMinutes(30));
+
+        assertThrows(TaskValidationException.class, () -> {
+            taskManager.addTask(task2);
+        });
+    }
+
+    @Test
+    public void shouldNotThrowTasksOverlapsInTimeExceptionWhenAddingTaskIsBeforeExistingAndNotOverlaps() {
+        LocalDateTime start = LocalDateTime.now();
+        Task task = new Task("task1", "taskTesting");
+        task.setStartTime(start.plusHours(2));
+        task.setDuration(Duration.ofHours(3));
+        taskManager.addTask(task);
+
+        Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(start.plusHours(1));
+        task2.setDuration(Duration.ofMinutes(30));
+
         assertDoesNotThrow(() -> {
-            taskManager.addTask(task3);
+            taskManager.addTask(task2);
+        });
+    }
+
+    @Test
+    public void shouldThrowTasksOverlapsInTimeExceptionWhenAddingTaskIsAfterExistingAndOverlaps() {
+        LocalDateTime start = LocalDateTime.now();
+        Task task = new Task("task1", "taskTesting");
+        task.setStartTime(start);
+        task.setDuration(Duration.ofHours(1));
+        taskManager.addTask(task);
+
+        Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(start.plusMinutes(30));
+        task2.setDuration(Duration.ofMinutes(90));
+
+        assertThrows(TaskValidationException.class, () -> {
+            taskManager.addTask(task2);
+        });
+    }
+
+    @Test
+    public void shouldNotThrowTasksOverlapsInTimeExceptionWhenAddingTaskIsAfterExistingAndNotOverlaps() {
+        LocalDateTime start = LocalDateTime.now();
+        Task task = new Task("task1", "taskTesting");
+        task.setStartTime(start);
+        task.setDuration(Duration.ofHours(1));
+        taskManager.addTask(task);
+
+        Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(start.plusHours(2));
+        task2.setDuration(Duration.ofMinutes(30));
+
+        assertDoesNotThrow(() -> {
+            taskManager.addTask(task2);
         });
     }
 }
