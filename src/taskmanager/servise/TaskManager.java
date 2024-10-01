@@ -5,7 +5,6 @@ import taskmanager.tasktypes.Subtask;
 import taskmanager.tasktypes.Task;
 
 import java.util.List;
-import java.util.Set;
 
 public interface TaskManager {
 
