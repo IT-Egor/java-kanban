@@ -3,7 +3,11 @@ package taskmanager.tasktypes;
 import taskmanager.utility.Status;
 import taskmanager.utility.Type;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Task {
     protected String name;
@@ -11,6 +15,8 @@ public class Task {
     protected int id;
     protected Status status;
     protected Type type;
+    protected LocalDateTime startTime;
+    protected Duration duration;
 
     public Task(String name, String description) {
         this.description = description;
@@ -56,6 +62,28 @@ public class Task {
         return type;
     }
 
+    public Optional<LocalDateTime> getStartTime() {
+        return Optional.ofNullable(startTime);
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public Optional<Duration> getDuration() {
+        return Optional.ofNullable(duration);
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public Optional<LocalDateTime> getEndTime() {
+        return Optional.ofNullable(startTime)
+                .flatMap(start -> Optional.ofNullable(duration)
+                        .map(dur -> start.plus(dur)));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,11 +99,15 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                '}';
+        return String.format("Task{name='%s', description='%s', id=%d, status=%s, " +
+                        "startTime='%s', endTime='%s', duration='%s'}",
+                name, description, id, status,
+                getStartTime()
+                        .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::format)
+                        .orElse("null"),
+                getEndTime()
+                        .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::format)
+                        .orElse("null"),
+                getDuration().map(duration1 -> duration.toMinutes() + "m").orElse("null"));
     }
 }

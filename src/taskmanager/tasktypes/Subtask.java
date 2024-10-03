@@ -2,6 +2,8 @@ package taskmanager.tasktypes;
 
 import taskmanager.utility.Type;
 
+import java.time.format.DateTimeFormatter;
+
 public class Subtask extends Task {
     protected int containingEpicId;
 
@@ -26,12 +28,15 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Subtask{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                ", containingEpicId=" + containingEpicId +
-                '}';
+        return String.format("Subtask{name='%s', description='%s', id=%d, status=%s, " +
+                        "containingEpicId=%d, startTime='%s', endTime='%s', duration='%s'}",
+                name, description, id, status, containingEpicId,
+                getStartTime()
+                        .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::format)
+                        .orElse("null"),
+                getEndTime()
+                        .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::format)
+                        .orElse("null"),
+                getDuration().map(duration1 -> duration.toMinutes() + "m").orElse("null"));
     }
 }

@@ -3,6 +3,9 @@ package taskmanager.tasktypes;
 import org.junit.jupiter.api.Test;
 import taskmanager.utility.Status;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class SubtaskTest {
@@ -27,7 +30,10 @@ class SubtaskTest {
         subtask.setId(10);
         subtask.setContainingEpicId(11);
         subtask.setStatus(Status.DONE);
-        String expected = "Subtask{name='Subtask Name', description='Subtask Description', id=10, status=DONE, containingEpicId=11}";
+        subtask.setStartTime(LocalDateTime.of(1,1,1, 0,0,0));
+        subtask.setDuration(Duration.ZERO);
+        String expected = "Subtask{name='Subtask Name', description='Subtask Description', id=10, status=DONE, " +
+                "containingEpicId=11, startTime='0001-01-01T00:00:00', endTime='0001-01-01T00:00:00', duration='0m'}";
         assertEquals(expected, subtask.toString());
     }
 
