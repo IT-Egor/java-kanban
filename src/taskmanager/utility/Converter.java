@@ -23,7 +23,7 @@ public class Converter {
                 .orElse("null")).append(",");
 
         builder.append(task.getDuration()
-                .map(duration -> String.valueOf(duration.toSeconds()))
+                .map(duration -> String.valueOf(duration.toMinutes()))
                 .orElse("null")).append(",");
 
         if (task.getType() == Type.EPIC) {
@@ -68,7 +68,7 @@ public class Converter {
         if (values[6].equals("null")) {
             task.setDuration(null);
         } else {
-            task.setDuration(Duration.ofSeconds(Long.parseLong(values[6])));
+            task.setDuration(Duration.ofMinutes(Long.parseLong(values[6])));
         }
         return task;
     }

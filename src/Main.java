@@ -188,22 +188,22 @@ public class Main {
 
         Subtask subtask1 = new Subtask("subtask1", "subtaskTesting1");
         subtask1.setStartTime(LocalDateTime.now().plusHours(3));
-        subtask1.setDuration(Duration.ofHours(4));
+        subtask1.setDuration(Duration.ofMinutes(4));
         subtask1.setContainingEpicId(epic1.getId());
 
         Subtask subtask2 = new Subtask("subtask2", "subtaskTesting2");
         subtask2.setStartTime(LocalDateTime.now().plusHours(4));
-        subtask2.setDuration(Duration.ofHours(5));
+        subtask2.setDuration(Duration.ofMinutes(5));
         subtask2.setContainingEpicId(epic1.getId());
 
         Subtask subtask3 = new Subtask("subtask3", "subtaskTesting3");
         subtask3.setStartTime(LocalDateTime.now().plusHours(5));
-        subtask3.setDuration(Duration.ofHours(6));
+        subtask3.setDuration(Duration.ofMinutes(6));
         subtask3.setContainingEpicId(epic2.getId());
 
         Subtask subtask4 = new Subtask("subtask4", "subtaskTesting4");
         subtask4.setStartTime(LocalDateTime.now().plusHours(6));
-        subtask4.setDuration(Duration.ofHours(7));
+        subtask4.setDuration(Duration.ofMinutes(7));
         subtask4.setContainingEpicId(epic2.getId());
 
         taskManager.addSubtask(subtask2);
