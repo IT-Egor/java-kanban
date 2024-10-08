@@ -71,9 +71,9 @@ class FileBackedTaskManagerTest extends AbstractTaskManagerTest<FileBackedTaskMa
                         "TASK,%d,task2,taskTesting2,NEW,0002-01-01T00:00:00,2,\n" +
                         "EPIC,%d,epic1,epicTesting1,IN_PROGRESS,0003-01-01T00:00:00,7,0004-01-01T00:00:00,\n" +
                         "EPIC,%d,epic2,epicTesting2,DONE,0005-01-01T00:00:00,5,0005-01-01T00:05:00,\n" +
-                        "SUBTASK,%d,subtask1,subtaskTesting1,DONE,0003-01-01T00:00:00,3,%d,\n" +
-                        "SUBTASK,%d,subtask2,subtaskTesting2,NEW,0004-01-01T00:00:00,4,%d,\n" +
-                        "SUBTASK,%d,subtask3,subtaskTesting3,DONE,0005-01-01T00:00:00,5,%d,\n",
+                        "SUBTASK,%d,subtask1,subtaskTesting1,DONE,0003-01-01T00:00:00,3,,%d,\n" +
+                        "SUBTASK,%d,subtask2,subtaskTesting2,NEW,0004-01-01T00:00:00,4,,%d,\n" +
+                        "SUBTASK,%d,subtask3,subtaskTesting3,DONE,0005-01-01T00:00:00,5,,%d,\n",
                 task1.getId(), task2.getId(),
                 epic1.getId(), epic2.getId(),
                 subtask1.getId(), subtask1.getContainingEpicId(),

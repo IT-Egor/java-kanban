@@ -33,7 +33,7 @@ public class Converter {
         }
 
         if (task.getType() == Type.SUBTASK) {
-            builder.append(((Subtask) task).getContainingEpicId()).append(",");
+            builder.append(",").append(((Subtask) task).getContainingEpicId()).append(",");
         }
         builder.append("\n");
         return builder.toString();
@@ -53,7 +53,7 @@ public class Converter {
             }
         } else if (values[0].equals("SUBTASK")) {
             task = new Subtask(values[2], values[3]);
-            ((Subtask) task).setContainingEpicId(Integer.parseInt(values[7]));
+            ((Subtask) task).setContainingEpicId(Integer.parseInt(values[8]));
         } else {
             throw new TaskConversionException("Unknown task type: " + values[0]);
         }
