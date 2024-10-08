@@ -11,7 +11,10 @@ import taskmanager.utility.Managers;
 import taskmanager.utility.Type;
 
 import java.io.*;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     private File file;
@@ -126,7 +129,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     public static FileBackedTaskManager loadFromFile(File file) {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             FileBackedTaskManager taskManager = new FileBackedTaskManager(file, Managers.getDefaultHistoryManager());
-
+            int maxId = 0;
             String line;
             br.readLine();
 
@@ -142,7 +145,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                     taskManager.epics.get(((Subtask) task).getContainingEpicId()).addSubtaskId(task.getId());
                 }
                 taskManager.prioritizedTasks.add(task);
+                if (task.getId() > maxId) {
+                    maxId = task.getId();
+                }
             }
+            for (int i = 1; i <= maxId; i++) {
+                Managers.getNextId();
+            }
+
             return taskManager;
 
         } catch (IOException e) {
