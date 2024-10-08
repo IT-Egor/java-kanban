@@ -270,13 +270,14 @@ public class InMemoryTaskManager implements TaskManager {
                     LocalDateTime currentTaskEndTime = currentTask.getEndTime().get();
                     LocalDateTime taskEndTime = task.getEndTime().get();
 
-                    return ((taskStartTime.isBefore(currentTaskStartTime)
+                    return !task.equals(currentTask)
+                            && (((taskStartTime.isBefore(currentTaskStartTime)
                             || taskStartTime.isEqual(currentTaskStartTime))
                             && taskEndTime.isAfter(currentTaskStartTime))
                             ||
                             ((currentTaskStartTime.isBefore(taskStartTime)
                             || currentTaskStartTime.isEqual(taskStartTime))
-                            && currentTaskEndTime.isAfter(taskStartTime));
+                            && currentTaskEndTime.isAfter(taskStartTime)));
                 });
     }
 

@@ -1238,4 +1238,45 @@ abstract class AbstractTaskManagerTest<T extends TaskManager> {
             taskManager.addTask(task2);
         });
     }
+
+    @Test
+    public void shouldUpdateTaskWithSameTimeIfTasksAreEquals() {
+        LocalDateTime start = LocalDateTime.now();
+        Task task = new Task("task1", "taskTesting");
+        task.setStartTime(start);
+        task.setDuration(Duration.ofHours(1));
+        taskManager.addTask(task);
+
+        Task updatedTask = new Task("updatedTask1", "updatedTask1Testing");
+        updatedTask.setId(task.getId());
+        updatedTask.setStartTime(start);
+        updatedTask.setDuration(Duration.ofHours(2));
+
+        assertDoesNotThrow(() -> {
+            taskManager.updateTask(updatedTask);
+        });
+    }
+
+    @Test
+    public void shouldUpdateTaskWithSameTimeIfTasksAreNotEquals() {
+        LocalDateTime start = LocalDateTime.now();
+        Task task = new Task("task1", "taskTesting");
+        task.setStartTime(start);
+        task.setDuration(Duration.ofHours(1));
+        taskManager.addTask(task);
+
+        Task task2 = new Task("task2", "taskTesting2");
+        task2.setStartTime(start.plusHours(1));
+        task2.setDuration(Duration.ofHours(1));
+        taskManager.addTask(task2);
+
+        Task updatedTask2 = new Task("updatedTask2", "updatedTask2Testing");
+        updatedTask2.setId(task2.getId());
+        updatedTask2.setStartTime(start);
+        updatedTask2.setDuration(Duration.ofHours(2));
+
+        assertThrows(TaskValidationException.class, () -> {
+            taskManager.updateTask(updatedTask2);
+        });
+    }
 }
