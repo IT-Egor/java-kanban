@@ -27,6 +27,7 @@ public class TasksHandler implements HttpHandler {
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                 .registerTypeAdapter(Duration.class, new DurationAdapter())
+                .serializeNulls()
                 .create();
     }
 
@@ -43,6 +44,10 @@ public class TasksHandler implements HttpHandler {
 
             case "POST":
                 handlePostRequest(exchange);
+                break;
+
+            case "DELETE":
+                handleDeleteRequest(exchange, path);
                 break;
 
             default:
@@ -118,6 +123,33 @@ public class TasksHandler implements HttpHandler {
                 response = "Invalid request";
             }
         } catch (JsonSyntaxException e) {
+            statusCode = 400;
+            response = "Invalid request";
+        }
+        sendResponse(exchange, statusCode, response);
+    }
+
+    private void handleDeleteRequest(HttpExchange exchange, String path) throws IOException {
+        String response;
+        int statusCode;
+        String[] pathElements = path.split("/");
+
+        if (pathElements.length == 3) {
+            try {
+                int taskId = Integer.parseInt(pathElements[2]);
+                Task deletedTask = taskManager.removeTask(taskId);
+                if (deletedTask != null) {
+                    statusCode = 200;
+                    response = gson.toJson(deletedTask);
+                } else {
+                    statusCode = 404;
+                    response = String.format("Task with id=%s not found", taskId);
+                }
+            } catch (NumberFormatException e) {
+                statusCode = 415;
+                response = "Task id should be integer";
+            }
+        } else {
             statusCode = 400;
             response = "Invalid request";
         }
