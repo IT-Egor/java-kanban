@@ -46,6 +46,7 @@ public class InMemoryTaskManager implements TaskManager {
         throwIfTasksOverlaps(task);
         int id = Managers.getNextId();
         task.setId(id);
+        task.setStatus(Status.NEW);
         tasks.put(id, task);
         prioritizedTasks.add(task);
         return id;
@@ -55,6 +56,7 @@ public class InMemoryTaskManager implements TaskManager {
     public int addEpic(Epic epic) {
         int id = Managers.getNextId();
         epic.setId(id);
+        epic.setStatus(Status.NEW);
         epics.put(id, epic);
         return id;
     }
@@ -69,6 +71,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         int subtaskId = Managers.getNextId();
         subtask.setId(subtaskId);
+        subtask.setStatus(Status.NEW);
         subtasks.put(subtaskId, subtask);
         prioritizedTasks.add(subtask);
         Epic containingEpic = epics.get(epicId);
