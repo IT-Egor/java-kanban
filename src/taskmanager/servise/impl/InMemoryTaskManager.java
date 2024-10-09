@@ -163,6 +163,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (!tasks.containsKey(updatedTask.getId())) {
             return -1;
         }
+        if (updatedTask.getStatus() == null) {
+            return -4;
+        }
         tasks.put(updatedTask.getId(), updatedTask);
         Task oldTask = tasks.get(updatedTask.getId());
         prioritizedTasks.remove(oldTask);
@@ -174,6 +177,9 @@ public class InMemoryTaskManager implements TaskManager {
     public int updateEpic(Epic updatedEpic) {
         if (!epics.containsKey(updatedEpic.getId())) {
             return -1;
+        }
+        if (updatedEpic.getStatus() == null) {
+            return -4;
         }
         Epic oldEpic = epics.get(updatedEpic.getId());  //их id равны
         if (oldEpic.getStatus() != updatedEpic.getStatus()) {
@@ -194,6 +200,9 @@ public class InMemoryTaskManager implements TaskManager {
         throwIfTasksOverlaps(updatedSubtask);
         if (!subtasks.containsKey(updatedSubtask.getId())) {
             return -1;
+        }
+        if (updatedSubtask.getStatus() == null) {
+            return -4;
         }
         Subtask oldSubtask = subtasks.get(updatedSubtask.getId());  //их id равны
         int oldSubtaskContainingEpicId = oldSubtask.getContainingEpicId();
