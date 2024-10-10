@@ -63,11 +63,12 @@ public class SubtasksHandler extends TasksHandler {
                     if (subtask.getId() == 0) {
                         int subtaskAddStatus = taskManager.addSubtask(subtask);
                         if (subtaskAddStatus == -1) {
-                            throw new TaskValidationException(
-                                    String.format("Epic with id=%s not found", subtask.getContainingEpicId()));
+                            statusCode = 404;
+                            response = String.format("Epic with id=%s not found", subtask.getContainingEpicId());
+                        } else {
+                            statusCode = 201;
+                            response = "Subtask added";
                         }
-                        statusCode = 201;
-                        response = "Subtask added";
                     } else {
                         int updateSubtaskCode = taskManager.updateTask(subtask);
                         if (updateSubtaskCode > 0) {
@@ -76,6 +77,9 @@ public class SubtasksHandler extends TasksHandler {
                         } else if (updateSubtaskCode == -1) {
                             statusCode = 404;
                             response = String.format("Subtask with id=%s not found", subtask.getId());
+                        } else if (updateSubtaskCode == -2) {
+                            statusCode = 404;
+                            response = String.format("Epic with id=%s not found", subtask.getContainingEpicId());
                         } else {
                             statusCode = 406;
                             response = "Invalid subtask";
