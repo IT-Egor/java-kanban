@@ -1,7 +1,6 @@
 package taskmanager.server.handlers;
 
 import com.google.gson.*;
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import taskmanager.exceptions.TaskValidationException;
@@ -18,8 +17,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class TasksHandler implements HttpHandler {
-    private TaskManager taskManager;
-    private Gson gson;
+    protected TaskManager taskManager;
+    protected Gson gson;
 
     public TasksHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
@@ -57,7 +56,7 @@ public class TasksHandler implements HttpHandler {
         }
     }
 
-    private void handleGetRequest(HttpExchange exchange, String path) throws IOException {
+    protected void handleGetRequest(HttpExchange exchange, String path) throws IOException {
         String response;
         int statusCode;
         String[] pathElements = path.split("/");
@@ -86,7 +85,7 @@ public class TasksHandler implements HttpHandler {
         sendResponse(exchange, statusCode, response);
     }
 
-    private void handlePostRequest(HttpExchange exchange) throws IOException {
+    protected void handlePostRequest(HttpExchange exchange) throws IOException {
         String response;
         int statusCode;
         try {
@@ -129,7 +128,7 @@ public class TasksHandler implements HttpHandler {
         sendResponse(exchange, statusCode, response);
     }
 
-    private void handleDeleteRequest(HttpExchange exchange, String path) throws IOException {
+    protected void handleDeleteRequest(HttpExchange exchange, String path) throws IOException {
         String response;
         int statusCode;
         String[] pathElements = path.split("/");
@@ -156,13 +155,9 @@ public class TasksHandler implements HttpHandler {
         sendResponse(exchange, statusCode, response);
     }
 
-    private void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
-
-//        Headers headers = exchange.getResponseHeaders();
-//        headers.set("Content-Type", "application/json");
-
+    protected void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
+        exchange.getResponseHeaders().set("Content-Type", "application/json");
         exchange.sendResponseHeaders(statusCode, response.length());
-        // System.out.println("Response: " + response);
 
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());

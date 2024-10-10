@@ -3,6 +3,7 @@ package taskmanager.server;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import taskmanager.server.handlers.SubtasksHandler;
 import taskmanager.server.handlers.TasksHandler;
 
 import taskmanager.servise.TaskManager;
@@ -25,6 +26,7 @@ public class HttpTaskServer {
             HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
             server.createContext("/start", new TestHandler());
             server.createContext("/tasks", new TasksHandler(taskManager));
+            server.createContext("/subtasks", new SubtasksHandler(taskManager));
             server.start();
             System.out.println("Started on port " + PORT);
 
