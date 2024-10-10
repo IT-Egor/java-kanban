@@ -8,6 +8,7 @@ import taskmanager.server.typeadapters.DurationAdapter;
 import taskmanager.server.typeadapters.LocalDateTimeAdapter;
 import taskmanager.servise.TaskManager;
 import taskmanager.tasktypes.Task;
+import taskmanager.utility.Type;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -95,6 +96,9 @@ public class TasksHandler implements HttpHandler {
                 Task task = gson.fromJson(jsonElement, Task.class);
                 System.out.println("task = " + task);
                 try {
+                    if (task.getStatus() == null || task.getType() != Type.TASK) {
+                        throw new TaskValidationException("Invalid task");
+                    }
                     if (task.getId() == 0) {
                         taskManager.addTask(task);
                         statusCode = 201;
