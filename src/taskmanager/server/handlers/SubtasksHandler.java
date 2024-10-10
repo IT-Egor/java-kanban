@@ -101,6 +101,34 @@ public class SubtasksHandler extends TasksHandler {
         sendResponse(exchange, statusCode, response);
     }
 
+    @Override
+    protected void handleDeleteRequest(HttpExchange exchange, String path) throws IOException {
+        String response;
+        int statusCode;
+        String[] pathElements = path.split("/");
+
+        if (pathElements.length == 3) {
+            try {
+                int subtaskId = Integer.parseInt(pathElements[2]);
+                Subtask deletedSubtask = taskManager.removeSubtask(subtaskId);
+                if (deletedSubtask != null) {
+                    statusCode = 200;
+                    response = gson.toJson(deletedSubtask);
+                } else {
+                    statusCode = 404;
+                    response = String.format("Subtask with id=%s not found", subtaskId);
+                }
+            } catch (NumberFormatException e) {
+                statusCode = 415;
+                response = "Subtask id should be integer";
+            }
+        } else {
+            statusCode = 400;
+            response = "Invalid request";
+        }
+        sendResponse(exchange, statusCode, response);
+    }
+
     private void throwIfSubtaskNotValid(Subtask subtask) {
         if (subtask.getType() != Type.SUBTASK || subtask.getStatus() == null || subtask.getContainingEpicId() == 0) {
             throw new TaskValidationException("Invalid subtask");
