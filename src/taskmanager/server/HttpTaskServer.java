@@ -26,7 +26,6 @@ public class HttpTaskServer {
 
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
-            server.createContext("/start", new TestHandler());
             server.createContext("/tasks", new TasksHandler(taskManager));
             server.createContext("/subtasks", new SubtasksHandler(taskManager));
             server.createContext("/epics", new EpicsHandler(taskManager));
@@ -37,19 +36,6 @@ public class HttpTaskServer {
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
-        }
-    }
-}
-
-
-class TestHandler implements HttpHandler {
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        String response = "start";
-        exchange.sendResponseHeaders(200, 0);
-
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
         }
     }
 }
