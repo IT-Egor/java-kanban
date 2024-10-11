@@ -2,33 +2,19 @@ package taskmanager.server.handlers;
 
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import taskmanager.exceptions.TaskValidationException;
-import taskmanager.server.typeadapters.DurationAdapter;
-import taskmanager.server.typeadapters.LocalDateTimeAdapter;
 import taskmanager.servise.TaskManager;
 import taskmanager.tasktypes.Task;
 import taskmanager.utility.Type;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
-public class TasksHandler implements HttpHandler {
-    protected TaskManager taskManager;
-    protected Gson gson;
+public class TasksHandler extends AbstractTaskManagerHandler {
 
     public TasksHandler(TaskManager taskManager) {
-        this.taskManager = taskManager;
-        gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                .registerTypeAdapter(Duration.class, new DurationAdapter())
-                .serializeNulls()
-                .create();
+        super(taskManager);
     }
 
     @Override
@@ -156,14 +142,5 @@ public class TasksHandler implements HttpHandler {
             response = "Invalid request";
         }
         sendResponse(exchange, statusCode, response);
-    }
-
-    protected void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
-        exchange.getResponseHeaders().set("Content-Type", "application/json");
-        exchange.sendResponseHeaders(statusCode, response.length());
-
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
     }
 }

@@ -4,11 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
-import taskmanager.exceptions.TaskValidationException;
 import taskmanager.servise.TaskManager;
 import taskmanager.tasktypes.Epic;
-import taskmanager.tasktypes.Task;
-import taskmanager.utility.Type;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
