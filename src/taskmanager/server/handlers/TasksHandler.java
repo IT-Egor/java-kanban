@@ -94,7 +94,6 @@ public class TasksHandler implements HttpHandler {
             JsonElement jsonElement = JsonParser.parseString(body);
             if (jsonElement.isJsonObject()) {
                 Task task = gson.fromJson(jsonElement, Task.class);
-                System.out.println("task = " + task);
                 try {
                     if (task.getStatus() == null || task.getType() != Type.TASK) {
                         throw new TaskValidationException("Invalid task");

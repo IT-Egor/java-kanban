@@ -57,7 +57,6 @@ public class SubtasksHandler extends TasksHandler {
             JsonElement jsonElement = JsonParser.parseString(body);
             if (jsonElement.isJsonObject()) {
                 Subtask subtask = gson.fromJson(jsonElement, Subtask.class);
-                System.out.println("Subtask = " + subtask);
                 try {
                     throwIfSubtaskNotValid(subtask);
                     if (subtask.getId() == 0) {
