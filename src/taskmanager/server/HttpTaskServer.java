@@ -3,10 +3,7 @@ package taskmanager.server;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import taskmanager.server.handlers.EpicsHandler;
-import taskmanager.server.handlers.PriorityHandler;
-import taskmanager.server.handlers.SubtasksHandler;
-import taskmanager.server.handlers.TasksHandler;
+import taskmanager.server.handlers.*;
 
 import taskmanager.servise.TaskManager;
 import taskmanager.servise.impl.FileBackedTaskManager;
@@ -30,6 +27,7 @@ public class HttpTaskServer {
             server.createContext("/tasks", new TasksHandler(taskManager));
             server.createContext("/subtasks", new SubtasksHandler(taskManager));
             server.createContext("/epics", new EpicsHandler(taskManager));
+            server.createContext("/history", new HistoryHandler(taskManager));
             server.createContext("/prioritized", new PriorityHandler(taskManager));
             server.start();
             System.out.println("Started on port " + PORT);
