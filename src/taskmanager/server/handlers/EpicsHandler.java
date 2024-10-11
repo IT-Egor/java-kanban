@@ -67,17 +67,12 @@ public class EpicsHandler extends TasksHandler {
             String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
             JsonElement jsonElement = JsonParser.parseString(body);
             if (jsonElement.isJsonObject()) {
-                Epic epic = gson.fromJson(jsonElement, Epic.class);
-                try {
-                    throwIfEpicIsInvalid(epic);
-                    taskManager.addEpic(epic);
-                    statusCode = 201;
-                    response = "Epic added";
+                Epic jsonEpic = gson.fromJson(jsonElement, Epic.class);
+                Epic epic = new Epic(jsonEpic.getName(), jsonEpic.getDescription());
 
-                } catch (TaskValidationException e) {
-                    response = e.getMessage();
-                    statusCode = 406;
-                }
+                taskManager.addEpic(epic);
+                statusCode = 201;
+                response = "Epic added";
             } else {
                 statusCode = 400;
                 response = "Invalid request";
@@ -89,14 +84,31 @@ public class EpicsHandler extends TasksHandler {
         sendResponse(exchange, statusCode, response);
     }
 
-    private void throwIfEpicIsInvalid(Epic epic) {
-        if (epic.getStatus() != null
-                || epic.getType() != Type.EPIC
-                || epic.getId() != 0
-                || epic.getStartTime().isPresent()
-                || epic.getDuration().isPresent()
-                || epic.getEndTime().isPresent()) {
-            throw new TaskValidationException("Invalid epic");
+    @Override
+    protected void handleDeleteRequest(HttpExchange exchange, String path) throws IOException {
+        String response;
+        int statusCode;
+        String[] pathElements = path.split("/");
+
+        if (pathElements.length == 3) {
+            try {
+                int epicId = Integer.parseInt(pathElements[2]);
+                Epic deletedEpic = taskManager.removeEpic(epicId);
+                if (deletedEpic != null) {
+                    statusCode = 200;
+                    response = gson.toJson(deletedEpic);
+                } else {
+                    statusCode = 404;
+                    response = String.format("Epic with id=%s not found", epicId);
+                }
+            } catch (NumberFormatException e) {
+                statusCode = 415;
+                response = "Epic id should be integer";
+            }
+        } else {
+            statusCode = 400;
+            response = "Invalid request";
         }
+        sendResponse(exchange, statusCode, response);
     }
 }
