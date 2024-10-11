@@ -1,4 +1,4 @@
-package taskmanager.server.handlers;
+package taskmanager.server.handlers.taskshandlers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -28,7 +28,6 @@ public class EpicsHandler extends TasksHandler {
             try {
                 int epicId = Integer.parseInt(pathElements[2]);
                 Epic epic = taskManager.findEpic(epicId);
-                System.out.println(epic);
                 if (epic == null) {
                     statusCode = 404;
                     response = String.format("Epic with id=%s not found", epicId);

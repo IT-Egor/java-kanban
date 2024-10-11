@@ -1,8 +1,9 @@
-package taskmanager.server.handlers;
+package taskmanager.server.handlers.taskshandlers;
 
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import taskmanager.exceptions.TaskValidationException;
+import taskmanager.server.handlers.AbstractTaskManagerHandler;
 import taskmanager.servise.TaskManager;
 import taskmanager.tasktypes.Task;
 import taskmanager.utility.Type;

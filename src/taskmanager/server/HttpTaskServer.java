@@ -5,6 +5,9 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import taskmanager.server.handlers.*;
 
+import taskmanager.server.handlers.taskshandlers.EpicsHandler;
+import taskmanager.server.handlers.taskshandlers.SubtasksHandler;
+import taskmanager.server.handlers.taskshandlers.TasksHandler;
 import taskmanager.servise.TaskManager;
 import taskmanager.servise.impl.FileBackedTaskManager;
 

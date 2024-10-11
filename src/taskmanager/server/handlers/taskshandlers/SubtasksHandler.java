@@ -1,4 +1,4 @@
-package taskmanager.server.handlers;
+package taskmanager.server.handlers.taskshandlers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
