@@ -1,10 +1,17 @@
 package taskmanager.server.handlers;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
+import taskmanager.exceptions.TaskValidationException;
 import taskmanager.servise.TaskManager;
 import taskmanager.tasktypes.Epic;
+import taskmanager.tasktypes.Task;
+import taskmanager.utility.Type;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class EpicsHandler extends TasksHandler {
     public EpicsHandler(TaskManager taskManager) {
@@ -49,5 +56,47 @@ public class EpicsHandler extends TasksHandler {
             response = "Invalid request";
         }
         sendResponse(exchange, statusCode, response);
+    }
+
+    @Override
+    protected void handlePostRequest(HttpExchange exchange) throws IOException {
+        String response;
+        int statusCode;
+
+        try {
+            String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+            JsonElement jsonElement = JsonParser.parseString(body);
+            if (jsonElement.isJsonObject()) {
+                Epic epic = gson.fromJson(jsonElement, Epic.class);
+                try {
+                    throwIfEpicIsInvalid(epic);
+                    taskManager.addEpic(epic);
+                    statusCode = 201;
+                    response = "Epic added";
+
+                } catch (TaskValidationException e) {
+                    response = e.getMessage();
+                    statusCode = 406;
+                }
+            } else {
+                statusCode = 400;
+                response = "Invalid request";
+            }
+        } catch (JsonSyntaxException e) {
+            statusCode = 400;
+            response = "Invalid request";
+        }
+        sendResponse(exchange, statusCode, response);
+    }
+
+    private void throwIfEpicIsInvalid(Epic epic) {
+        if (epic.getStatus() != null
+                || epic.getType() != Type.EPIC
+                || epic.getId() != 0
+                || epic.getStartTime().isPresent()
+                || epic.getDuration().isPresent()
+                || epic.getEndTime().isPresent()) {
+            throw new TaskValidationException("Invalid epic");
+        }
     }
 }
