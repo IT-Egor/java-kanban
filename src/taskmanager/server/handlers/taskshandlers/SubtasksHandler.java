@@ -68,7 +68,7 @@ public class SubtasksHandler extends TasksHandler {
                             response = "Subtask added";
                         }
                     } else {
-                        int updateSubtaskCode = taskManager.updateTask(subtask);
+                        int updateSubtaskCode = taskManager.updateSubtask(subtask);
                         if (updateSubtaskCode > 0) {
                             statusCode = 201;
                             response = "Subtask updated";

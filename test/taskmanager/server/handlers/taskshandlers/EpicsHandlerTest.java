@@ -172,6 +172,10 @@ class EpicsHandlerTest extends AbstractTaskManagerHandlerTest {
     public void shouldReturn200WhenEpicDELETE() throws IOException, InterruptedException {
         Epic epic = new Epic("epic1", "epicTesting1");
         taskManager.addEpic(epic);
+        Subtask subtask = new Subtask("subtask1", "subtaskTesting1", epic.getId());
+        subtask.setStartTime(LocalDateTime.now());
+        subtask.setDuration(Duration.ZERO);
+        taskManager.addSubtask(subtask);
 
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/epics/" + epic.getId());
@@ -180,5 +184,6 @@ class EpicsHandlerTest extends AbstractTaskManagerHandlerTest {
 
         assertEquals(200, response.statusCode());
         assertEquals(gson.toJson(epic), response.body());
+        assertEquals(0, taskManager.getSubtasks().size());
     }
 }
