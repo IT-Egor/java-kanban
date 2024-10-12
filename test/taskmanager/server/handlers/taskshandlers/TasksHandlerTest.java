@@ -1,17 +1,8 @@
 package taskmanager.server.handlers.taskshandlers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import taskmanager.server.HttpTaskServer;
-import taskmanager.server.typeadapters.DurationAdapter;
-import taskmanager.server.typeadapters.LocalDateTimeAdapter;
-import taskmanager.servise.TaskManager;
-import taskmanager.servise.impl.InMemoryTaskManager;
+import taskmanager.server.handlers.AbstractTaskManagerHandlerTest;
 import taskmanager.tasktypes.Task;
-import taskmanager.utility.Managers;
 
 import java.io.IOException;
 import java.net.URI;
@@ -24,28 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TasksHandlerTest {
-
-    Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .registerTypeAdapter(Duration.class, new DurationAdapter())
-            .serializeNulls()
-            .create();
-
-    TaskManager taskManager;
-
-    @BeforeEach
-    public void setUp() {
-        taskManager = new InMemoryTaskManager(Managers.getDefaultHistoryManager());
-        HttpTaskServer.start(taskManager);
-    }
-
-    @AfterEach
-    public void shutDown() {
-        HttpTaskServer.stop();
-    }
-
+class TasksHandlerTest extends AbstractTaskManagerHandlerTest {
 
     @Test
     public void shouldReturn405ForNotAllowedMethod() throws IOException, InterruptedException {
