@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import taskmanager.exceptions.TaskValidationException;
 import taskmanager.server.HttpTaskServer;
 import taskmanager.server.typeadapters.DurationAdapter;
 import taskmanager.server.typeadapters.LocalDateTimeAdapter;
@@ -13,7 +12,6 @@ import taskmanager.servise.TaskManager;
 import taskmanager.servise.impl.InMemoryTaskManager;
 import taskmanager.tasktypes.Task;
 import taskmanager.utility.Managers;
-import taskmanager.utility.Status;
 
 import java.io.IOException;
 import java.net.URI;
@@ -208,15 +206,10 @@ class TasksHandlerTest {
         HttpRequest request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(taskJson)).build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        request = HttpRequest.newBuilder().uri(url).GET().build();
-        response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        String responseBody = response.body();
-        responseBody = responseBody.replaceAll("\\[", "").replaceAll("]", "");
-
-        Task updatedTask = gson.fromJson(responseBody, Task.class);
-        updatedTask.setName("task2");
-        updatedTask.setDescription("taskTesting2");
+        Task updatedTask = new Task("task2", "taskTesting2");
+        updatedTask.setId(taskManager.getTasks().get(0).getId());
+        updatedTask.setStartTime(task.getStartTime().get());
+        updatedTask.setDuration(task.getDuration().get());
 
         String updatedTaskJson = gson.toJson(updatedTask);
 
@@ -302,19 +295,13 @@ class TasksHandlerTest {
         HttpRequest request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(taskJson)).build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        request = HttpRequest.newBuilder().uri(url).GET().build();
-        response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        String responseBody = response.body();
-        responseBody = responseBody.replaceAll("\\[", "").replaceAll("]", "");
-
-        Task taskToDelete = gson.fromJson(responseBody, Task.class);
-        URI urlToDelete = URI.create("http://localhost:8080/tasks/" + taskToDelete.getId());
+        task.setId(taskManager.getTasks().get(0).getId());
+        URI urlToDelete = URI.create("http://localhost:8080/tasks/" + task.getId());
 
         request = HttpRequest.newBuilder().uri(urlToDelete).DELETE().build();
         response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         assertEquals(200, response.statusCode());
-        assertEquals(gson.toJson(taskToDelete), response.body());
+        assertEquals(gson.toJson(task), response.body());
     }
 }
