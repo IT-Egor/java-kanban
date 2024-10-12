@@ -8,6 +8,8 @@ import taskmanager.server.handlers.taskshandlers.SubtasksHandler;
 import taskmanager.server.handlers.taskshandlers.TasksHandler;
 import taskmanager.servise.TaskManager;
 import taskmanager.servise.impl.FileBackedTaskManager;
+import taskmanager.servise.impl.InMemoryTaskManager;
+import taskmanager.utility.Managers;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +21,8 @@ public class HttpTaskServer {
     private static HttpServer server;
 
     public static void main(String[] args) {
-        start(FileBackedTaskManager.loadFromFile(CSV_FILE));
+        start(new InMemoryTaskManager(Managers.getDefaultHistoryManager()));
+        //start(FileBackedTaskManager.loadFromFile(CSV_FILE));
         System.out.println("Started on port " + PORT);
     }
 
