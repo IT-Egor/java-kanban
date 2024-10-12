@@ -201,10 +201,7 @@ class TasksHandlerTest {
         Task task = new Task("task1", "taskTesting1");
         task.setStartTime(LocalDateTime.now());
         task.setDuration(Duration.ZERO);
-        String taskJson = gson.toJson(task);
-
-        HttpRequest request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(taskJson)).build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        taskManager.addTask(task);
 
         Task updatedTask = new Task("task2", "taskTesting2");
         updatedTask.setId(taskManager.getTasks().get(0).getId());
@@ -213,8 +210,8 @@ class TasksHandlerTest {
 
         String updatedTaskJson = gson.toJson(updatedTask);
 
-        request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(updatedTaskJson)).build();
-        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpRequest request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(updatedTaskJson)).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         assertEquals(201, response.statusCode());
         assertEquals("Task updated", response.body());
@@ -228,10 +225,7 @@ class TasksHandlerTest {
         Task task = new Task("task1", "taskTesting1");
         task.setStartTime(LocalDateTime.now());
         task.setDuration(Duration.ZERO);
-        String taskJson = gson.toJson(task);
-
-        HttpRequest request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(taskJson)).build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        taskManager.addTask(task);
 
         Task updatedTask = new Task("updatedTask1", "taskTesting1");
         updatedTask.setId(-1);
@@ -240,8 +234,8 @@ class TasksHandlerTest {
 
         String updatedTaskJson = gson.toJson(updatedTask);
 
-        request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(updatedTaskJson)).build();
-        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpRequest request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(updatedTaskJson)).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         assertEquals(404, response.statusCode());
         assertEquals("Task with id=-1 not found", response.body());
@@ -285,21 +279,16 @@ class TasksHandlerTest {
     @Test
     public void shouldReturn200WhenTaskDeletedDELETE() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/tasks");
 
         Task task = new Task("task1", "taskTesting1");
         task.setStartTime(LocalDateTime.now());
         task.setDuration(Duration.ZERO);
-        String taskJson = gson.toJson(task);
+        taskManager.addTask(task);
 
-        HttpRequest request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(taskJson)).build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        task.setId(taskManager.getTasks().get(0).getId());
         URI urlToDelete = URI.create("http://localhost:8080/tasks/" + task.getId());
 
-        request = HttpRequest.newBuilder().uri(urlToDelete).DELETE().build();
-        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpRequest request = HttpRequest.newBuilder().uri(urlToDelete).DELETE().build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         assertEquals(200, response.statusCode());
         assertEquals(gson.toJson(task), response.body());
