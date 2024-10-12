@@ -17,7 +17,7 @@ import java.net.InetSocketAddress;
 
 public class HttpTaskServer {
     public static final int PORT = 8080;
-    private static final File CSV_FILE = new File( "src/taskmanager/resources/serverData.csv");
+    private static final File CSV_FILE = new File("src/taskmanager/resources/serverData.csv");
     private static final boolean FILE_BACKED = false;
     private static HttpServer server;
 
