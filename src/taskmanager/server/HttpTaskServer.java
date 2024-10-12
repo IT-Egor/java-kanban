@@ -18,11 +18,15 @@ import java.net.InetSocketAddress;
 public class HttpTaskServer {
     public static final int PORT = 8080;
     private static final File CSV_FILE = new File( "src/taskmanager/resources/serverData.csv");
+    private static final boolean FILE_BACKED = false;
     private static HttpServer server;
 
     public static void main(String[] args) {
-        start(new InMemoryTaskManager(Managers.getDefaultHistoryManager()));
-        //start(FileBackedTaskManager.loadFromFile(CSV_FILE));
+        if (FILE_BACKED) {
+            start(FileBackedTaskManager.loadFromFile(CSV_FILE));
+        } else {
+            start(new InMemoryTaskManager(Managers.getDefaultHistoryManager()));
+        }
         System.out.println("Started on port " + PORT);
     }
 
