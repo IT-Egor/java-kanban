@@ -31,7 +31,7 @@ public abstract class AbstractTaskManagerHandler implements HttpHandler {
         exchange.getResponseHeaders().set("Content-Type", "application/json");
         exchange.sendResponseHeaders(statusCode, response.length());
 
-        try (OutputStream os = exchange.getResponseBody()) {
+        try (exchange; OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
     }
