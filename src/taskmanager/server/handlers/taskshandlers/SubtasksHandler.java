@@ -37,7 +37,7 @@ public class SubtasksHandler extends TasksHandler {
                     statusCode = 200;
                 }
             } catch (NumberFormatException e) {
-                statusCode = 415;
+                statusCode = 400;
                 response = "Subtask id should be integer";
             }
         } else {
@@ -117,7 +117,7 @@ public class SubtasksHandler extends TasksHandler {
                     response = String.format("Subtask with id=%s not found", subtaskId);
                 }
             } catch (NumberFormatException e) {
-                statusCode = 415;
+                statusCode = 400;
                 response = "Subtask id should be integer";
             }
         } else {

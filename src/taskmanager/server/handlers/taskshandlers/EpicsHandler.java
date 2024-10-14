@@ -44,7 +44,7 @@ public class EpicsHandler extends TasksHandler {
                     }
                 }
             } catch (NumberFormatException e) {
-                statusCode = 415;
+                statusCode = 400;
                 response = "Epic id should be integer";
             }
         } else {
@@ -98,7 +98,7 @@ public class EpicsHandler extends TasksHandler {
                     response = String.format("Epic with id=%s not found", epicId);
                 }
             } catch (NumberFormatException e) {
-                statusCode = 415;
+                statusCode = 400;
                 response = "Epic id should be integer";
             }
         } else {

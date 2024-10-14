@@ -63,7 +63,7 @@ public class TasksHandler extends AbstractTaskManagerHandler {
                     statusCode = 200;
                 }
             } catch (NumberFormatException e) {
-                statusCode = 415;
+                statusCode = 400;
                 response = "Task id should be integer";
             }
         } else {
@@ -135,7 +135,7 @@ public class TasksHandler extends AbstractTaskManagerHandler {
                     response = String.format("Task with id=%s not found", taskId);
                 }
             } catch (NumberFormatException e) {
-                statusCode = 415;
+                statusCode = 400;
                 response = "Task id should be integer";
             }
         } else {
