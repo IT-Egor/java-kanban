@@ -27,17 +27,23 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getTasks() {
-        return new ArrayList<>(tasks.values());
+        List<Task> out = new ArrayList<>(tasks.values());
+        out.sort(Comparator.comparing(Task::getId));
+        return out;
     }
 
     @Override
     public List<Epic> getEpics() {
-        return new ArrayList<>(epics.values());
+        List<Epic> out = new ArrayList<>(epics.values());
+        out.sort(Comparator.comparing(Epic::getId));
+        return out;
     }
 
     @Override
     public List<Subtask> getSubtasks() {
-        return new ArrayList<>(subtasks.values());
+        List<Subtask> out = new ArrayList<>(subtasks.values());
+        out.sort(Comparator.comparing(Subtask::getId));
+        return out;
     }
 
     @Override
@@ -160,6 +166,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (!tasks.containsKey(updatedTask.getId())) {
             return -1;
         }
+        if (updatedTask.getStatus() == null) {
+            return -4;
+        }
         tasks.put(updatedTask.getId(), updatedTask);
         Task oldTask = tasks.get(updatedTask.getId());
         prioritizedTasks.remove(oldTask);
@@ -171,6 +180,9 @@ public class InMemoryTaskManager implements TaskManager {
     public int updateEpic(Epic updatedEpic) {
         if (!epics.containsKey(updatedEpic.getId())) {
             return -1;
+        }
+        if (updatedEpic.getStatus() == null) {
+            setSubtasksStatusToEpic(updatedEpic.getId());
         }
         Epic oldEpic = epics.get(updatedEpic.getId());  //их id равны
         if (oldEpic.getStatus() != updatedEpic.getStatus()) {
@@ -192,6 +204,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (!subtasks.containsKey(updatedSubtask.getId())) {
             return -1;
         }
+        if (updatedSubtask.getStatus() == null) {
+            return -4;
+        }
         Subtask oldSubtask = subtasks.get(updatedSubtask.getId());  //их id равны
         int oldSubtaskContainingEpicId = oldSubtask.getContainingEpicId();
         if (oldSubtaskContainingEpicId != updatedSubtask.getContainingEpicId()) {
@@ -207,6 +222,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task removeTask(int id) {
+        if (!tasks.containsKey(id)) {
+            return null;
+        }
         historyManager.remove(id);
         prioritizedTasks.remove(tasks.get(id));
         return tasks.remove(id);
@@ -270,13 +288,14 @@ public class InMemoryTaskManager implements TaskManager {
                     LocalDateTime currentTaskEndTime = currentTask.getEndTime().get();
                     LocalDateTime taskEndTime = task.getEndTime().get();
 
-                    return ((taskStartTime.isBefore(currentTaskStartTime)
+                    return !task.equals(currentTask)
+                            && (((taskStartTime.isBefore(currentTaskStartTime)
                             || taskStartTime.isEqual(currentTaskStartTime))
                             && taskEndTime.isAfter(currentTaskStartTime))
                             ||
                             ((currentTaskStartTime.isBefore(taskStartTime)
                             || currentTaskStartTime.isEqual(taskStartTime))
-                            && currentTaskEndTime.isAfter(taskStartTime));
+                            && currentTaskEndTime.isAfter(taskStartTime)));
                 });
     }
 
