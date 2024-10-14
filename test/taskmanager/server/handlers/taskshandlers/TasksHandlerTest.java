@@ -79,13 +79,13 @@ class TasksHandlerTest extends AbstractTaskManagerHandlerTest {
     }
 
     @Test
-    public void shouldReturn415WhenTaskIdNotIntegerGET() throws IOException, InterruptedException {
+    public void shouldReturn400WhenTaskIdNotIntegerGET() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks/a");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        assertEquals(415, response.statusCode());
+        assertEquals(400, response.statusCode());
         assertEquals("Task id should be integer", response.body());
     }
 
@@ -225,13 +225,13 @@ class TasksHandlerTest extends AbstractTaskManagerHandlerTest {
     }
 
     @Test
-    public void shouldReturn415WhenIdIsNotIntegerDELETE() throws IOException, InterruptedException {
+    public void shouldReturn400WhenIdIsNotIntegerDELETE() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks/b");
         HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        assertEquals(415, response.statusCode());
+        assertEquals(400, response.statusCode());
         assertEquals("Task id should be integer", response.body());
     }
 

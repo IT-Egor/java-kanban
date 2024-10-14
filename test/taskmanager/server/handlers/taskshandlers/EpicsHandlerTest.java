@@ -34,13 +34,13 @@ class EpicsHandlerTest extends AbstractTaskManagerHandlerTest {
     }
 
     @Test
-    public void shouldReturn415WhenIdIsNotIntegerGET() throws IOException, InterruptedException {
+    public void shouldReturn400WhenIdIsNotIntegerGET() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/epics/a");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        assertEquals(415, response.statusCode());
+        assertEquals(400, response.statusCode());
         assertEquals("Epic id should be integer", response.body());
     }
 
@@ -147,13 +147,13 @@ class EpicsHandlerTest extends AbstractTaskManagerHandlerTest {
     }
 
     @Test
-    public void shouldReturn415WhenIdIsNotIntegerDELETE() throws IOException, InterruptedException {
+    public void shouldReturn400WhenIdIsNotIntegerDELETE() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/epics/a");
         HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        assertEquals(415, response.statusCode());
+        assertEquals(400, response.statusCode());
         assertEquals("Epic id should be integer", response.body());
     }
 
