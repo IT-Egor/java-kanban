@@ -182,7 +182,7 @@ public class InMemoryTaskManager implements TaskManager {
             return -1;
         }
         if (updatedEpic.getStatus() == null) {
-            return -4;
+            setSubtasksStatusToEpic(updatedEpic.getId());
         }
         Epic oldEpic = epics.get(updatedEpic.getId());  //их id равны
         if (oldEpic.getStatus() != updatedEpic.getStatus()) {
