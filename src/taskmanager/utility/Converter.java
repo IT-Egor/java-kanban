@@ -8,35 +8,37 @@ import taskmanager.tasktypes.Task;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.StringJoiner;
 
 public class Converter {
     public static String anyTaskToCSVLine(Task task) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(task.getType()).append(",");
-        builder.append(task.getId()).append(",");
-        builder.append(task.getName()).append(",");
-        builder.append(task.getDescription()).append(",");
-        builder.append(task.getStatus()).append(",");
+        StringJoiner joiner = new StringJoiner(",");
+        joiner.add(String.valueOf(task.getType()));
+        joiner.add(String.valueOf(task.getId()));
+        joiner.add(task.getName());
+        joiner.add(task.getDescription());
+        joiner.add(String.valueOf(task.getStatus()));
 
-        builder.append(task.getStartTime()
+        joiner.add(task.getStartTime()
                 .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::format)
-                .orElse("null")).append(",");
+                .orElse("null"));
 
-        builder.append(task.getDuration()
+        joiner.add(task.getDuration()
                 .map(duration -> String.valueOf(duration.toMinutes()))
-                .orElse("null")).append(",");
+                .orElse("null"));
 
         if (task.getType() == Type.EPIC) {
-            builder.append(task.getEndTime()
+            joiner.add(task.getEndTime()
                     .map(DateTimeFormatter.ISO_LOCAL_DATE_TIME::format)
-                    .orElse("null")).append(",");
+                    .orElse("null"));
         }
 
         if (task.getType() == Type.SUBTASK) {
-            builder.append(",").append(((Subtask) task).getContainingEpicId()).append(",");
+            joiner.add(String.format(",%d", ((Subtask) task).getContainingEpicId()));
         }
-        builder.append("\n");
-        return builder.toString();
+        joiner.add("\n");
+
+        return joiner.toString();
     }
 
     public static Task fromCSVLineToAnyTask(String csvLine) {
